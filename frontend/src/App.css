@@ -1,0 +1,55 @@
+/* ═══════════════════════════════════════════
+   APP.CSS — SGC Website Global Styles
+   ═══════════════════════════════════════════ */
+
+/* ─── RESET & BOX MODEL ─────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── HTML & BODY ────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
+
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+/* ─── IMAGES ─────────────────────────────── */
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+/* ─── LINKS ──────────────────────────────── */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─── BUTTONS ────────────────────────────── */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+}
+
+/* ─── ROOT WRAPPER ───────────────────────── */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

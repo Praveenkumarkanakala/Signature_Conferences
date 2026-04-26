@@ -1,0 +1,434 @@
+
+/* ─── VARIABLES (scoped under .usa-page) ────────────────────── */
+.usa-page {
+  --usa-eid-bg: #f4f4f4;
+  --usa-eid-card-bg: #ffffff;
+  --usa-eid-accent: #f0a500;
+  --usa-eid-accent-dark: #cf7500;
+  --usa-eid-dark: #1a1c20;
+  --usa-eid-white: #f4f4f4;
+  --usa-eid-text-light: #1a1c20;
+  --usa-eid-text-muted: rgba(26, 28, 32, 0.55);
+  --usa-eid-font-heading: "Bebas Neue", sans-serif;
+  --usa-eid-font-body: "DM Sans", sans-serif;
+  --usa-eid-radius-pill: 50px;
+  --usa-eid-radius-card: 16px;
+  --usa-eid-radius-chip: 10px;
+  --usa-eid-border-light: rgba(26, 28, 32, 0.08);
+  --usa-eid-border-medium: rgba(26, 28, 32, 0.12);
+  --usa-eid-border-heavy: rgba(26, 28, 32, 0.15);
+  --usa-eid-border-focus: rgba(240, 165, 0, 0.15);
+  --usa-eid-shadow-sm: 0 4px 14px rgba(240, 165, 0, 0.35);
+  --usa-eid-shadow-md: 0 4px 14px rgba(240, 165, 0, 0.4);
+  --usa-eid-shadow-lg: 0 6px 20px rgba(240, 165, 0, 0.5);
+  --usa-eid-gradient: linear-gradient(to bottom, rgba(26, 28, 32, 0.1) 0%, rgba(26, 28, 32, 0.55) 45%, rgba(26, 28, 32, 0.97) 100%);
+  --usa-eid-transition: 0.25s ease;
+}
+
+/* ─── SHARED TYPOGRAPHY & UTILS ─────────────────────────────── */
+.usa-page .usa-eid-back-btn,
+.usa-page .usa-eid-hero__cat,
+.usa-page .usa-eid-hero__meta-label,
+.usa-page .usa-eid-cta-card__label,
+.usa-page .usa-eid-cta-card__btn,
+.usa-page .usa-eid-theme-line__label,
+.usa-page .usa-eid-theme-chip__num {
+  font-family: var(--usa-eid-font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.usa-page .usa-eid-hero__title,
+.usa-page .usa-eid-cta-card__title,
+.usa-page .usa-eid-section__heading,
+.usa-page .usa-eid-theme-chip__num {
+  font-family: var(--usa-eid-font-heading);
+}
+
+.usa-page .usa-eid-section__text,
+.usa-page .usa-eid-cta-card__row-val,
+.usa-page .usa-eid-theme-chip__text,
+.usa-page .usa-eid-theme-line__text {
+  font-family: var(--usa-eid-font-body);
+}
+
+/* ─── NOT FOUND & BACK BUTTON ───────────────────────────────── */
+.usa-page .usa-eid-notfound {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: var(--usa-eid-text-light);
+}
+
+.usa-page .usa-eid-back-btn {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: rgba(26, 28, 32, 0.55);
+  background: transparent;
+  border: 1px solid var(--usa-eid-border-heavy);
+  border-radius: var(--usa-eid-radius-pill);
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: color var(--usa-eid-transition), border-color var(--usa-eid-transition), background var(--usa-eid-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.usa-page .usa-eid-back-btn:hover {
+  color: var(--usa-eid-dark);
+  border-color: rgba(26, 28, 32, 0.35);
+  background: rgba(26, 28, 32, 0.05);
+}
+
+/* ─── HERO SECTION ──────────────────────────────────────────── */
+.usa-page .usa-eid-hero {
+  position: relative;
+  min-height: 75vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.usa-page .usa-eid-hero__img-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.usa-page .usa-eid-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: brightness(0.4);
+}
+
+.usa-page .usa-eid-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--usa-eid-gradient);
+}
+
+.usa-page .usa-eid-hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 140px 60px 60px;
+}
+
+.usa-page .usa-eid-hero__top-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.usa-page .usa-eid-hero__title-block {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── HERO BADGE & TITLE ────────────────────────────────────── */
+.usa-page .usa-eid-hero__cat,
+.usa-page .usa-eid-cta-card__btn {
+  font-size: 0.62rem;
+  letter-spacing: 2.5px;
+  border-radius: var(--usa-eid-radius-pill);
+}
+
+.usa-page .usa-eid-hero__cat {
+  color: var(--usa-eid-dark);
+  background: var(--usa-eid-accent);
+  padding: 6px 16px;
+  display: inline-block;
+  margin-bottom: 20px;
+  box-shadow: var(--usa-eid-shadow-sm);
+}
+
+.usa-page .usa-eid-hero__title {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 900;
+  color: var(--usa-eid-white);
+  line-height: 1.15;
+  margin-bottom: 32px;
+}
+
+/* ─── HERO META (SHARED WITH CTA ROWS) ──────────────────────── */
+.usa-page .usa-eid-hero__meta,
+.usa-page .usa-eid-cta-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.usa-page .usa-eid-hero__meta {
+  flex-direction: row;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.usa-page .usa-eid-hero__meta-item,
+.usa-page .usa-eid-cta-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.usa-page .usa-eid-hero__meta-item {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.usa-page .usa-eid-hero__meta-label,
+.usa-page .usa-eid-cta-card__row-label {
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  color: var(--usa-eid-accent);
+}
+
+.usa-page .usa-eid-cta-card__row-label {
+  font-size: 0.7rem;
+  color: rgba(244, 244, 244, 0.4);
+  flex-shrink: 0;
+}
+
+.usa-page .usa-eid-hero__meta-value,
+.usa-page .usa-eid-cta-card__row-val {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.usa-page .usa-eid-hero__meta-value {
+  font-size: 0.88rem;
+  color: rgba(244, 244, 244, 0.85);
+}
+
+.usa-page .usa-eid-cta-card__row-val {
+  color: rgba(244, 244, 244, 0.8);
+  text-align: right;
+}
+
+.usa-page .usa-eid-hero__meta-div {
+  width: 1px;
+  height: 36px;
+  background: rgba(244, 244, 244, 0.15);
+}
+
+/* ─── CTA CARD ──────────────────────────────────────────────── */
+.usa-page .usa-eid-cta-card {
+  width: 300px;
+  flex-shrink: 0;
+  background: rgba(26, 28, 32, 0.75);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--usa-eid-border-focus);
+  border-radius: var(--usa-eid-radius-card);
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.usa-page .usa-eid-cta-card__label {
+  font-size: 0.62rem;
+  letter-spacing: 2.5px;
+  color: var(--usa-eid-accent);
+  margin: 0;
+}
+
+.usa-page .usa-eid-cta-card__title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--usa-eid-white);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.usa-page .usa-eid-cta-card__details {
+  border-top: 1px solid var(--usa-eid-border-focus);
+  border-bottom: 1px solid var(--usa-eid-border-focus);
+  padding: 14px 0;
+}
+
+/* ─── BUTTONS (SHARED STYLES) ───────────────────────────────── */
+.usa-page .usa-eid-cta-card__btn,
+.usa-page .usa-eid-back-btn {
+  letter-spacing: 1.5px;
+  border-radius: var(--usa-eid-radius-pill);
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: opacity var(--usa-eid-transition), transform 0.2s, box-shadow var(--usa-eid-transition);
+  border: none;
+  width: 100%;
+  text-align: center;
+}
+
+.usa-page .usa-eid-cta-card__btn {
+  font-size: 0.7rem;
+}
+
+.usa-page .usa-eid-cta-card__btn:not(.usa-eid-cta-card__btn--outline) {
+  color: var(--usa-eid-dark);
+  background: var(--usa-eid-accent);
+  box-shadow: var(--usa-eid-shadow-sm);
+}
+
+.usa-page .usa-eid-cta-card__btn:not(.usa-eid-cta-card__btn--outline):hover {
+  background: var(--usa-eid-accent-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--usa-eid-shadow-lg);
+}
+
+.usa-page .usa-eid-cta-card__btn--outline {
+  color: rgba(244, 244, 244, 0.6);
+  background: transparent;
+  border: 1px solid rgba(244, 244, 244, 0.15);
+}
+
+.usa-page .usa-eid-cta-card__btn--outline:hover {
+  color: var(--usa-eid-white);
+  border-color: rgba(244, 244, 244, 0.35);
+  background: rgba(244, 244, 244, 0.05);
+}
+
+/* ─── BODY & SECTIONS ───────────────────────────────────────── */
+.usa-page .usa-eid-body {
+  background-color: var(--usa-eid-bg);
+  padding: 70px 60px 100px;
+}
+
+.usa-page .usa-eid-body__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.usa-page .usa-eid-section {
+  margin-bottom: 56px;
+}
+
+.usa-page .usa-eid-section__heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--usa-eid-text-light);
+  margin-bottom: 16px;
+  position: relative;
+  padding-bottom: 14px;
+}
+
+.usa-page .usa-eid-section__heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--usa-eid-accent), transparent);
+}
+
+.usa-page .usa-eid-section__paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.usa-page .usa-eid-section__text {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--usa-eid-text-muted);
+  margin: 0;
+}
+
+.usa-page .usa-eid-section__sub {
+  font-size: 0.75rem;
+  color: rgba(26, 28, 32, 0.35);
+  margin-bottom: 24px;
+  letter-spacing: 0.5px;
+}
+
+/* ─── THEME LINE & CHIPS ────────────────────────────────────── */
+.usa-page .usa-eid-theme-line {
+  margin-top: 24px;
+  padding: 20px 24px;
+  border-left: 3px solid var(--usa-eid-accent);
+  background: rgba(240, 165, 0, 0.06);
+  border-radius: 0 8px 8px 0;
+}
+
+.usa-page .usa-eid-theme-line__label {
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  color: var(--usa-eid-accent);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.usa-page .usa-eid-theme-line__text {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--usa-eid-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.usa-page .usa-eid-themes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.usa-page .usa-eid-theme-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--usa-eid-card-bg);
+  border: 1px solid var(--usa-eid-border-light);
+  border-radius: var(--usa-eid-radius-chip);
+  padding: 14px 16px;
+  transition: border-color var(--usa-eid-transition), background var(--usa-eid-transition);
+}
+
+.usa-page .usa-eid-theme-chip:hover {
+  border-color: rgba(240, 165, 0, 0.3);
+  background: rgba(240, 165, 0, 0.04);
+}
+
+.usa-page .usa-eid-theme-chip__num {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: var(--usa-eid-accent);
+  opacity: 0.7;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.usa-page .usa-eid-theme-chip__text {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--usa-eid-text-muted);
+  line-height: 1.5;
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .usa-page .usa-eid-hero__top-row { flex-direction: column; align-items: flex-start; gap: 30px; }
+  .usa-page .usa-eid-cta-card { width: 100%; }
+  .usa-page .usa-eid-hero__content { padding: 130px 30px 50px; }
+  .usa-page .usa-eid-body { padding: 50px 30px 80px; }
+  .usa-page .usa-eid-themes-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .usa-page .usa-eid-hero__content { padding: 120px 24px 40px; }
+  .usa-page .usa-eid-body { padding: 40px 24px 70px; }
+  .usa-page .usa-eid-hero__meta { gap: 16px; }
+  .usa-page .usa-eid-hero__meta-div { display: none; }
+  .usa-page .usa-eid-themes-grid { grid-template-columns: 1fr; }
+}

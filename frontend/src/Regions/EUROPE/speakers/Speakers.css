@@ -1,0 +1,288 @@
+/* ─── ROOT VARIABLES ────────────────────── */
+.europe-page {
+  --color-bg: #f5ede0;
+  --color-accent: #d4a55a;
+  --color-accent-dark: #b8845a;
+  --color-hover: #c0724a;
+  --color-dark: #3b2112;
+  --color-white: #ffffff;
+  --color-nav-bg: #5c3d2e;
+  --color-text-muted: rgba(59, 33, 18, 0.55);
+  --color-card-bg: #fffaf4;
+  --color-card-tag-bg: rgba(212, 165, 90, 0.15);
+  --font-heading: "Bebas Neue", sans-serif;
+  --font-body: "Roboto", sans-serif;
+  --nav-height: 68px;
+  --transition: 0.25s ease;
+  --border-radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+.europe-page, .europe-page-wrapper {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-dark);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ─── HERO ──────────────────────────────────── */
+.europe-speakers-hero {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 60px 60px;
+  background: var(--color-bg);
+  text-align: center;
+}
+
+.europe-speakers-hero__glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 165, 90, 0.08) 0%, transparent 70%);
+  top: -150px;
+  right: 10%;
+  pointer-events: none;
+}
+
+.europe-speakers-hero__content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.europe-speakers-hero__tag {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.europe-speakers-hero__tag::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+.europe-speakers-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 900;
+  color: var(--color-dark);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+/* ─── FILTER BAR ───────────────────────────── */
+.europe-speakers-filters {
+  padding: 20px 60px;
+  background: var(--color-card-bg);
+  border-bottom: 1px solid rgba(59, 33, 18, 0.08);
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 100;
+}
+
+.europe-speakers-filters__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.europe-speakers-filters__pill {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid rgba(59, 33, 18, 0.15);
+  border-radius: 50px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.europe-speakers-filters__pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.europe-speakers-filters__pill--active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-dark);
+  font-weight: 600;
+}
+
+/* ─── GRID SECTION ───────────────────────── */
+.europe-speakers-grid-section {
+  background: var(--color-bg);
+  padding: 60px;
+}
+
+.europe-speakers-grid-section__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.europe-speakers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* ─── CARD ───────────────────────────────── */
+.europe-speakers-card {
+  background: var(--color-card-bg);
+  border-radius: 22px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 300px;
+}
+
+.europe-speakers-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+}
+
+.europe-speakers-card__imageWrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  height: 470px;
+  background: var(--color-card-bg);
+  display: flex;
+}
+
+.europe-speakers-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: var(--color-text-muted) solid 0.5px;
+  object-position: bottom center;
+  transition: transform 0.4s ease;
+}
+
+.europe-speakers-card:hover .europe-speakers-card__img {
+  transform: scale(1.05);
+}
+
+.europe-speakers-card__badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: var(--color-card-bg);
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.europe-speakers-card__cat {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--color-accent);
+  color: var(--color-text-light);
+  font-size: 0.6rem;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+/* ─── RESPONSIVE ───────────────────────── */
+@media (max-width: 1200px) {
+  .europe-speakers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .europe-speakers-hero { padding: 60px 30px 50px; }
+  .europe-speakers-filters { padding: 16px 30px; }
+  .europe-speakers-grid-section { padding: 40px 20px; }
+  
+  .europe-speakers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .europe-speakers-card { height: auto; }
+  .europe-speakers-card__imageWrap { height: 280px; }
+}
+
+@media (max-width: 480px) {
+  .europe-speakers-hero { padding: 50px 20px 40px; }
+  .europe-speakers-filters { padding: 12px 20px; }
+  .europe-speakers-grid-section { padding: 30px 12px; overflow-x: hidden; }
+  
+  .europe-speakers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .europe-speakers-card {
+    height: auto;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+  
+  .europe-speakers-card__imageWrap {
+    height: 180px;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .europe-speakers-card__img {
+    object-position: top center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .europe-speakers-hero__title { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+  
+  .europe-speakers-filters__pill {
+    font-size: 0.75rem;
+    padding: 6px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

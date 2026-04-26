@@ -1,0 +1,294 @@
+/* ─── ROOT VARIABLES ────────────────────── */
+.na-page {
+  --primary: #34d399;
+  --primary-dark: #10b981;
+  --secondary: #6ee7b7;
+  --bg-dark: #021e1a;
+  --bg-darker: #064e3b;
+  --text-light: #a7f3d0;
+  --white: #fff;
+  --nav-height: 80px;
+  --font-body: "Roboto", sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --transition: 0.25s ease;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+.na-page, .na-page-wrapper {
+  font-family: var(--font-body);
+  background: var(--bg-dark);
+  overflow-x: hidden;
+  width: 100%;
+  color: var(--white);
+}
+
+/* ─── HERO ─────────────────────────────────── */
+.na-speakers-hero {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 80px 60px 60px;
+  background: var(--bg-dark);
+  text-align: center;
+}
+
+.na-speakers-hero__glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.08) 0%, transparent 70%);
+  top: -150px;
+  right: 10%;
+  pointer-events: none;
+}
+
+.na-speakers-hero__content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.na-speakers-hero__tag {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.na-speakers-hero__tag::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--primary);
+}
+
+.na-speakers-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.na-speakers-hero__sub {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-bottom: 32px;
+}
+
+/* ─── FILTER BAR ───────────────────────────── */
+.na-speakers-filters {
+  padding: 20px 60px;
+  background: var(--bg-darker);
+  border-bottom: 1px solid rgba(52, 211, 153, 0.1);
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 100;
+}
+
+.na-speakers-filters__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.na-speakers-filters__pill {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-light);
+  background: transparent;
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: 50px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.na-speakers-filters__pill:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.na-speakers-filters__pill--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--bg-dark);
+  font-weight: 600;
+}
+
+/* ─── GRID SECTION ───────────────────────── */
+.na-speakers-grid-section {
+  background: var(--bg-dark);
+  padding: 60px;
+  padding-top: calc(var(--nav-height) + 70px);
+}
+
+.na-speakers-grid-section__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.na-speakers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* ─── CARD ──────────────────────────────── */
+.na-speakers-card {
+  background: #e4e1e1;
+  border-radius: 22px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 300px;
+}
+
+.na-speakers-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+}
+
+.na-speakers-card__imageWrap {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  height: 470px;
+  background: var(--white);
+  display: flex;
+}
+
+.na-speakers-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: #666 solid 0.5px;
+  object-position: bottom center;
+  transition: transform 0.4s ease;
+}
+
+.na-speakers-card:hover .na-speakers-card__img {
+  transform: scale(1.05);
+}
+
+.na-speakers-card__badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: var(--white);
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--bg-dark);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.na-speakers-card__cat {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--primary);
+  color: var(--bg-dark);
+  font-size: 0.6rem;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+/* ─── RESPONSIVE ───────────────────────── */
+@media (max-width: 1200px) {
+  .na-speakers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .na-speakers-hero { padding: 60px 30px 50px; }
+  .na-speakers-filters { padding: 16px 30px; }
+  .na-speakers-grid-section { padding: 40px 20px; padding-top: calc(var(--nav-height) + 50px); }
+  
+  .na-speakers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .na-speakers-card { height: auto; }
+  .na-speakers-card__imageWrap { height: 280px; }
+}
+
+@media (max-width: 480px) {
+  .na-speakers-hero { padding: 50px 20px 40px; }
+  .na-speakers-filters { padding: 12px 20px; }
+  .na-speakers-grid-section { padding: 30px 12px; padding-top: calc(var(--nav-height) + 40px); overflow-x: hidden; }
+  
+  .na-speakers-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .na-speakers-card {
+    height: auto;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+  
+  .na-speakers-card__imageWrap {
+    height: 180px;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .na-speakers-card__img {
+    object-position: top center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .na-speakers-hero__title { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+  .na-speakers-hero__sub { font-size: 1rem; }
+  
+  .na-speakers-filters__pill {
+    font-size: 0.75rem;
+    padding: 6px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

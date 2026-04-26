@@ -1,0 +1,458 @@
+/* ─── ROOT VARIABLES (Matches Homepage) ────────────────────── */
+.na-page {
+  --primary: #34d399;
+  --primary-dark: #10b981;
+  --secondary: #6ee7b7;
+  --bg-dark: #021e1a;
+  --bg-darker: #064e3b;
+  --text-light: #a7f3d0;
+  --white: #fff;
+  --nav-height: 80px;
+  --font-body: "Roboto", sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --transition: 0.25s ease;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+.na-page, .na-page-wrapper {
+  font-family: var(--font-body);
+  background: var(--bg-dark);
+  overflow-x: hidden;
+  width: 100%;
+  color: var(--white);
+}
+
+/* ─── NOT FOUND ─────────────────────────────── */
+.na-ed-notfound {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: var(--white);
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+}
+
+/* ─── BACK BUTTON (Interactive - Keep Styles) ───────────────────────────── */
+.na-ed-back-btn {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(167, 243, 208, 0.6);
+  background: transparent;
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  border-radius: 50px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.na-ed-back-btn:hover {
+  color: var(--white);
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+/* ─── HERO ──────────────────────────────────── */
+.na-ed-hero {
+  position: relative;
+  min-height: 75vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.na-ed-hero__img-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.na-ed-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: brightness(0.4);
+  /* ✅ Removed: transition on image */
+}
+
+.na-ed-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 30, 26, 0.1) 0%,
+    rgba(2, 30, 26, 0.55) 45%,
+    rgba(2, 30, 26, 0.97) 100%
+  );
+}
+
+.na-ed-hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 140px 60px 60px;
+}
+
+/* ── title + CTA side by side inside hero ── */
+.na-ed-hero__top-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.na-ed-hero__title-block {
+  flex: 1;
+  min-width: 0;
+}
+
+.na-ed-hero__cat {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--bg-dark);
+  background: var(--primary);
+  padding: 6px 16px;
+  border-radius: 50px;
+  display: inline-block;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 14px rgba(52, 211, 153, 0.4);
+}
+
+.na-ed-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 32px;
+}
+
+.na-ed-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.na-ed-hero__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.na-ed-hero__meta-label {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.na-ed-hero__meta-value {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: rgba(244, 244, 244, 0.85);
+}
+
+.na-ed-hero__meta-div {
+  width: 1px;
+  height: 36px;
+  background: rgba(52, 211, 153, 0.2);
+}
+
+/* ─── CTA CARD (inside hero) ────────────────── */
+.na-ed-cta-card {
+  width: 300px;
+  flex-shrink: 0;
+  background: rgba(6, 78, 59, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  border-radius: 16px;
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.na-ed-cta-card__label {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0;
+}
+
+.na-ed-cta-card__title {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.na-ed-cta-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  border-top: 1px solid rgba(52, 211, 153, 0.12);
+  border-bottom: 1px solid rgba(52, 211, 153, 0.12);
+  padding: 14px 0;
+}
+
+.na-ed-cta-card__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.na-ed-cta-card__row-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: rgba(167, 243, 208, 0.45);
+  flex-shrink: 0;
+}
+
+.na-ed-cta-card__row-val {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(244, 244, 244, 0.85);
+  text-align: right;
+}
+
+/* ─── CTA BUTTONS (Interactive - Keep Styles) ────────────────── */
+.na-ed-cta-card__btn {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: opacity var(--transition), transform 0.2s, box-shadow var(--transition);
+  border: none;
+  width: 100%;
+  text-align: center;
+}
+
+.na-ed-cta-card__btn:not(.na-ed-cta-card__btn--outline) {
+  color: var(--bg-dark);
+  background: var(--primary);
+  box-shadow: 0 4px 14px rgba(52, 211, 153, 0.35);
+}
+
+.na-ed-cta-card__btn:not(.na-ed-cta-card__btn--outline):hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.5);
+}
+
+.na-ed-cta-card__btn--outline {
+  color: rgba(167, 243, 208, 0.65);
+  background: transparent;
+  border: 1px solid rgba(52, 211, 153, 0.18);
+}
+
+.na-ed-cta-card__btn--outline:hover {
+  color: var(--text-light);
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+/* ─── BODY ──────────────────────────────────── */
+.na-ed-body {
+  background-color: var(--bg-dark);
+  padding: 70px 60px 100px;
+}
+
+.na-ed-body__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ─── SECTIONS ──────────────────────────────── */
+.na-ed-section {
+  margin-bottom: 56px;
+}
+
+.na-ed-section__heading {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 16px;
+  position: relative;
+  padding-bottom: 14px;
+}
+
+.na-ed-section__heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+
+.na-ed-section__paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.na-ed-section__text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.na-ed-section__sub {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: rgba(167, 243, 208, 0.35);
+  margin-bottom: 24px;
+  letter-spacing: 0.5px;
+}
+
+/* ─── THEME LINE ────────────────────────────── */
+.na-ed-theme-line {
+  margin-top: 24px;
+  padding: 20px 24px;
+  border-left: 3px solid var(--primary);
+  background: rgba(52, 211, 153, 0.06);
+  border-radius: 0 8px 8px 0;
+}
+
+.na-ed-theme-line__label {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.na-ed-theme-line__text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-light);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── THEMES GRID ───────────────────────────── */
+.na-ed-themes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.na-ed-theme-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg-darker);
+  border: 1px solid rgba(52, 211, 153, 0.1);
+  border-radius: 10px;
+  padding: 14px 16px;
+  /* ✅ Removed: cursor, transition, hover effects (non-interactive) */
+}
+
+/* ✅ Removed entire .na-ed-theme-chip:hover block */
+
+.na-ed-theme-chip__num {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: var(--primary);
+  opacity: 0.7;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.na-ed-theme-chip__text {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
+/* ─── RESPONSIVE ────────────────────────────── */
+@media (max-width: 1024px) {
+  .na-ed-hero__top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  .na-ed-cta-card {
+    width: 100%;
+  }
+  .na-ed-hero__content {
+    padding: 130px 30px 50px;
+  }
+  .na-ed-body {
+    padding: 50px 30px 80px;
+  }
+  .na-ed-themes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .na-ed-hero__content {
+    padding: 120px 24px 40px;
+  }
+  .na-ed-hero__meta {
+    gap: 16px;
+  }
+  .na-ed-hero__meta-div {
+    display: none;
+  }
+  .na-ed-themes-grid {
+    grid-template-columns: 1fr;
+  }
+  .na-ed-body {
+    padding: 40px 24px 70px;
+  }
+}
+
+/* ─── ACCESSIBILITY ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
