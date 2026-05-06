@@ -1,0 +1,781 @@
+/* ============================================================
+   EUROPE CONTACT — FULLY RESPONSIVE CSS
+   Fixes: email icon, phone icon, info card icons, layout
+   Breakpoints: 320px, 375px, 390px, 414px (iPhone)
+                768px (iPad), 1024px (iPad Pro)
+                1280px, 1440px, 1920px (Desktop)
+   ============================================================ */
+
+/* ─── ROOT VARIABLES ────────────────────── */
+.europe-page {
+  --color-bg: #f5ede0;
+  --color-accent: #d4a55a;
+  --color-accent-dark: #b8845a;
+  --color-hover: #c0724a;
+  --color-dark: #3b2112;
+  --color-white: #ffffff;
+  --color-nav-bg: #5c3d2e;
+  --color-text-muted: rgba(59, 33, 18, 0.55);
+  --color-card-bg: #fffaf4;
+  --color-card-tag-bg: rgba(212, 165, 90, 0.15);
+  --font-heading: "Bebas Neue", sans-serif;
+  --font-body: "Roboto", sans-serif;
+  --nav-height: 68px;
+  --transition: 0.25s ease;
+  --border-radius: 6px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.europe-page,
+.europe-page-wrapper {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-dark);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ============================================================
+   PAGE WRAPPER
+   ============================================================ */
+.europe-contact-page {
+  min-height: 100vh;
+  padding: 120px 60px 100px;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+/* ─── BLOBS ─────────────────────────────── */
+.europe-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.europe-blob--1 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(212, 165, 90, 0.08) 0%, transparent 70%);
+  top: -80px;
+  right: 5%;
+}
+
+.europe-blob--2 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(207, 117, 0, 0.07) 0%, transparent 70%);
+  bottom: 10%;
+  left: 5%;
+}
+
+/* ============================================================
+   LAYOUT — two-column grid
+   ============================================================ */
+.europe-contact-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 80px;
+  align-items: start;
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================================
+   LEFT COLUMN
+   ============================================================ */
+.europe-contact-tag {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.europe-contact-tag::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 2px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.europe-contact-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  font-weight: 900;
+  color: var(--color-dark);
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.europe-contact-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.88rem, 1.4vw, 1.05rem);
+  color: var(--color-text-muted);
+  line-height: 1.75;
+  max-width: 420px;
+  margin-bottom: 36px;
+}
+
+/* ─── CONTACT LINKS with icons ──────────── */
+.europe-contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 52px;
+}
+
+.europe-contact-link {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color var(--transition);
+}
+
+.europe-contact-link:hover {
+  color: var(--color-accent);
+}
+
+/* icon pill that sits before each link */
+.europe-contact-link-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(212, 165, 90, 0.12);
+  border: 1px solid rgba(212, 165, 90, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.europe-contact-link:hover .europe-contact-link-icon {
+  background: rgba(212, 165, 90, 0.22);
+  border-color: rgba(212, 165, 90, 0.4);
+}
+
+.europe-contact-link-icon svg {
+  width: 15px;
+  height: 15px;
+  color: var(--color-accent-dark);
+  flex-shrink: 0;
+}
+
+.europe-contact-link--underline .europe-contact-link-text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.europe-contact-link-text {
+  line-height: 1.3;
+}
+
+/* ============================================================
+   INFO CARDS — with icon badges
+   ============================================================ */
+.europe-info-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.europe-info-card {
+  padding: 20px 18px;
+  background: var(--color-card-bg);
+  border: 1px solid rgba(59, 33, 18, 0.08);
+  border-radius: 14px;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+  cursor: default;
+}
+
+.europe-info-card:hover {
+  border-color: rgba(212, 165, 90, 0.3);
+  box-shadow: 0 6px 24px rgba(59, 33, 18, 0.07);
+  transform: translateY(-3px);
+}
+
+/* icon badge at the top of each card */
+.europe-info-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(212, 165, 90, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  transition: background var(--transition);
+}
+
+.europe-info-card:hover .europe-info-card__icon {
+  background: rgba(212, 165, 90, 0.22);
+}
+
+.europe-info-card__icon svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-accent-dark);
+  flex-shrink: 0;
+}
+
+.europe-info-card__title {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.europe-info-card__body {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   RIGHT COLUMN — sticky form card
+   ============================================================ */
+.europe-contact-right {
+  position: sticky;
+  top: 90px;
+}
+
+.europe-contact-card {
+  background: var(--color-card-bg);
+  border: 1px solid rgba(59, 33, 18, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(59, 33, 18, 0.08);
+}
+
+.europe-contact-card__bar {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+}
+
+.europe-contact-card__header {
+  padding: 28px 28px 20px;
+}
+
+.europe-contact-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: var(--color-dark);
+  margin-bottom: 4px;
+}
+
+.europe-contact-card__sub {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+.europe-contact-form {
+  padding: 0 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.europe-contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.europe-contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ─── INPUTS ─────────────────────────────── */
+.europe-contact-input,
+.europe-contact-textarea {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-dark);
+  background: rgba(59, 33, 18, 0.04);
+  border: 1px solid rgba(59, 33, 18, 0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  outline: none;
+  width: 100%;
+  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.europe-contact-input::placeholder,
+.europe-contact-textarea::placeholder {
+  color: rgba(59, 33, 18, 0.28);
+}
+
+.europe-contact-input:focus,
+.europe-contact-textarea:focus {
+  border-color: rgba(212, 165, 90, 0.5);
+  background: rgba(212, 165, 90, 0.04);
+  box-shadow: 0 0 0 3px rgba(212, 165, 90, 0.1);
+}
+
+.europe-contact-input--error {
+  border-color: rgba(220, 80, 40, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(220, 80, 40, 0.08) !important;
+}
+
+.europe-contact-error {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  color: #e0522a;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ─── EMAIL FIELD with icon ─────────────── */
+.europe-contact-input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.europe-contact-input-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: rgba(59, 33, 18, 0.35);
+  pointer-events: none;
+  flex-shrink: 0;
+  /* ensure SVG renders */
+  display: block;
+  z-index: 1;
+}
+
+.europe-contact-input--icon {
+  padding-left: 40px;
+}
+
+/* ─── PHONE ROW ─────────────────────────── */
+.europe-contact-phone-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.europe-contact-input--phone {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── CUSTOM COUNTRY DROPDOWN ───────────── */
+.europe-country-dropdown {
+  position: relative;
+  flex-shrink: 0;
+  width: 155px;
+}
+
+.europe-country-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  padding: 11px 10px 11px 12px;
+  background: rgba(59, 33, 18, 0.04);
+  border: 1px solid rgba(59, 33, 18, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+  min-height: 42px;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.europe-country-trigger--open {
+  border-color: rgba(212, 165, 90, 0.5);
+  background: rgba(212, 165, 90, 0.04);
+  box-shadow: 0 0 0 3px rgba(212, 165, 90, 0.1);
+}
+
+.europe-country-trigger:hover:not(.europe-country-trigger--open) {
+  border-color: rgba(59, 33, 18, 0.25);
+  background: rgba(59, 33, 18, 0.06);
+}
+
+.europe-country-selected {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.europe-country-code {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  line-height: 1.2;
+}
+
+.europe-country-name {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.europe-country-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-dark);
+  width: 100%;
+  min-width: 0;
+}
+
+.europe-country-search-input::placeholder {
+  color: rgba(59, 33, 18, 0.28);
+}
+
+.europe-country-chevron {
+  width: 10px;
+  height: 10px;
+  color: rgba(59, 33, 18, 0.35);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.europe-country-chevron--up {
+  transform: rotate(180deg);
+}
+
+.europe-country-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 240px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--color-card-bg);
+  border: 1px solid rgba(212, 165, 90, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(59, 33, 18, 0.12);
+  z-index: 200;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 165, 90, 0.3) transparent;
+}
+
+.europe-country-list::-webkit-scrollbar { width: 4px; }
+.europe-country-list::-webkit-scrollbar-track { background: transparent; }
+.europe-country-list::-webkit-scrollbar-thumb {
+  background: rgba(212, 165, 90, 0.3);
+  border-radius: 4px;
+}
+
+.europe-country-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.europe-country-option:hover {
+  background: rgba(212, 165, 90, 0.08);
+}
+
+.europe-country-option--active {
+  background: rgba(212, 165, 90, 0.14);
+}
+
+.europe-country-option__code {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  min-width: 40px;
+  flex-shrink: 0;
+}
+
+.europe-country-option__name {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.europe-country-empty {
+  padding: 16px 14px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ─── TEXTAREA ───────────────────────────── */
+.europe-contact-textarea-wrap {
+  position: relative;
+}
+
+.europe-contact-textarea {
+  min-height: 108px;
+  resize: none;
+  line-height: 1.6;
+  padding-bottom: 28px;
+}
+
+.europe-contact-char-count {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  color: rgba(59, 33, 18, 0.25);
+  pointer-events: none;
+}
+
+/* ─── SUBMIT BUTTON ─────────────────────── */
+.europe-contact-submit-btn {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  background: var(--color-accent);
+  border: none;
+  border-radius: 50px;
+  padding: 15px 40px;
+  cursor: pointer;
+  width: 100%;
+  transition: background var(--transition), transform 0.2s, box-shadow var(--transition);
+  box-shadow: 0 6px 24px rgba(212, 165, 90, 0.35);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.europe-contact-submit-btn:hover {
+  background: var(--color-accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(212, 165, 90, 0.45);
+}
+
+.europe-contact-submit-btn:active {
+  transform: translateY(0);
+}
+
+.europe-contact-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ─── TERMS ─────────────────────────────── */
+.europe-contact-terms {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  color: rgba(59, 33, 18, 0.35);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.europe-contact-terms__link {
+  color: var(--color-dark);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(59, 33, 18, 0.25);
+  transition: color var(--transition);
+}
+
+.europe-contact-terms__link:hover {
+  color: var(--color-accent);
+}
+
+/* ─── SUCCESS STATE ─────────────────────── */
+.europe-contact-card__success {
+  padding: 52px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.europe-contact-card__success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: var(--color-dark);
+  box-shadow: 0 8px 28px rgba(212, 165, 90, 0.4);
+}
+
+.europe-contact-card__success-title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  color: var(--color-dark);
+}
+
+.europe-contact-card__success-sub {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  max-width: 300px;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
+
+/* Large desktop */
+@media (min-width: 1440px) {
+  .europe-contact-page { padding: 140px 80px 120px; }
+}
+
+/* Laptop / small desktop */
+@media (max-width: 1280px) {
+  .europe-contact-page { padding: 120px 48px 100px; }
+  .europe-contact-inner { gap: 60px; }
+}
+
+/* iPad Pro / small laptop */
+@media (max-width: 1100px) {
+  .europe-contact-page { padding: 110px 32px 80px; }
+  .europe-contact-inner {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+  .europe-contact-right {
+    position: static;
+  }
+  .europe-contact-desc { max-width: 100%; }
+  .europe-info-cards { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* iPad / Tablet */
+@media (max-width: 900px) {
+  .europe-contact-page { padding: 100px 28px 72px; }
+  .europe-contact-inner { gap: 48px; }
+  .europe-info-cards { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .europe-contact-card { border-radius: 20px; }
+}
+
+/* iPad Portrait */
+@media (max-width: 768px) {
+  .europe-contact-page { padding: 96px 20px 64px; }
+  .europe-contact-row { grid-template-columns: 1fr; gap: 0; }
+  .europe-contact-form { gap: 12px; }
+  .europe-info-cards { grid-template-columns: 1fr; gap: 12px; }
+  .europe-country-dropdown { width: 140px; }
+  .europe-country-list { width: 220px; }
+  .europe-contact-submit-btn { padding: 14px 30px; font-size: 0.76rem; }
+  .europe-contact-card__header { padding: 24px 22px 16px; }
+  .europe-contact-form { padding: 0 22px 24px; }
+  .europe-contact-links { margin-bottom: 40px; }
+}
+
+/* Large phone */
+@media (max-width: 600px) {
+  .europe-contact-page { padding: 88px 16px 56px; }
+  .europe-contact-heading { font-size: clamp(2rem, 9vw, 3rem); }
+  .europe-contact-inner { gap: 40px; }
+  .europe-blob--1 { width: 280px; height: 280px; }
+  .europe-blob--2 { width: 200px; height: 200px; }
+}
+
+/* iPhone / Small phones */
+@media (max-width: 480px) {
+  .europe-contact-page { padding: 84px 14px 52px; }
+  .europe-contact-heading { font-size: clamp(1.8rem, 9.5vw, 2.8rem); }
+  .europe-contact-card { border-radius: 16px; }
+  .europe-contact-card__header { padding: 20px 18px 14px; }
+  .europe-contact-form { padding: 0 18px 20px; gap: 11px; }
+  .europe-contact-input,
+  .europe-contact-textarea { font-size: 0.9rem; padding: 13px 12px; }
+  .europe-contact-input--icon { padding-left: 36px; }
+  .europe-contact-input-icon { left: 11px; width: 14px; height: 14px; }
+  .europe-contact-phone-wrap { gap: 6px; }
+  .europe-country-dropdown { width: 130px; }
+  .europe-country-list { width: 200px; }
+  .europe-contact-submit-btn { padding: 13px 24px; font-size: 0.74rem; letter-spacing: 1.5px; }
+  .europe-info-cards { gap: 10px; }
+  .europe-info-card { padding: 16px 14px; }
+  .europe-contact-link-icon { width: 30px; height: 30px; }
+  .europe-contact-link-icon svg { width: 13px; height: 13px; }
+  .europe-contact-link { font-size: 0.84rem; }
+}
+
+/* iPhone SE (360px) */
+@media (max-width: 380px) {
+  .europe-contact-page { padding: 80px 12px 48px; }
+  .europe-contact-heading { font-size: clamp(1.7rem, 10vw, 2.4rem); }
+  .europe-country-dropdown { width: 118px; }
+  .europe-country-list { width: 190px; left: -8px; }
+  .europe-contact-card__header { padding: 18px 16px 12px; }
+  .europe-contact-form { padding: 0 16px 18px; }
+}
+
+/* ─── REDUCED MOTION ────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

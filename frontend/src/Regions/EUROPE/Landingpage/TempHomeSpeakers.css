@@ -1,0 +1,322 @@
+/* =====================================================================
+   TempHomeGallery.css
+   Speakers placeholder — homepage
+   Consumes --color-* and --font-* from .europe-page (eurohome.css).
+   ===================================================================== */
+
+/* ── Root section ───────────────────────────────────────────────────── */
+.thg-root {
+  width: 100%;
+  background-color: var(--color-bg);
+  padding: 72px 5% 0;
+  box-sizing: border-box;
+}
+
+/* =====================================================================
+   HEADER
+   ===================================================================== */
+.thg-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* "——— SPEAKERS ———" eyebrow row */
+.thg-header__eyebrow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.thg-header__line {
+  display: block;
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: var(--color-accent);
+  opacity: 0.5;
+  position: relative;
+}
+
+/* small dot at the centre of the eyebrow row */
+.thg-header__eyebrow-row::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.thg-header__eyebrow {
+  font-family: var(--font-heading);
+  font-size: clamp(0.75rem, 1.2vw, 0.88rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Main heading: "GREAT IDEAS. Real People. BIG IMPACT." */
+.thg-header__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-dark);
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+
+/* italic golden part */
+.thg-header__title-em {
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+.thg-header__subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 1.3vw, 0.97rem);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* =====================================================================
+   ANNOUNCEMENT CARD
+   ===================================================================== */
+.thg-announce {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: var(--color-card-bg);
+  border: 1px solid rgba(212, 165, 90, 0.2);
+  border-radius: 12px;
+  padding: 32px 40px;
+  margin-bottom: 44px;
+  box-shadow: 0 4px 24px rgba(59, 33, 18, 0.05);
+  transition: box-shadow 0.25s ease;
+}
+
+.thg-announce:hover {
+  box-shadow: 0 8px 36px rgba(59, 33, 18, 0.09);
+}
+
+@media (max-width: 700px) {
+  .thg-announce {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 24px;
+    gap: 20px;
+  }
+}
+
+/* circle background for megaphone */
+.thg-announce__icon-wrap {
+  flex-shrink: 0;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: rgba(212, 165, 90, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thg-announce__megaphone {
+  width: 72px;
+  height: 72px;
+}
+
+/* vertical separator between icon and text */
+.thg-announce__body {
+  border-left: 1.5px solid rgba(212, 165, 90, 0.22);
+  padding-left: 32px;
+}
+
+@media (max-width: 700px) {
+  .thg-announce__body {
+    border-left: none;
+    border-top: 1.5px solid rgba(212, 165, 90, 0.22);
+    padding-left: 0;
+    padding-top: 20px;
+  }
+}
+
+.thg-announce__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-dark);
+  margin: 0 0 10px;
+}
+
+.thg-announce__text {
+  font-family: var(--font-body);
+  font-size: clamp(0.83rem, 1.2vw, 0.93rem);
+  color: var(--color-text-muted);
+  line-height: 1.72;
+  margin: 0 0 14px;
+  max-width: 560px;
+}
+
+.thg-announce__coming {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+/* =====================================================================
+   SNEAK PEEK LABEL
+   ===================================================================== */
+.thg-peek-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.thg-peek-label__line {
+  flex: 1;
+  max-width: 200px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent) 40%,
+    var(--color-accent) 60%,
+    transparent
+  );
+  opacity: 0.4;
+}
+
+.thg-peek-label__text {
+  font-family: var(--font-heading);
+  font-size: clamp(0.72rem, 1.1vw, 0.82rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+/* =====================================================================
+   SPEAKER PLACEHOLDER GRID
+   ===================================================================== */
+.thg-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 960px)  { .thg-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 580px)  { .thg-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── Card ── */
+.thg-speaker-card {
+  background: var(--color-card-bg);
+  border: 1px solid rgba(212, 165, 90, 0.15);
+  border-radius: 10px;
+  padding: 28px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: default;
+  animation: thg-fade-up 0.5s ease both;
+  animation-delay: var(--stagger, 0s);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.thg-speaker-card--hovered {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 28px rgba(59, 33, 18, 0.08);
+  border-color: rgba(212, 165, 90, 0.35);
+}
+
+@keyframes thg-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* avatar circle */
+.thg-speaker-card__avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: rgba(212, 165, 90, 0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease;
+}
+
+.thg-speaker-card--hovered .thg-speaker-card__avatar {
+  background: rgba(212, 165, 90, 0.14);
+}
+
+.thg-speaker-card__icon {
+  width: 56px;
+  height: 56px;
+  color: rgba(212, 165, 90, 0.5);
+  transition: color 0.25s ease;
+}
+
+.thg-speaker-card--hovered .thg-speaker-card__icon {
+  color: var(--color-accent);
+}
+
+/* star */
+.thg-speaker-card__star {
+  width: 18px;
+  height: 18px;
+  color: rgba(212, 165, 90, 0.4);
+  transition: color 0.25s ease;
+}
+
+.thg-speaker-card--hovered .thg-speaker-card__star {
+  color: var(--color-accent);
+}
+
+/* shimmer lines */
+.thg-speaker-card__lines {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+}
+
+.thg-speaker-card__line {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(212, 165, 90, 0.15);
+  animation: thg-shimmer 1.8s ease-in-out infinite;
+}
+
+.thg-speaker-card__line--name {
+  width: 72%;
+  animation-delay: 0s;
+}
+
+.thg-speaker-card__line--role {
+  width: 50%;
+  animation-delay: 0.15s;
+}
+
+@keyframes thg-shimmer {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+

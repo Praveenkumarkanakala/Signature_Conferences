@@ -1,0 +1,437 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap");
+
+/* ─── ROOT VARIABLES ────────────────────── */
+.na-page {
+  --primary: #34d399;
+  --primary-dark: #10b981;
+  --secondary: #6ee7b7;
+  --bg-sand: #e8e4db;
+  --bg-dark: #021e1a;
+  --green-deep: #1e3a2f;
+  --green-mid: #2a5240;
+  --gold: #b8952a;
+  --text-light: #a7f3d0;
+  --white: #fff;
+  --nav-height: 80px;
+  --font-body: "Poppins", sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --transition: 0.25s ease;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.na-page, .na-page-wrapper {
+  font-family: var(--font-body);
+  background: var(--bg-sand);
+  overflow-x: hidden;
+  width: 100%;
+  color: var(--white);
+}
+
+/* ─── HERO ─────────────────────────────────── */
+.na-speakers-hero {
+  background: var(--bg-sand);
+  padding: 72px 60px 52px;
+  text-align: center;
+}
+
+.na-speakers-hero__content {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.na-speakers-hero__tag {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--green-deep);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.na-speakers-hero__tag::before,
+.na-speakers-hero__tag::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--green-deep);
+  flex-shrink: 0;
+}
+
+.na-speakers-hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  font-weight: 900;
+  color: var(--green-deep);
+  line-height: 1.05;
+}
+
+.na-speakers-hero__title em {
+  color: var(--gold);
+  font-style: normal;
+}
+
+/* ─── FILTER BAR ───────────────────────────── */
+.na-speakers-filters {
+  padding: 18px 60px;
+  background: var(--green-deep);
+  border-bottom: 1px solid rgba(52, 211, 153, 0.1);
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 100;
+}
+
+.na-speakers-filters__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.na-speakers-filters__pill {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--gold);
+  background: transparent;
+  border: 1px solid rgba(52, 211, 153, 0.15);
+  border-radius: 50px;
+  padding: 8px 22px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.na-speakers-filters__pill:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.na-speakers-filters__pill--active {
+  background: var(--green-mid);
+  border-color: var(--bg-sand);
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ─── SPLIT SECTION ─────────────────────────── */
+.na-speakers-split {
+  display: flex;
+  align-items: stretch;
+  min-height: 520px;
+  background: var(--bg-sand);
+}
+
+/* Image side */
+.na-speakers-split__img-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 460px;
+}
+
+.na-speakers-split__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.na-speakers-split__img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 55%, var(--bg-sand) 100%);
+}
+
+/* Mobile quote — hidden on desktop */
+.na-speakers-split__mobile-quote {
+  display: none;
+}
+
+/* Quote side — desktop */
+.na-speakers-split__quote {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 56px 64px 40px;
+}
+
+.na-speakers-split__quote-inner {
+  max-width: 420px;
+}
+
+.na-speakers-split__quote-mark {
+  font-family: var(--font-serif);
+  font-size: 100px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 0.6;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.na-speakers-split__journey-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-weight: 700;
+  color: var(--green-deep);
+  line-height: 1.25;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+.na-speakers-split__journey-heading em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.na-speakers-split__quote-text {
+  font-family: var(--font-body);
+  font-size: 0.97rem;
+  font-weight: 400;
+  color: #3a5248;
+  line-height: 1.9;
+}
+
+.na-speakers-split__quote-line {
+  width: 52px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin-top: 28px;
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS — ALL DEVICES
+   ══════════════════════════════════════════════ */
+
+/* ─── 4K / Ultra-Wide (≥1920px) ─────────────── */
+@media (min-width: 1920px) {
+  .na-speakers-hero { padding: 88px 80px 64px; }
+  .na-speakers-hero__content { max-width: 1100px; }
+  .na-speakers-filters { padding: 22px 80px; }
+  .na-speakers-filters__inner { max-width: 1600px; }
+  .na-speakers-split { min-height: 680px; }
+  .na-speakers-split__img-wrap { min-height: 600px; }
+  .na-speakers-split__quote { padding: 80px 72px 80px 56px; }
+  .na-speakers-split__quote-inner { max-width: 560px; }
+  .na-speakers-split__quote-mark { font-size: 130px; }
+}
+
+/* ─── Large Desktop (1440–1919px) ──────────── */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .na-speakers-hero { padding: 80px 72px 60px; }
+  .na-speakers-hero__content { max-width: 960px; }
+  .na-speakers-split { min-height: 600px; }
+  .na-speakers-split__img-wrap { min-height: 540px; }
+  .na-speakers-split__quote { padding: 72px 64px 72px 48px; }
+  .na-speakers-split__quote-inner { max-width: 480px; }
+}
+
+/* ─── Standard Desktop (1280–1439px) ───────── */
+@media (min-width: 1280px) and (max-width: 1439px) {
+  .na-speakers-hero { padding: 76px 64px 56px; }
+  .na-speakers-split { min-height: 560px; }
+  .na-speakers-split__quote { padding: 68px 60px 68px 44px; }
+}
+
+/* ─── Small Desktop / MacBook (1100–1279px) ─── */
+@media (min-width: 1100px) and (max-width: 1279px) {
+  .na-speakers-hero { padding: 72px 48px 52px; }
+  .na-speakers-filters { padding: 18px 48px; }
+  .na-speakers-split { min-height: 520px; }
+  .na-speakers-split__quote { padding: 60px 48px 60px 36px; }
+  .na-speakers-split__quote-inner { max-width: 380px; }
+}
+
+/* ─── iPad Pro 12.9" Landscape / Laptop (≤1099px) */
+@media (max-width: 1099px) {
+  .na-speakers-hero { padding: 64px 40px 44px; }
+  .na-speakers-filters { padding: 16px 40px; }
+  .na-speakers-split__quote { padding: 52px 40px 52px 32px; }
+  .na-speakers-split__quote-inner { max-width: 360px; }
+}
+
+/* ─── iPad Pro 11" / Large Tablet (≤1024px) ─── */
+@media (max-width: 1024px) {
+  .na-speakers-hero { padding: 62px 36px 42px; }
+  .na-speakers-split { min-height: 480px; }
+  .na-speakers-split__img-wrap { min-height: 420px; }
+  .na-speakers-split__quote { padding: 48px 36px 48px 28px; }
+  .na-speakers-split__quote-mark { font-size: 84px; }
+}
+
+/* ─── iPad / Tablet Portrait (≤900px) ───────── */
+@media (max-width: 900px) {
+  .na-speakers-hero { padding: 56px 32px 40px; }
+  .na-speakers-filters { padding: 15px 32px; }
+  .na-speakers-filters__pill { font-size: 0.74rem; padding: 7px 18px; }
+
+  /* Stack vertically */
+  .na-speakers-split { flex-direction: column; min-height: unset; }
+  .na-speakers-split__img-wrap { min-height: 360px; max-height: 480px; }
+  .na-speakers-split__img-overlay {
+    background: linear-gradient(to bottom, transparent 50%, var(--bg-sand) 100%);
+  }
+  .na-speakers-split__quote {
+    padding: 44px 36px 56px;
+    justify-content: flex-start;
+  }
+  .na-speakers-split__quote-inner { max-width: 100%; }
+  .na-speakers-split__journey-heading { font-size: clamp(1.6rem, 3.5vw, 2.4rem); }
+  .na-speakers-split__mobile-quote { display: none; }
+}
+
+/* ─── iPad Mini / Tablet (≤768px) ───────────── */
+@media (max-width: 768px) {
+  .na-speakers-hero { padding: 56px 28px 40px; }
+  .na-speakers-hero__tag {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    gap: 10px;
+    text-align: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .na-speakers-filters { padding: 14px 28px; }
+  .na-speakers-filters__pill { font-size: 0.72rem; padding: 7px 16px; }
+  .na-speakers-split__img-wrap { min-height: 320px; max-height: 440px; }
+  .na-speakers-split__quote { padding: 40px 28px 52px; }
+  .na-speakers-split__quote-mark { font-size: 80px; margin-bottom: 20px; }
+  .na-speakers-split__journey-heading { font-size: clamp(1.5rem, 4vw, 2.2rem); }
+  .na-speakers-split__quote-text { font-size: 0.93rem; }
+}
+
+/* ─── Large Phone / Phablet (≤640px) ────────── */
+@media (max-width: 640px) {
+  .na-speakers-hero { padding: 48px 22px 36px; }
+  .na-speakers-filters { padding: 12px 22px; }
+  .na-speakers-filters__inner { gap: 8px; }
+  .na-speakers-filters__pill { font-size: 0.7rem; padding: 7px 14px; }
+  .na-speakers-split__img-wrap { min-height: 280px; max-height: 380px; }
+  .na-speakers-split__quote { padding: 36px 22px 48px; }
+  .na-speakers-split__quote-mark { font-size: 72px; }
+  .na-speakers-split__journey-heading { font-size: clamp(1.4rem, 5vw, 2rem); }
+}
+
+/* ─── iPhone Pro Max / Large Android (≤480px) ─ */
+@media (max-width: 480px) {
+  .na-speakers-hero { padding: 48px 18px 36px; }
+  .na-speakers-hero__tag { font-size: 0.55rem; letter-spacing: 2.5px; gap: 8px; }
+  .na-speakers-hero__tag::before, .na-speakers-hero__tag::after { width: 20px; }
+  .na-speakers-hero__title { line-height: 1.15; }
+  .na-speakers-filters { padding: 12px 16px; }
+  .na-speakers-filters__inner { gap: 8px; }
+  .na-speakers-filters__pill { font-size: 0.68rem; padding: 6px 13px; }
+  .na-speakers-split__img-wrap { min-height: 260px; max-height: 360px; }
+  .na-speakers-split__quote { padding: 36px 18px 48px; }
+  .na-speakers-split__quote-mark { font-size: 64px; margin-bottom: 16px; }
+  .na-speakers-split__journey-heading {
+    font-size: clamp(1.35rem, 6vw, 1.8rem);
+    margin-bottom: 18px;
+  }
+  .na-speakers-split__quote-text { font-size: 0.88rem; line-height: 1.8; }
+  .na-speakers-split__quote-line { width: 40px; margin-top: 22px; }
+}
+
+/* ─── iPhone Standard (≤414px) ──────────────── */
+@media (max-width: 414px) {
+  .na-speakers-hero { padding: 44px 16px 32px; }
+  .na-speakers-filters { padding: 11px 14px; }
+  .na-speakers-filters__pill { font-size: 0.66rem; padding: 6px 12px; }
+  .na-speakers-split__img-wrap { min-height: 240px; max-height: 320px; }
+  .na-speakers-split__quote { padding: 32px 16px 44px; }
+  .na-speakers-split__quote-mark { font-size: 58px; }
+  .na-speakers-split__journey-heading { font-size: clamp(1.3rem, 6.5vw, 1.7rem); }
+}
+
+/* ─── iPhone SE / Small Android (≤390px) ────── */
+@media (max-width: 390px) {
+  .na-speakers-hero { padding: 40px 14px 28px; }
+  .na-speakers-hero__tag { font-size: 0.5rem; letter-spacing: 2px; gap: 6px; }
+  .na-speakers-hero__tag::before, .na-speakers-hero__tag::after { width: 14px; }
+  .na-speakers-filters { padding: 10px 12px; }
+  .na-speakers-filters__inner { gap: 6px; }
+  .na-speakers-filters__pill { font-size: 0.64rem; padding: 5px 11px; }
+  .na-speakers-split__img-wrap { min-height: 220px; max-height: 300px; }
+  .na-speakers-split__quote { padding: 28px 14px 40px; }
+  .na-speakers-split__quote-mark { font-size: 52px; margin-bottom: 12px; }
+  .na-speakers-split__journey-heading {
+    font-size: clamp(1.2rem, 7vw, 1.6rem);
+    margin-bottom: 16px;
+  }
+  .na-speakers-split__quote-text { font-size: 0.84rem; }
+  .na-speakers-split__quote-line { width: 36px; margin-top: 18px; }
+}
+
+/* ─── iPhone SE 1st gen / 320px ─────────────── */
+@media (max-width: 360px) {
+  .na-speakers-hero__tag { font-size: 0.48rem; letter-spacing: 1.8px; }
+  .na-speakers-filters__pill { font-size: 0.62rem; padding: 5px 10px; }
+  .na-speakers-split__journey-heading { font-size: 1.15rem; }
+}
+
+/* ─── Landscape orientation — phones ─────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .na-speakers-hero { padding: 72px 24px 36px; }
+  .na-speakers-hero__title { font-size: clamp(1.5rem, 4vw, 2.2rem); }
+  .na-speakers-split { flex-direction: row; min-height: 340px; }
+  .na-speakers-split__img-wrap { min-height: 300px; max-height: unset; }
+  .na-speakers-split__img-overlay {
+    background: linear-gradient(to right, transparent 55%, var(--bg-sand) 100%);
+  }
+  .na-speakers-split__quote { padding: 32px 32px 32px 24px; }
+  .na-speakers-split__quote-mark { font-size: 56px; margin-bottom: 12px; }
+  .na-speakers-split__journey-heading {
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    margin-bottom: 14px;
+  }
+  .na-speakers-split__quote-text { font-size: 0.82rem; line-height: 1.7; }
+  .na-speakers-split__quote-line { margin-top: 16px; }
+}
+
+/* ─── Tablet Landscape (768–1024px landscape) ── */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .na-speakers-split { flex-direction: row; min-height: 440px; }
+  .na-speakers-split__img-wrap { min-height: 400px; max-height: unset; }
+  .na-speakers-split__img-overlay {
+    background: linear-gradient(to right, transparent 55%, var(--bg-sand) 100%);
+  }
+  .na-speakers-split__quote {
+    padding: 48px 40px 48px 32px;
+    justify-content: center;
+  }
+  .na-speakers-split__quote-inner { max-width: 380px; }
+}
+
+/* ─── iPad Pro / Large Tablet Landscape ─────── */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .na-speakers-split__quote { padding: 56px 44px 56px 36px; }
+  .na-speakers-split__journey-heading { font-size: 2.2rem; }
+}
+
+/* ─── Reduced motion ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

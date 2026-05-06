@@ -1,0 +1,394 @@
+/* =====================================================================
+   TempSpeakers.css
+   Uses --color-* and --font-* variables already declared on
+   .as-page in eurohome.css — no duplication needed.
+
+   All classes prefixed as-speakers- to match region naming.
+   ===================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap");
+
+/* ─── LOCAL ALIAS ───────────────────────────────────────────────────
+   Map the NA-origin token names used in this file onto the as-page
+   variables so nothing bleeds into the rest of the site.
+   ─────────────────────────────────────────────────────────────────── */
+.as-speakers-hero,
+.as-speakers-filters,
+.as-speakers-split {
+  --sp-bg:          var(--color-bg);
+  --sp-dark:        var(--color-dark);
+  --sp-accent:      var(--color-accent);
+  --sp-accent-dark: var(--color-accent-dark);
+  --sp-muted:       var(--color-text-muted);
+  --sp-card-bg:     var(--color-card-bg);
+  --sp-white:       var(--color-white);
+  --sp-font-body:   var(--font-body);
+  --sp-font-serif:  "Playfair Display", serif;
+  --sp-transition:  var(--transition);
+}
+
+/* =====================================================================
+   HERO
+   ===================================================================== */
+.as-speakers-hero {
+  background: var(--sp-bg);
+  padding: 72px 60px 52px;
+  text-align: center;
+}
+
+.as-speakers-hero__content {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.as-speakers-hero__tag {
+  font-family: var(--sp-font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--sp-dark);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.as-speakers-hero__tag::before,
+.as-speakers-hero__tag::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--sp-dark);
+  flex-shrink: 0;
+}
+
+.as-speakers-hero__title {
+  font-family: var(--font-heading);        /* Bebas Neue from as-page */
+  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  font-weight: 400;                        /* Bebas is display-weight by default */
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sp-dark);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.as-speakers-hero__title em {
+  color: var(--sp-accent);
+  font-style: normal;
+}
+
+/* =====================================================================
+   FILTER BAR
+   ===================================================================== */
+.as-speakers-filters {
+  padding: 18px 60px;
+  background: var(--sp-dark);
+  border-bottom: 1px solid rgba(212, 165, 90, 0.12);
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 100;
+}
+
+.as-speakers-filters__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.as-speakers-filters__pill {
+  font-family: var(--sp-font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--sp-accent);
+  background: transparent;
+  border: 1px solid rgba(212, 165, 90, 0.2);
+  border-radius: 50px;
+  padding: 8px 22px;
+  cursor: pointer;
+  transition: all var(--sp-transition);
+  white-space: nowrap;
+}
+
+.as-speakers-filters__pill:hover {
+  border-color: var(--sp-accent);
+  color: var(--sp-accent);
+  background: rgba(212, 165, 90, 0.08);
+}
+
+.as-speakers-filters__pill--active {
+  background: var(--sp-accent);
+  border-color: var(--sp-accent);
+  color: var(--sp-dark);
+  font-weight: 600;
+}
+
+/* =====================================================================
+   SPLIT SECTION
+   ===================================================================== */
+.as-speakers-split {
+  display: flex;
+  align-items: stretch;
+  min-height: 520px;
+  background: var(--sp-bg);
+}
+
+/* ── Image side ── */
+.as-speakers-split__img-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 460px;
+}
+
+.as-speakers-split__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.as-speakers-split__img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, transparent 55%, var(--sp-bg) 100%);
+}
+
+/* Mobile quote — hidden on desktop */
+.as-speakers-split__mobile-quote {
+  display: none;
+}
+
+/* ── Quote side (desktop) ── */
+.as-speakers-split__quote {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 56px 64px 40px;
+}
+
+.as-speakers-split__quote-inner {
+  max-width: 420px;
+}
+
+.as-speakers-split__quote-mark {
+  font-family: var(--sp-font-serif);
+  font-size: 100px;
+  font-weight: 700;
+  color: var(--sp-accent);
+  line-height: 0.6;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.as-speakers-split__journey-heading {
+  font-family: var(--sp-font-serif);
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-weight: 700;
+  color: var(--sp-dark);
+  line-height: 1.25;
+  margin-bottom: 24px;
+  letter-spacing: -0.01em;
+}
+
+.as-speakers-split__journey-heading em {
+  color: var(--sp-accent);
+  font-style: italic;
+}
+
+.as-speakers-split__quote-text {
+  font-family: var(--sp-font-body);
+  font-size: 0.97rem;
+  font-weight: 400;
+  color: var(--sp-muted);
+  line-height: 1.9;
+}
+
+.as-speakers-split__quote-line {
+  width: 52px;
+  height: 2px;
+  background: var(--sp-accent);
+  border-radius: 2px;
+  margin-top: 28px;
+}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+
+/* Large tablets / small laptops */
+@media (max-width: 1024px) {
+  .as-speakers-hero {
+    padding: 64px 40px 44px;
+  }
+
+  .as-speakers-filters {
+    padding: 16px 40px;
+  }
+
+  .as-speakers-split__quote {
+    padding: 52px 40px 52px 32px;
+  }
+
+  .as-speakers-split__quote-inner {
+    max-width: 360px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .as-speakers-hero {
+    padding: 56px 28px 40px;
+  }
+
+  .as-speakers-hero__tag {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .as-speakers-filters {
+    padding: 14px 28px;
+  }
+
+  .as-speakers-filters__pill {
+    font-size: 0.72rem;
+    padding: 7px 16px;
+  }
+
+  /* Stack: image on top, quote below */
+  .as-speakers-split {
+    flex-direction: column;
+    min-height: unset;
+  }
+
+  .as-speakers-split__img-wrap {
+    min-height: 320px;
+    max-height: 420px;
+  }
+
+  .as-speakers-split__img-overlay {
+    background: linear-gradient(to bottom, transparent 50%, var(--sp-bg) 100%);
+  }
+
+  .as-speakers-split__quote {
+    padding: 44px 32px 52px;
+    justify-content: flex-start;
+  }
+
+  .as-speakers-split__quote-inner {
+    max-width: 100%;
+  }
+
+  .as-speakers-split__journey-heading {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .as-speakers-hero {
+    padding: 48px 18px 36px;
+  }
+
+  .as-speakers-hero__tag {
+    font-size: 0.55rem;
+    letter-spacing: 2.5px;
+    gap: 8px;
+  }
+
+  .as-speakers-hero__tag::before,
+  .as-speakers-hero__tag::after {
+    width: 20px;
+  }
+
+  .as-speakers-filters {
+    padding: 12px 16px;
+  }
+
+  .as-speakers-filters__inner {
+    gap: 8px;
+  }
+
+  .as-speakers-filters__pill {
+    font-size: 0.68rem;
+    padding: 6px 13px;
+  }
+
+  .as-speakers-split__img-wrap {
+    min-height: 260px;
+    max-height: 340px;
+  }
+
+  .as-speakers-split__quote {
+    padding: 36px 20px 48px;
+  }
+
+  .as-speakers-split__quote-mark {
+    font-size: 72px;
+    margin-bottom: 16px;
+  }
+
+  .as-speakers-split__journey-heading {
+    font-size: clamp(1.35rem, 6vw, 1.8rem);
+    margin-bottom: 18px;
+  }
+
+  .as-speakers-split__quote-text {
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .as-speakers-split__quote-line {
+    width: 40px;
+    margin-top: 22px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .as-speakers-hero__tag {
+    font-size: 0.5rem;
+    letter-spacing: 2px;
+  }
+
+  .as-speakers-filters__pill {
+    font-size: 0.64rem;
+    padding: 5px 11px;
+  }
+
+  .as-speakers-split__journey-heading {
+    font-size: 1.25rem;
+  }
+}
+
+/* iPad Pro landscape */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .as-speakers-split__quote {
+    padding: 56px 44px 56px 36px;
+  }
+
+  .as-speakers-split__journey-heading {
+    font-size: 2.2rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
