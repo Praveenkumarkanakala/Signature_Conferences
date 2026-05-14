@@ -1,35 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import logo from "./SGCLogo.png";
 
 const LINKS = [
-  { label: "HOME", path: "#home", type: "scroll" },
-  { label: "ABOUT", path: "/about", type: "route" },
+  { label: "HOME",        path: "#home",    type: "scroll" },
+  { label: "ABOUT",       path: "/about",   type: "route"  },
   { label: "GLOBAL HUBS", path: "#regions", type: "scroll", hasDropdown: true },
-  { label: "CONTACT", path: "/contact", type: "route" },
+  { label: "CONTACT",     path: "/contact", type: "route"  },
 ];
 
 const REGIONS_DROPDOWN = [
-  { label: "Asia Signature Global Conferences", path: "/asia", type: "route" },
-  { label: "Europe Signature Global Conferences", path: "/europe", type: "route" },
-  { label: "North America Signature Global Conferences", path: "/northamerica", type: "route" },
-  { label: "USA Signature Global Conference", path: "/usa", type: "route" }, // ✅ FIX
+  { label: "Signature Asia Global Conferences",          path: "/asia",         type: "route" },
+  { label: "Signature Europe Global Conferences",        path: "/europe",       type: "route" },
+  { label: "Signature North America Global Conferences", path: "/northamerica", type: "route" },
+  { label: "Signature USA Global Conference",            path: "/usa",          type: "route" },
 ];
 
-const Navbar = () => {
-  const navigate = useNavigate();
+const safeNavigate = (path) => {
+  try {
+    window.location.href = path;
+  } catch (e) {
+    console.error("Navigation error:", e);
+  }
+};
 
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+const Navbar = () => {
+  const [scrolled,    setScrolled]    = useState(false);
+  const [menuOpen,    setMenuOpen]    = useState(false);
   const [regionsOpen, setRegionsOpen] = useState(false);
-  const [active, setActive] = useState("");
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [active,      setActive]      = useState("");
+  const [isMobile,    setIsMobile]    = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
-
       document.querySelectorAll("section[id]").forEach((sec) => {
         if (window.scrollY >= sec.offsetTop - 100) {
           setActive(`#${sec.id}`);
@@ -48,34 +52,35 @@ const Navbar = () => {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
-
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
   }, []);
 
-  // 🔥 Unified Navigation Handler
   const handleNav = (e, link) => {
+    e.preventDefault();
     setMenuOpen(false);
     setRegionsOpen(false);
 
-    if (link.type === "scroll") {
-      e.preventDefault();
+    if (link.type === "route") {
+      safeNavigate(link.path);
+      return;
+    }
 
+    if (link.type === "scroll") {
+      const isHash = link.path.startsWith("#");
+      if (!isHash) {
+        safeNavigate(link.path);
+        return;
+      }
       const el = document.querySelector(link.path);
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
         window.history.pushState(null, "", link.path);
       } else {
-        // If section not found → go to home first then scroll
-        navigate("/");
-        setTimeout(() => {
-          document.querySelector(link.path)?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
+        window.location.href = "/" + link.path;
       }
-    } else if (link.type === "route") {
-      navigate(link.path);
     }
   };
 
@@ -99,12 +104,10 @@ const Navbar = () => {
           </span>
         </div>
 
-
-        {/* DESKTOP */}
+        {/* DESKTOP LINKS */}
         <ul className="nav-links">
           {LINKS.map((link) => (
             <li key={link.label} className="nav-item">
-
               {link.hasDropdown ? (
                 <div
                   className="dropdown-wrapper"
@@ -133,10 +136,6 @@ const Navbar = () => {
                     ))}
                   </ul>
                 </div>
-              ) : link.type === "route" ? (
-                <span className="link" onClick={(e) => handleNav(e, link)}>
-                  {link.label}
-                </span>
               ) : (
                 <a
                   href={link.path}
@@ -150,9 +149,12 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* RIGHT */}
+        {/* RIGHT - Register CTA */}
         <div className="nav-right">
-          <span className="cta" onClick={(e) => handleNav(e, { path: "/register", type: "route" })}>
+          <span
+            className="cta"
+            onClick={(e) => handleNav(e, { path: "/register", type: "route" })}
+          >
             Register
           </span>
 
@@ -164,11 +166,10 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* MOBILE */}
+      {/* MOBILE MENU */}
       <div className={`mobile ${menuOpen ? "show" : ""}`}>
         {LINKS.map((link) => (
           <div key={link.label} className="mobile-item">
-
             {link.hasDropdown ? (
               <>
                 <a href={link.path} className="m-link" onClick={toggleRegions}>
@@ -181,7 +182,7 @@ const Navbar = () => {
                       <a
                         href={sub.path}
                         className="m-dropdown-item"
-                        onClick={(e) => handleNav(e, { ...sub, type: "scroll" })}
+                        onClick={(e) => handleNav(e, sub)}
                       >
                         {sub.label}
                       </a>
@@ -190,14 +191,21 @@ const Navbar = () => {
                 </ul>
               </>
             ) : (
-              <span className="m-link" onClick={(e) => handleNav(e, link)}>
+              <a
+                href={link.path}
+                className="m-link"
+                onClick={(e) => handleNav(e, link)}
+              >
                 {link.label}
-              </span>
+              </a>
             )}
           </div>
         ))}
 
-        <span className="m-cta" onClick={(e) => handleNav(e, { path: "#register", type: "scroll" })}>
+        <span
+          className="m-cta"
+          onClick={(e) => handleNav(e, { path: "/register", type: "route" })}
+        >
           Register
         </span>
       </div>

@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, useCallback } from "react";
 import "./asia.css";
 import HERO_IMAGE from "./ASIA_IMG.jpg";
+// import sgcLogo from "./SGC Logo.png"
 import { getConferencesByRegion } from "../../globaldata/eventsglobaldata";
 import Footer from "../../../Components/Footer/footer";
 import { TempHomeGallery, TempHomeSpeakers } from "./TempHGS";
@@ -192,8 +193,9 @@ export function Navbar() {
       >
         {/* Logo */}
         <div className="as-hp-navbar__logo" onClick={() => navigate("/")}>
-          <span className="as-hp-navbar__logo-sig">SIGNATURE</span>
-          <span className="as-hp-navbar__logo-sub">Conferences</span>
+         {/* <img src={sgcLogo} alt="SGC Logo" className="asi-navbar__logo-img" /> */}
+          <span className="as-hp-navbar__logo-sig">SIGNATURE ASIA</span>
+          <span className="as-hp-navbar__logo-sub">Global Conferences</span>
         </div>
 
         {/* Desktop links */}
@@ -266,8 +268,8 @@ function Hero() {
         <div className="as-hp-hero__left">
           <p className="as-hp-hero__eyebrow">World-Class Events Platform</p>
           <div className="as-hp-hero__heading">
-            <span className="as-hp-hero__word as-hp-hero__word--1">ASIA</span>
-            <span className="as-hp-hero__word as-hp-hero__word--2">SIGNATURE</span>
+            <span className="as-hp-hero__word as-hp-hero__word--1">SIGNATURE</span>
+            <span className="as-hp-hero__word as-hp-hero__word--2">ASIA</span>
             <span className="as-hp-hero__word as-hp-hero__word--3">GLOBAL</span>
             <span className="as-hp-hero__word as-hp-hero__word--2">CONFERENCES</span>
           </div>

@@ -144,7 +144,7 @@ export function TempHomeGallery() {
       </div>
 
       {/* ── Notify CTA strip ── */}
-      <div className="thg-cta">
+      {/* <div className="thg-cta">
         <div className="thg-cta__left">
           <BellIcon />
           <div className="thg-cta__text">
@@ -172,7 +172,7 @@ export function TempHomeGallery() {
             </>
           )}
         </button>
-      </div>
+      </div> */}
 
     </section>
   );

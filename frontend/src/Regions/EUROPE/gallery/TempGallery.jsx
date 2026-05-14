@@ -180,7 +180,7 @@ export function TempGallery() {
               </p>
             </div>
           </div>
-          <a href="#register" className="tg-cta-banner__btn">
+          <a href="/europe-register" className="tg-cta-banner__btn">
             Register Now
             <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path

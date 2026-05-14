@@ -1,23 +1,20 @@
 /* =====================================================================
-   TempSpeakers.css
-   Uses --color-* and --font-* variables already declared on
-   .as-page in eurohome.css — no duplication needed.
-
-   All classes prefixed as-speakers- to match region naming.
+   TempSpeakers.css  —  Asia Speakers page
+   Hero & filter bar : maroon  (var --color-bg / --color-dark)
+   Split section     : maroon  (same maroon, white text)
    ===================================================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap");
 
-/* ─── LOCAL ALIAS ───────────────────────────────────────────────────
-   Map the NA-origin token names used in this file onto the as-page
-   variables so nothing bleeds into the rest of the site.
-   ─────────────────────────────────────────────────────────────────── */
+/* ─── LOCAL ALIAS ────────────────────────────────────────────────────
+   Map as-page tokens onto shorthand vars used throughout this file.
+   ──────────────────────────────────────────────────────────────────── */
 .as-speakers-hero,
 .as-speakers-filters,
 .as-speakers-split {
-  --sp-bg:          var(--color-bg);
-  --sp-dark:        var(--color-dark);
-  --sp-accent:      var(--color-accent);
+  --sp-bg:          var(--color-bg);           /* site maroon           */
+  --sp-dark:        var(--color-dark);          /* deep dark             */
+  --sp-accent:      var(--color-accent);        /* gold #d4a55a          */
   --sp-accent-dark: var(--color-accent-dark);
   --sp-muted:       var(--color-text-muted);
   --sp-card-bg:     var(--color-card-bg);
@@ -25,10 +22,20 @@
   --sp-font-body:   var(--font-body);
   --sp-font-serif:  "Playfair Display", serif;
   --sp-transition:  var(--transition);
+
+  /* ── Maroon panel theme ── */
+  --sp-panel:       #3a0e0e;                   /* maroon bg             */
+  --sp-panel-text:  #ffffff;                   /* white heading         */
+  --sp-panel-muted: rgba(255, 255, 255, 0.68); /* soft white body text  */
+
+  /* RGB breakdown of --sp-panel used in gradient rgba() calls */
+  --sp-panel-r: 58;
+  --sp-panel-g: 14;
+  --sp-panel-b: 14;
 }
 
 /* =====================================================================
-   HERO
+   HERO  —  maroon background
    ===================================================================== */
 .as-speakers-hero {
   background: var(--sp-bg);
@@ -47,7 +54,7 @@
   font-weight: 600;
   letter-spacing: 4px;
   text-transform: uppercase;
-  color: var(--sp-dark);
+  color: var(--sp-accent);
   display: inline-flex;
   align-items: center;
   gap: 14px;
@@ -60,17 +67,17 @@
   display: block;
   width: 32px;
   height: 1px;
-  background: var(--sp-dark);
+  background: var(--sp-accent);
   flex-shrink: 0;
 }
 
 .as-speakers-hero__title {
-  font-family: var(--font-heading);        /* Bebas Neue from as-page */
+  font-family: var(--font-heading);
   font-size: clamp(2.4rem, 6vw, 4.8rem);
-  font-weight: 400;                        /* Bebas is display-weight by default */
+  font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--sp-dark);
+  color: var(--sp-white);
   line-height: 1.05;
   margin: 0;
 }
@@ -81,7 +88,7 @@
 }
 
 /* =====================================================================
-   FILTER BAR
+   FILTER BAR  —  dark background, gold pills
    ===================================================================== */
 .as-speakers-filters {
   padding: 18px 60px;
@@ -129,16 +136,16 @@
 }
 
 /* =====================================================================
-   SPLIT SECTION
+   SPLIT SECTION  —  full maroon background
    ===================================================================== */
 .as-speakers-split {
   display: flex;
   align-items: stretch;
   min-height: 520px;
-  background: var(--sp-bg);
+  background: var(--sp-panel);       /* maroon                          */
 }
 
-/* ── Image side ── */
+/* ── Image side ─────────────────────────────────────────────────────── */
 .as-speakers-split__img-wrap {
   flex: 1;
   position: relative;
@@ -154,10 +161,23 @@
   display: block;
 }
 
+/*
+  Overlay: photo fades cleanly into the maroon panel on the right.
+  Starts fully transparent so the left edge of the photo is crisp,
+  then transitions to solid maroon (#3a0e0e) at the right edge.
+  No white/grey — only transparent → maroon.
+*/
 .as-speakers-split__img-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, transparent 55%, var(--sp-bg) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(58, 14, 14, 0)    0%,
+    rgba(58, 14, 14, 0)   38%,
+    rgba(58, 14, 14, 0.45) 62%,
+    rgba(58, 14, 14, 0.85) 80%,
+    rgba(58, 14, 14, 1)   100%
+  );
 }
 
 /* Mobile quote — hidden on desktop */
@@ -165,41 +185,46 @@
   display: none;
 }
 
-/* ── Quote side (desktop) ── */
+/* ── Quote side (desktop) ────────────────────────────────────────────── */
 .as-speakers-split__quote {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 64px 56px 64px 40px;
+  background: var(--sp-panel);       /* maroon — no seam with img side  */
 }
 
 .as-speakers-split__quote-inner {
   max-width: 420px;
 }
 
+/*
+  " in Playfair Display Bold renders as two gold teardrop comma-shapes.
+*/
 .as-speakers-split__quote-mark {
   font-family: var(--sp-font-serif);
-  font-size: 100px;
+  font-size: 96px;
   font-weight: 700;
   color: var(--sp-accent);
-  line-height: 0.6;
-  margin-bottom: 24px;
+  line-height: 0.55;
+  margin-bottom: 28px;
   display: block;
+  letter-spacing: -0.05em;
 }
 
 .as-speakers-split__journey-heading {
   font-family: var(--sp-font-serif);
   font-size: clamp(1.7rem, 3vw, 2.6rem);
   font-weight: 700;
-  color: var(--sp-dark);
+  color: var(--sp-panel-text);       /* white                           */
   line-height: 1.25;
   margin-bottom: 24px;
   letter-spacing: -0.01em;
 }
 
 .as-speakers-split__journey-heading em {
-  color: var(--sp-accent);
+  color: var(--sp-accent);           /* gold italic "first step."       */
   font-style: italic;
 }
 
@@ -207,14 +232,14 @@
   font-family: var(--sp-font-body);
   font-size: 0.97rem;
   font-weight: 400;
-  color: var(--sp-muted);
+  color: var(--sp-panel-muted);      /* soft white                      */
   line-height: 1.9;
 }
 
 .as-speakers-split__quote-line {
   width: 52px;
   height: 2px;
-  background: var(--sp-accent);
+  background: var(--sp-accent);      /* gold rule                       */
   border-radius: 2px;
   margin-top: 28px;
 }
@@ -277,8 +302,15 @@
     max-height: 420px;
   }
 
+  /* Mobile: fade bottom-to-maroon */
   .as-speakers-split__img-overlay {
-    background: linear-gradient(to bottom, transparent 50%, var(--sp-bg) 100%);
+    background: linear-gradient(
+      to bottom,
+      rgba(58, 14, 14, 0)    0%,
+      rgba(58, 14, 14, 0)   42%,
+      rgba(58, 14, 14, 0.55) 70%,
+      rgba(58, 14, 14, 1)   100%
+    );
   }
 
   .as-speakers-split__quote {
@@ -336,7 +368,7 @@
 
   .as-speakers-split__quote-mark {
     font-size: 72px;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .as-speakers-split__journey-heading {

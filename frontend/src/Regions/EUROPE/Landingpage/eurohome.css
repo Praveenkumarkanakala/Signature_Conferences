@@ -1,11 +1,7 @@
-/* ============================================================
-   EUROPE HOME — FULLY RESPONSIVE CSS
-   Tested breakpoints: 320px, 375px, 390px, 414px (iPhone SE/14/15/Pro)
-                       768px (iPad), 820px (iPad Air), 1024px (iPad Pro)
-                       1280px, 1440px, 1920px (Desktop/Laptop)
-   ============================================================ */
-
 /* =================== CSS VARIABLES =================== */
+@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
+
+
 .europe-page {
   --color-bg: #f5ede0;
   --color-accent: #d4a55a;
@@ -14,7 +10,7 @@
   --color-mid: #b8845a;
   --color-dark: #3b2112;
   --color-white: #ffffff;
-  --color-nav-bg: #5c3d2e;
+  --color-nav-bg: #3b2112;
   --color-text-light: #3b2112;
   --color-text-muted: rgba(59, 33, 18, 0.55);
   --color-card-bg: #fffaf4;
@@ -67,8 +63,8 @@ html {
   left: 0;
   width: 100%;
   height: var(--nav-height);
-  background: linear-gradient(90deg, #5c3d2e 0%, #7a5243 100%);
-  box-shadow: 0 2px 20px rgba(80, 40, 10, 0.25);
+  background: linear-gradient(90deg, #3b2112 0%, #3b2112 100%);
+box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -290,7 +286,7 @@ html {
     top: var(--nav-height);
     left: 0;
     width: 100%;
-    background-color: #5c3d2e;
+    background-color: #3b2112;
     padding: 0.5rem 1.25rem 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
@@ -430,23 +426,29 @@ html {
 }
 
 .europe-hero-v2__script {
-  font-family: 'Dancing Script', 'Segoe Script', cursive;
-  font-size: clamp(2.4rem, 4.5vw, 4.2rem);
-  font-weight: 700;
-  color: #3b2112;
-  line-height: 1;
+  font-family: 'Allura', cursive;
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 400;
+  color: #6b4a35;
+  line-height: 0.8;
   margin: 0;
-  letter-spacing: 0.01em;
+  position: relative;
+  z-index: 3;
+  margin-bottom: -2.3rem;
+  margin-left: -0.2rem;
+  opacity: 0.95;
 }
 
 .europe-hero-v2__headline {
   font-family: 'Playfair Display', 'Georgia', serif;
-  font-size: clamp(2.2rem, 5vw, 5rem);
-  font-weight: 900;
-  line-height: 1.0;
+  font-size: clamp(4rem, 7vw, 7.5rem);
+  font-weight: 700;
+  line-height: 0.88;
   color: #1a0e07;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.04em;
+  position: relative;
+  z-index: 1;
 }
 
 .europe-hero-v2__tagline {

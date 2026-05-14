@@ -42,6 +42,15 @@ const DATA = {
 
 /* ─── COMPONENTS ───────────────────────────────────────────────── */
 function AboutHero() {
+  const navigate = useNavigate();
+
+  const handleScrollToStory = (e) => {
+    e.preventDefault();
+    const target = document.getElementById("our-story");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
   return (
     <section className="na-hero">
       <div className="na-hero__lines" />
@@ -53,8 +62,8 @@ function AboutHero() {
           <h1 className="na-hero__title">More Than a<br />Conference.<br /><em>A Movement.</em></h1>
           <p className="na-hero__sub">A premier international platform dedicated to inspiring voices, empowering leaders, and creating meaningful global impact — one stage, one story, one life at a time.</p>
           <div className="na-hero__actions">
-            <button className="na-btn na-btn--primary">Explore Conferences</button>
-            <button className="na-btn na-btn--ghost">Our Story ↓</button>
+            <button className="na-btn na-btn--primary"  onClick={() => navigate("/na-events")}>Explore Conferences</button>
+            <button className="na-btn na-btn--ghost" onClick={handleScrollToStory}>Our Story ↓</button>
           </div>
         </div>
         <div>
@@ -89,7 +98,7 @@ function StatsBar() {
 
 function Mission() {
   return (
-    <section className="na-mission">
+    <section className="na-mission" id="our-story">
       <div className="na-mission__inner">
 
         {/* ── Centered heading ── */}

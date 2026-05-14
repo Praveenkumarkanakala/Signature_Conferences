@@ -1463,7 +1463,6 @@
     transition: background var(--ease);
   }
   .usa-page .usa-navbar__cta-mobile a:hover { background: var(--color-accent-dark); }
-
   .usa-page .usa-navbar__logo-name {
     display: block;
     font-size: 0.6rem;
@@ -1472,49 +1471,67 @@
   .usa-page .usa-navbar__logo-img { width: 36px; height: 36px; }
   .usa-page .usa-navbar__logo-usa { font-size: 0.85rem; letter-spacing: 2px; }
 
-  /* ─── HERO — Mobile (text first, image below) ────────────── */
+  /* ─── HERO — Mobile ─────────────────────────────────────── */
   .usa-page .usa-hero {
-    padding: calc(var(--nav-h) + 24px) 1.5rem 40px;
+    padding: calc(var(--nav-h) + 28px) 1.5rem 56px;
     min-height: auto;
   }
 
   .usa-page .usa-hero-container {
-    flex-direction: column;       /* TEXT on top, IMAGE below */
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    gap: 16px;
+    gap: 0;
   }
 
   .usa-page .usa-hero-text {
     order: 1;
     width: 100%;
+    z-index: 2;
   }
 
+  /* Generous image block so rings + statue are fully visible */
   .usa-page .usa-hero-image {
     order: 2;
     width: 100%;
-    max-width: 320px;
-    min-height: 320px;
-    margin: 0 auto;
+    max-width: 440px;
+    min-height: 440px;
+    margin: 4px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* float animation still active — keep it */
   }
 
   .usa-page .usa-hero-tag-line { justify-content: center; }
 
   .usa-page .usa-hero-heading__solid,
-  .usa-page .usa-hero-heading__outline { font-size: clamp(2.4rem, 7.5vw, 3.5rem); }
+  .usa-page .usa-hero-heading__outline {
+    font-size: clamp(2.4rem, 7.5vw, 3.5rem);
+  }
 
   .usa-page .usa-hero-sub { font-size: 1rem; }
   .usa-page .usa-hero-buttons { justify-content: center; }
 
+  /* Rings: sized to match the 440px image block comfortably */
   .usa-page .usa-hero-circular-wrap {
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: flex;
   }
-  .usa-page .usa-hero-statue { max-width: 240px; }
-  .usa-page .usa-circular-char { font-size: 8px !important; }
+
+  .usa-page .usa-hero-statue {
+    max-width: 295px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .usa-page .usa-circular-char { font-size: 9.5px !important; }
 
   /* Events */
   .usa-page .usa-events-section { padding: 2.5rem 1.5rem; }
@@ -1538,17 +1555,17 @@
 /* ── 768px ───────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .usa-page .usa-hero {
-    padding: calc(var(--nav-h) + 20px) 1.25rem 36px;
+    padding: calc(var(--nav-h) + 22px) 1.25rem 44px;
   }
 
   .usa-page .usa-hero-image {
-    max-width: 290px;
-    min-height: 290px;
+    max-width: 390px;
+    min-height: 390px;
   }
 
-  .usa-page .usa-hero-circular-wrap { width: 268px; height: 268px; }
-  .usa-page .usa-hero-statue { max-width: 215px; }
-  .usa-page .usa-circular-char { font-size: 7.5px !important; }
+  .usa-page .usa-hero-circular-wrap { width: 358px; height: 358px; }
+  .usa-page .usa-hero-statue { max-width: 270px; }
+  .usa-page .usa-circular-char { font-size: 9px !important; }
 
   .usa-page .usa-events-section { padding: 2rem 1.25rem; }
   .usa-page .usa-events-track__backdrop { padding: 1rem; border-radius: 16px; }
@@ -1569,11 +1586,13 @@
 /* ── 600px ───────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .usa-page .usa-hero {
-    padding: calc(var(--nav-h) + 16px) 1rem 30px;
+    padding: calc(var(--nav-h) + 18px) 1rem 38px;
   }
 
   .usa-page .usa-hero-heading__solid,
-  .usa-page .usa-hero-heading__outline { font-size: clamp(2rem, 9vw, 2.8rem); }
+  .usa-page .usa-hero-heading__outline {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+  }
 
   .usa-page .usa-hero-sub {
     font-size: 0.88rem;
@@ -1584,18 +1603,18 @@
   .usa-page .usa-secondary-btn { padding: 11px 22px; font-size: 0.78rem; }
 
   .usa-page .usa-hero-image {
-    max-width: 260px;
-    min-height: 260px;
+    max-width: 340px;
+    min-height: 340px;
   }
 
   .usa-page .usa-hero-circular-wrap {
+    width: 312px;
+    height: 312px;
     display: flex;
-    width: 240px;
-    height: 240px;
   }
 
-  .usa-page .usa-hero-statue { max-width: 185px; }
-  .usa-page .usa-circular-char { font-size: 6.5px !important; }
+  .usa-page .usa-hero-statue { max-width: 238px; }
+  .usa-page .usa-circular-char { font-size: 8px !important; }
 
   /* Events */
   .usa-page .usa-events-section { padding: 2rem 1rem; }
@@ -1626,6 +1645,32 @@
   .capitol-canvas { padding: 28px 16px 32px; }
 }
 
+/* ── 430px — Most common phone width ─────────────────────────── */
+@media (max-width: 430px) {
+  .usa-page .usa-hero {
+    padding: calc(var(--nav-h) + 14px) 1rem 32px;
+  }
+
+  .usa-page .usa-hero-heading__solid,
+  .usa-page .usa-hero-heading__outline {
+    font-size: clamp(1.9rem, 9.5vw, 2.5rem);
+  }
+
+  .usa-page .usa-hero-image {
+    max-width: 300px;
+    min-height: 300px;
+  }
+
+  .usa-page .usa-hero-circular-wrap {
+    width: 276px;
+    height: 276px;
+    display: flex;
+  }
+
+  .usa-page .usa-hero-statue { max-width: 210px; }
+  .usa-page .usa-circular-char { font-size: 7px !important; }
+}
+
 /* ── 400px ───────────────────────────────────────────────────── */
 @media (max-width: 400px) {
   .usa-page .usa-navbar { padding: 0 0.875rem; }
@@ -1634,11 +1679,13 @@
   .usa-page .usa-navbar__logo-name { font-size: 0.52rem; letter-spacing: 0.5px; }
 
   .usa-page .usa-hero {
-    padding: calc(var(--nav-h) + 14px) 0.875rem 24px;
+    padding: calc(var(--nav-h) + 12px) 0.875rem 28px;
   }
 
   .usa-page .usa-hero-heading__solid,
-  .usa-page .usa-hero-heading__outline { font-size: clamp(1.8rem, 10vw, 2.4rem); }
+  .usa-page .usa-hero-heading__outline {
+    font-size: clamp(1.75rem, 10vw, 2.2rem);
+  }
 
   /* Buttons stack vertically on tiny screens */
   .usa-page .usa-hero-buttons {
@@ -1654,13 +1701,19 @@
     justify-content: center;
   }
 
-  /* Hide rings on very tiny screens to avoid clutter */
   .usa-page .usa-hero-image {
-    max-width: 220px;
-    min-height: 220px;
+    max-width: 270px;
+    min-height: 270px;
   }
-  .usa-page .usa-hero-circular-wrap { display: none; }
-  .usa-page .usa-hero-statue { max-width: 200px; }
+
+  .usa-page .usa-hero-circular-wrap {
+    width: 248px;
+    height: 248px;
+    display: flex;
+  }
+
+  .usa-page .usa-hero-statue { max-width: 190px; }
+  .usa-page .usa-circular-char { font-size: 6.5px !important; }
 
   .usa-page .usa-event-card { flex: 0 0 200px; }
   .usa-page .usa-event-card__image-outer { height: 140px; }
@@ -1668,6 +1721,16 @@
   .usa-page .usa-speaker-card { flex: 0 0 130px; }
   .usa-page .usa-gallery-card img { height: 200px; }
   .usa-page .usa-gallery-card__overlay-title { font-size: 1.2rem; }
+}
+
+/* ── 360px — Very small phones: hide rings to save space ──────── */
+@media (max-width: 360px) {
+  .usa-page .usa-hero-circular-wrap { display: none; }
+  .usa-page .usa-hero-statue { max-width: 210px; }
+  .usa-page .usa-hero-image {
+    max-width: 240px;
+    min-height: 230px;
+  }
 }
 
 /* ── Landscape mobile ────────────────────────────────────────── */
@@ -1687,10 +1750,10 @@
   .usa-page .usa-hero-tag-line,
   .usa-page .usa-hero-buttons { justify-content: flex-start; }
   .usa-page .usa-hero-image {
-    max-width: 220px;
-    min-height: 220px;
+    max-width: 240px;
+    min-height: 240px;
   }
-  .usa-page .usa-hero-circular-wrap { width: 200px; height: 200px; }
+  .usa-page .usa-hero-circular-wrap { width: 220px; height: 220px; }
   .usa-page .usa-hero-statue { max-width: 180px; }
   .usa-page .usa-circular-char { font-size: 6px !important; }
   .usa-page .usa-hero-heading__solid,

@@ -12,7 +12,6 @@ import Futureevent3 from "../../globaldata/images/usaevents.jpeg";
 import { TempHomeGallery, TempHomeSpeakers } from "./TempHGS";
 
 
-
 import Speakerimg from "./images/galleryimg.jpeg";
 import Speakerimg1 from "./images/galleryimg1.jpeg";
 import Speakerimg2 from "./images/galleryimg2.jpeg";
@@ -146,10 +145,10 @@ const Hero = () => {
           </div>
 
           <h1 className="usa-hero-heading">
-            <span className="usa-hero-heading__outline">USA</span>
-            <span className="usa-hero-heading__solid">SIGNATURE</span>
-            <span className="usa-hero-heading__outline">GLOBAL</span>
-            <span className="usa-hero-heading__solid">CONFERENCES</span>
+            <span className="usa-hero-heading__outline">SIGNATURE</span>
+            <span className="usa-hero-heading__solid">USA GLOBAL</span>
+            <span className="usa-hero-heading__outline">CONFERENCES</span>
+            {/* <span className="usa-hero-heading__solid">CONFERENCES</span> */}
           </h1>
 
           <p className="usa-hero-sub">Where Leaders Rise and Impact Begins.</p>

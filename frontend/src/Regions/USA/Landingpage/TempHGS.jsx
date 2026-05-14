@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./TempHGS.css";
+import { useNavigate } from "react-router-dom";
+
 
 /* ================================================================
    SHARED ICONS
@@ -100,6 +102,7 @@ function GalleryCard({ variant = "light", size = "md", index = 0 }) {
 
 /* ── Main component ─────────────────────────────────────────────── */
 export function TempHomeGallery() {
+  const navigate = useNavigate();
   return (
     <section className="usa-thg2-root">
       <div className="usa-thg2-split">
@@ -135,7 +138,7 @@ export function TempHomeGallery() {
           </p>
 
           {/* CTA button */}
-          <button className="usa-thg2-cta" type="button">
+          <button className="usa-thg2-cta" type="button" onClick={() => navigate("/usa-gallery")}>
             <span>More Moments Coming Soon</span>
             <ArrowRightIcon />
           </button>

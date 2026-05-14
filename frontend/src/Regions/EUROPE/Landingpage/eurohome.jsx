@@ -288,15 +288,9 @@ function HeroSection() {
     <section className="europe-hero-v2">
       {/* ── LEFT: Text block ── */}
       <div className="europe-hero-v2__left">
-        <p className="europe-hero-v2__script">Europe</p>
-
-        <h1 className="europe-hero-v2__headline">
-          SIGNATURE<br />GLOBAL<br />CONFERENCES
-        </h1>
-
-        <p className="europe-hero-v2__tagline">
-          Inspiring Voices. Empowering Leaders. Creating Global Impact.
-        </p>
+        <p className="europe-hero-v2__script">Signature</p>
+        <h1 className="europe-hero-v2__headline"> EUROPE <br /> GLOBAL<br /> CONFERENCES</h1>
+        <p className="europe-hero-v2__tagline">  Inspiring Voices. Empowering Leaders. Creating Global Impact.  </p>
 
         <div className="europe-hero-v2__btns">
           <Link to="/europe-events" className="europe-hero-v2__btn europe-hero-v2__btn--primary">

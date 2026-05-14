@@ -2,27 +2,12 @@ import { useState } from "react";
 import "./tempspeakers.css";
 import speakerImg from "./image.png";
 
-/* ─────────────────────────────────────────────────────────────────────
-   TEMP SPEAKERS  –  drop-in placeholder for Speakers.jsx
-   
-   Usage in Speakers.jsx:
-   import { TempSpeakersHero, TempSpeakersFilter, TempSpeakersComingSoon } from "./TempSpeakers";
-
-   export default function Speakers() {
-     return (
-       <div className="as-page">
-         <Navbar />
-         <TempSpeakersHero />
-         <TempSpeakersFilter />
-         <TempSpeakersComingSoon />
-         {/* <SpeakersGrid /> */
-
 export const speakerCategories = [
-  { id: "all", label: "All Speakers" },
-  { id: "women-leadership", label: "Women & Leadership" },
-  { id: "ai-stem", label: "AI & STEM" },
-  { id: "business", label: "Business" },
-  { id: "wellness", label: "Wellness" },
+  { id: "all",              label: "All Speakers"       },
+  { id: "women-leadership", label: "Women & Leadership"  },
+  { id: "ai-stem",          label: "AI & STEM"           },
+  { id: "business",         label: "Business"            },
+  { id: "wellness",         label: "Wellness"            },
 ];
 
 /* ── Hero ─────────────────────────────────────────────────────────── */
@@ -52,7 +37,7 @@ export function TempSpeakersFilter({ active, onChange }) {
             className={`as-speakers-filters__pill${
               active === f.id ? " as-speakers-filters__pill--active" : ""
             }`}
-            onClick={() => onChange(f.id)}
+            onClick={() => onChange?.(f.id)}
           >
             {f.label}
           </button>
@@ -66,16 +51,21 @@ export function TempSpeakersFilter({ active, onChange }) {
 export function TempSpeakersComingSoon() {
   return (
     <section className="as-speakers-split">
-      {/* Image side */}
+
+      {/* ── Image side ── */}
       <div className="as-speakers-split__img-wrap">
         <img
           src={speakerImg}
           alt="Speaker presenting to audience"
           className="as-speakers-split__img"
         />
+        {/*
+          Overlay fades photo → maroon (#3a0e0e) left-to-right.
+          No white or grey tones — purely transparent-to-maroon.
+        */}
         <div className="as-speakers-split__img-overlay" />
 
-        {/* Quote overlay — visible only on mobile */}
+        {/* Mobile-only quote (shown when stacked) */}
         <div className="as-speakers-split__mobile-quote">
           <span className="as-speakers-split__quote-mark">"</span>
           <p className="as-speakers-split__journey-text">
@@ -90,10 +80,13 @@ export function TempSpeakersComingSoon() {
         </div>
       </div>
 
-      {/* Desktop quote panel */}
+      {/* ── Desktop quote panel — maroon bg ── */}
       <div className="as-speakers-split__quote">
         <div className="as-speakers-split__quote-inner">
+
+          {/* " in Playfair Display Bold = two gold teardrop comma-shapes */}
           <span className="as-speakers-split__quote-mark">"</span>
+
           <h2 className="as-speakers-split__journey-heading">
             Every great journey
             <br />
@@ -101,24 +94,22 @@ export function TempSpeakersComingSoon() {
             <br />
             <em>first step.</em>
           </h2>
+
           <p className="as-speakers-split__quote-text">
             We are curating a powerful lineup of global speakers, industry
             leaders, and changemakers. Stay tuned as we unveil inspiring voices
             for our upcoming conferences.
           </p>
+
           <div className="as-speakers-split__quote-line" />
         </div>
       </div>
+
     </section>
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────
-   SELF-CONTAINED WRAPPER
-   Only needed if you want to render TempSpeakers standalone
-   (e.g. during dev without the full Speakers.jsx shell).
-   Not required when using the three named exports above.
-─────────────────────────────────────────────────────────────────────── */
+/* ── Standalone wrapper (dev only) ───────────────────────────────── */
 export function TempSpeakers() {
   const [activeFilter, setActiveFilter] = useState("all");
 

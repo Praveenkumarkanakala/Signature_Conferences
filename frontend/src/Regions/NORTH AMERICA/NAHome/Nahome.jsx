@@ -6,13 +6,10 @@ import heroBg from "./north_america_bg.png";
 import Footer from "../../../Components/Footer/footer";
 import { TempHomeGallery, TempHomeSpeakers } from "./TempHGS";
 
-
-
 import Naimg from "../../globaldata/images/naevent.jpeg";
 import Naimg1 from "../../globaldata/images/naevent2.jpeg";
 import Naimg2 from "../../globaldata/images/naevent3.jpeg";
 import Naimg3 from "../../globaldata/images/naevent7.jpeg";
-
 
 const NA_NAV_LINKS = [
   { label: "Home", path: "/northamerica" },
@@ -107,11 +104,13 @@ function NaHero() {
           </svg>
           <span>CONNECT. COLLABORATE. CREATE IMPACT.</span>
         </div>
-        <h1 className="na-home-hero__heading">
-          <span>NORTH AMERICA</span>
-          <span>SIGNATURE GLOBAL</span>
-          <span>CONFERENCES</span>
-        </h1>
+           <h1 className="na-home-hero__heading">
+            <span>SIGNATURE</span>
+            <span>NORTH AMERICA</span>
+            <span>GLOBAL CONFERENCES</span>
+          </h1> 
+
+
         <div className="na-home-hero__rule" />
         <p className="na-home-hero__desc">
         “Your signature is your story—write it boldly on the world stage.”
@@ -254,11 +253,11 @@ function NaFutureEvents() {
 
 
 const WJU_ITEMS = [
-  { id: 1, title: "Be Part of a Global Movement", desc: "Join a purpose-driven community of leaders who are shaping the future." },
-  { id: 2, title: "Inspire Through Your Voice", desc: "Your story has power — share it, inspire others, and create change." },
-  { id: 3, title: "Elevate Your Leadership", desc: "Step into your potential and grow beyond limitations." },
-  { id: 4, title: "Build Meaningful Connections", desc: "Connect with individuals who value impact over competition." },
-  { id: 5, title: "Create Lasting Impact", desc: "Leave a mark that goes beyond the stage." },
+  { id: 1, title: "Global Platform for Thought Leaders", desc: "Showcase your expertise on an international stage alongside influential speakers, industry experts, and change-makers from around the world." },
+  { id: 2, title: "High-Impact Networking Opportunities", desc: "Connect with like-minded professionals, entrepreneurs, and leaders to build meaningful collaborations and long-term global relationships." },
+  { id: 3, title: "Transformational Learning Experience", desc: "Gain insights from powerful sessions, panel discussions, and evidence-based strategies designed to elevate both personal and professional growth." },
+  { id: 4, title: "Speaker Visibility & Leadership Growth", desc: "Position yourself as a credible authority while enhancing your personal brand, global recognition, and leadership presence." },
+  { id: 5, title: "Flexible & Legacy-Driven Experience", desc: "Join from anywhere with hybrid participation options while being part of a movement that creates lasting impact, inspires change, and empowers future leaders." },
 ];
 
 const IconPeople = () => (
@@ -369,7 +368,7 @@ function NaWhyJoinUs() {
           <p className="na-wju__sub"><span className="na-wju__sub-bracket">{"{ }"}</span>WHY JOIN US</p>
           <h2 className="na-wju__heading">BE PART OF<br />SOMETHING<br />BIGGER</h2>
           <div className="na-wju__heading-rule" />
-          <p className="na-wju__desc">Join a global community of purpose-driven leaders who are shaping a better future—together.</p>
+          <p className="na-wju__desc">Step Into the Global Spotlight & Leave Your Signature on the World Stage</p>
           <div className="na-wju__dotgrid" aria-hidden="true" />
         </div>
         <div className="na-wju__items-wrap">

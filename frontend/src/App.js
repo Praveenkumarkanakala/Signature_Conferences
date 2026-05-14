@@ -7,7 +7,6 @@ import "./App.css"
 import Navbar from "./Components/Navbar/navbar";
 import Footer from "./Components/Footer/footer";
 import CustomCursor from "./Components/Cursor/cursor";
-
 import Home from "./Pages/Home/homepage";
 import ContactPage from "./Pages/Contact/contact";
 import Aboutpage from "./Pages/About/about";

@@ -1,19 +1,9 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { allCountries } from "country-telephone-data";
-import Footer from "../../Components/Footer/footer.jsx";
 import "./register.css";
-
-import {
-  REGIONS, PACKAGES, PHYSICAL_PACKAGES, VIRTUAL_PACKAGES,
-  COMPANION_PRICE,  INITIAL_FORM,
-  STEP_META,
-  getConferencesForRegion,
-  validateStep1,
-  validateStep2,
-  calculateTotal,
-  submitRegistration,
-  applyCoupon,
-} from "./registerdata.js";
+import { REGIONS, PACKAGES, PHYSICAL_PACKAGES, VIRTUAL_PACKAGES,
+  COMPANION_PRICE,  INITIAL_FORM,  STEP_META,  getConferencesForRegion,
+  validateStep1,  validateStep2,  calculateTotal,  submitRegistration,  applyCoupon,} from "./registerdata.js";
 
 /* ═══════════════════════════════════════════════════════════
    COUNTRY DATA
@@ -1021,7 +1011,6 @@ export default function Register() {
 
   return (
     <div className="na-page sgc-register-page">
-
       {status === "success" && (
         <SuccessScreen fields={submittedData} allConferences={allConferences} onReset={handleReset} />
       )}
@@ -1034,7 +1023,6 @@ export default function Register() {
               <RegistrationForm onSuccess={handleSuccess} onFail={handleFail} />
             </div>
           </section>
-          <Footer />
         </>
       )}
     </div>

@@ -4,9 +4,12 @@ import { allCountries } from "country-telephone-data";
 import Footer from "../../../Components/Footer/footer.jsx";
 import "./asiaregister.css";
 
-import {  REGIONS,  PACKAGES,  PHYSICAL_PACKAGES,  VIRTUAL_PACKAGES,  COMPANION_PRICE,
-  INITIAL_FORM,  STEP_META,  getConferencesForRegion,  validateStep1,
-  validateStep2,  calculateTotal,  submitRegistration,  applyCoupon,} from "./registerdata.js";
+import {
+  REGIONS, PACKAGES, PHYSICAL_PACKAGES, VIRTUAL_PACKAGES,
+  COMPANION_PRICE, EXTRA_NIGHT_PRICE, INITIAL_FORM, STEP_META,
+  getConferencesForRegion, validateStep1, validateStep2,
+  calculateTotal, submitRegistration, applyCoupon,
+} from "./registerdata.js";
 
 /* ═══════════════════════════════════════════════════════════
    COUNTRY DATA
@@ -335,21 +338,23 @@ function Step1({ fields, errors, set, setField }) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   STEP 2 — Speaker Type + Package + Companions
+   STEP 2 — Speaker Type + Package + Companions + Extra Nights
    ═══════════════════════════════════════════════════════════ */
 function Step2({ fields, errors, setField }) {
   const activePkgs  = fields.speakerType === "virtual" ? VIRTUAL_PACKAGES : PHYSICAL_PACKAGES;
   const selectedPkg = PACKAGES.find((p) => p.id === fields.packageId);
-  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0);
+  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0);
   const isVirtual   = fields.speakerType === "virtual";
 
   function handleTypeSwitch(type) {
     setField("speakerType", type);
     setField("packageId", "");
+    setField("extraNights", 0);
   }
 
   return (
     <div className="as-rg-form-body">
+      {/* ── Participation Type ── */}
       <div>
         <label className="as-rg-label" style={{ marginBottom: 12, display: "block" }}>
           Participation Type <span style={{ color: "var(--as-rg-accent)" }}>*</span>
@@ -381,6 +386,7 @@ function Step2({ fields, errors, setField }) {
         </div>
       </div>
 
+      {/* ── Package Selection ── */}
       {fields.speakerType && (
         <div>
           <label className="as-rg-label" style={{ marginBottom: 14, display: "block" }}>
@@ -421,15 +427,20 @@ function Step2({ fields, errors, setField }) {
         </div>
       )}
 
+      {/* ── Companions + Extra Nights (Physical only) ── */}
       {fields.speakerType === "physical" && (
         <>
-          <div className="as-rg-divider">Additional Attendees</div>
+          <div className="as-rg-divider">Additional Attendees &amp; Nights</div>
+
+          {/* Companions */}
           <div className="as-rg-companion-box">
             <div className="as-rg-companion-box__info">
-              <div className="as-rg-companion-box__title">Accompanying Person(s)</div>
+              <div className="as-rg-companion-box__title">
+                <span className="as-rg-companion-box__title-icon">👥</span>
+                Accompanying Person(s)
+              </div>
               <div className="as-rg-companion-box__sub">
-                Each additional attendee is ${COMPANION_PRICE} · Currently:{" "}
-                <strong style={{ color: "var(--as-rg-accent)" }}>{fields.companions}</strong>
+                Each additional attendee — <strong>${COMPANION_PRICE}</strong>
               </div>
             </div>
             <div className="as-rg-companion-counter">
@@ -447,19 +458,51 @@ function Step2({ fields, errors, setField }) {
               >+</button>
             </div>
           </div>
+
+          {/* Extra Nights */}
+          <div className="as-rg-companion-box">
+            <div className="as-rg-companion-box__info">
+              <div className="as-rg-companion-box__title">
+                <span className="as-rg-companion-box__title-icon">🌙</span>
+                Extra Night(s)
+              </div>
+              <div className="as-rg-companion-box__sub">
+                Each additional night — <strong>${EXTRA_NIGHT_PRICE}</strong>
+              </div>
+            </div>
+            <div className="as-rg-companion-counter">
+              <button
+                className="as-rg-counter-btn"
+                disabled={(fields.extraNights || 0) === 0}
+                onClick={() => setField("extraNights", Math.max(0, (fields.extraNights || 0) - 1))}
+                type="button"
+              >−</button>
+              <span className="as-rg-counter-val">{fields.extraNights || 0}</span>
+              <button
+                className="as-rg-counter-btn"
+                onClick={() => setField("extraNights", (fields.extraNights || 0) + 1)}
+                type="button"
+              >+</button>
+            </div>
+          </div>
         </>
       )}
 
+      {/* ── Total Bar ── */}
       <div className="as-rg-total-bar">
         <div className="as-rg-total-bar__left">
           <div className="as-rg-total-bar__label">Estimated Total</div>
           <div className="as-rg-total-bar__breakdown">
             {selectedPkg
-              ? `${selectedPkg.name} $${selectedPkg.price.toLocaleString()}${
+              ? [
+                  `${selectedPkg.name} $${selectedPkg.price.toLocaleString()}`,
                   fields.companions > 0 && !isVirtual
                     ? ` + ${fields.companions} companion${fields.companions > 1 ? "s" : ""} $${fields.companions * COMPANION_PRICE}`
-                    : ""
-                }`
+                    : "",
+                  (fields.extraNights || 0) > 0 && !isVirtual
+                    ? ` + ${fields.extraNights} extra night${fields.extraNights > 1 ? "s" : ""} $${fields.extraNights * EXTRA_NIGHT_PRICE}`
+                    : "",
+                ].join("")
               : "Select a package to see pricing"}
           </div>
         </div>
@@ -542,12 +585,13 @@ function CouponWidget({ couponCode, discount, onApply, onRemove }) {
 function Step3({ fields, allConferences, onEditStep, setField }) {
   const conf        = allConferences.find((c) => String(c.id) === fields.conferenceId);
   const pkg         = PACKAGES.find((p) => p.id === fields.packageId);
-  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0);
+  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0);
   const regionLabel = REGIONS.find((r) => r.id === fields.regionId)?.label || "—";
   const isVirtual   = fields.speakerType === "virtual";
 
   return (
     <div className="as-rg-form-body">
+      {/* Personal Details */}
       <div className="as-rg-review-section">
         <div className="as-rg-review-section__head">
           <span className="as-rg-review-section__title">Personal Details</span>
@@ -570,6 +614,7 @@ function Step3({ fields, allConferences, onEditStep, setField }) {
         </div>
       </div>
 
+      {/* Conference */}
       <div className="as-rg-review-section">
         <div className="as-rg-review-section__head">
           <span className="as-rg-review-section__title">Conference</span>
@@ -589,9 +634,10 @@ function Step3({ fields, allConferences, onEditStep, setField }) {
         </div>
       </div>
 
+      {/* Package, Companions & Extra Nights */}
       <div className="as-rg-review-section">
         <div className="as-rg-review-section__head">
-          <span className="as-rg-review-section__title">Package &amp; Companions</span>
+          <span className="as-rg-review-section__title">Package, Companions &amp; Nights</span>
           <button className="as-rg-edit-btn" onClick={() => onEditStep(2)}>Edit</button>
         </div>
         <div className="as-rg-review-grid" style={{ marginBottom: 14 }}>
@@ -621,9 +667,20 @@ function Step3({ fields, allConferences, onEditStep, setField }) {
                 : `${fields.companions} person${fields.companions > 1 ? "s" : ""} (+$${fields.companions * COMPANION_PRICE})`}
             </span>
           </div>
+          <div className="as-rg-review-row">
+            <span className="as-rg-review-label">Extra Nights</span>
+            <span className="as-rg-review-value">
+              {isVirtual
+                ? "N/A (virtual)"
+                : (fields.extraNights || 0) === 0
+                ? "None"
+                : `${fields.extraNights} night${fields.extraNights > 1 ? "s" : ""} (+$${fields.extraNights * EXTRA_NIGHT_PRICE})`}
+            </span>
+          </div>
         </div>
       </div>
 
+      {/* Coupon */}
       <CouponWidget
         couponCode={fields.couponCode}
         discount={fields.discount}
@@ -631,6 +688,7 @@ function Step3({ fields, allConferences, onEditStep, setField }) {
         onRemove={() => { setField("couponCode", ""); setField("discount", 0); }}
       />
 
+      {/* Total */}
       <div className="as-rg-total-bar">
         <div className="as-rg-total-bar__left">
           <div className="as-rg-total-bar__label">Total Amount Due</div>
@@ -643,7 +701,7 @@ function Step3({ fields, allConferences, onEditStep, setField }) {
         <div className="as-rg-total-bar__amount">
           {fields.discount > 0 && pkg && (
             <span className="as-rg-total-bar__original">
-              ${calculateTotal(fields.packageId, fields.companions, 0).toLocaleString()}
+              ${calculateTotal(fields.packageId, fields.companions, 0, fields.extraNights || 0).toLocaleString()}
             </span>
           )}
           ${total.toLocaleString()}
@@ -657,21 +715,23 @@ function Step3({ fields, allConferences, onEditStep, setField }) {
    RESULT SCREENS
    ═══════════════════════════════════════════════════════════ */
 function SuccessScreen({ fields, allConferences, onReset }) {
-  const conf  = allConferences.find((c) => String(c.id) === fields.conferenceId);
-  const pkg   = PACKAGES.find((p) => p.id === fields.packageId);
-  const total = calculateTotal(fields.packageId, fields.companions, fields.discount || 0);
+  const conf      = allConferences.find((c) => String(c.id) === fields.conferenceId);
+  const pkg       = PACKAGES.find((p) => p.id === fields.packageId);
+  const total     = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0);
+  const isVirtual = fields.speakerType === "virtual";
 
   const rows = [
-    ["Name",       `${fields.firstName} ${fields.lastName}`],
-    ["Email",      fields.email],
-    ["Phone",      `${fields.countryCode} ${fields.phone}`],
-    ["Conference", conf ? `${conf.title} · ${conf.location}` : "—"],
-    ["Date",       conf?.date || "—"],
-    ["Type",       fields.speakerType ? fields.speakerType.charAt(0).toUpperCase() + fields.speakerType.slice(1) : "—"],
-    ["Package",    pkg ? `${pkg.name} — $${pkg.price.toLocaleString()}` : "—"],
-    ["Companions", fields.speakerType === "virtual" ? "N/A" : fields.companions > 0 ? `${fields.companions} person(s)` : "None"],
+    ["Name",         `${fields.firstName} ${fields.lastName}`],
+    ["Email",        fields.email],
+    ["Phone",        `${fields.countryCode} ${fields.phone}`],
+    ["Conference",   conf ? `${conf.title} · ${conf.location}` : "—"],
+    ["Date",         conf?.date || "—"],
+    ["Type",         fields.speakerType ? fields.speakerType.charAt(0).toUpperCase() + fields.speakerType.slice(1) : "—"],
+    ["Package",      pkg ? `${pkg.name} — $${pkg.price.toLocaleString()}` : "—"],
+    ["Companions",   isVirtual ? "N/A" : fields.companions > 0 ? `${fields.companions} person(s) (+$${fields.companions * COMPANION_PRICE})` : "None"],
+    ["Extra Nights", isVirtual ? "N/A" : (fields.extraNights || 0) > 0 ? `${fields.extraNights} night(s) (+$${fields.extraNights * EXTRA_NIGHT_PRICE})` : "None"],
     ...(fields.discount > 0 ? [["Discount", `-$${fields.discount} (${fields.couponCode})`]] : []),
-    ["Total",      `$${total.toLocaleString()}`],
+    ["Total",        `$${total.toLocaleString()}`],
   ];
 
   return (

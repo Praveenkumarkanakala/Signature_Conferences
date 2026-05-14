@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import "./homepage.css";
 import videoSrc from "./herovideo.mp4";
 import teamPhoto from "./image.png";
@@ -14,15 +13,15 @@ const regions = [
     stat: "38+ Events",  cls: "main-card-europe", route: "/europe" },
   { title: "North America", sub: "Signature Global Conferences", desc: "Driving bold conversations that define the future of business, innovation, and leadership.",       
     stat: "61+ Events",  cls: "main-card-namerica", route: "/northamerica"},
-  { title: "USA", sub: "Signature Global Conferences", esc: "At the epicenter of global influence — where every summit shapes industries and reshapes agendas.", 
+  { title: "USA", sub: "Signature Global Conferences", desc: "At the epicenter of global influence — where every summit shapes industries and reshapes agendas.", 
     stat: "55+ Events",  cls: "main-card-usa", route: "/usa" },
 ];
 
 const regionData = [
-  { id: "asia", name: "Asia", trips: "1,527 trips", image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=900&q=80", imageAlt: "Taj Mahal, India", caption: "Best Time to Visit Asia", captionDesc: "Asia offers unparalleled diversity — from ancient temples and bustling megacities to pristine beaches and mountain landscapes. Every season brings a new adventure.", countries: [["Tokyo", "Japan", "Dubai", "UAE"], ["Australia", "Melbourne",]] },
-  { id: "europe", name: "Europe", trips: "2,184 trips", image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=900&q=80", imageAlt: "Paris, Europe", caption: "Discover European Heritage", captionDesc: "Europe's rich tapestry of cultures, architecture, and landscapes spans thousands of years of history. From Paris boulevards to Greek islands, every destination tells a story.", countries: [["Germany", "Berlin", "Europe", "Rome"], ["Italy", "France", "Paris"]] },
-  { id: "namerica", name: "North America", trips: "986 trips", image: "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=900&q=80", imageAlt: "New York, North America", caption: "Explore North America", captionDesc: "From the Rocky Mountains to tropical coastlines, North America's sheer scale and variety make it a destination unlike any other. Iconic cities meet breathtaking wilderness.", countries: [["Canada", "Ontario", "Toronto", "Miami"], ["USA"]] },
-  { id: "usa", name: "USA", trips: "3,412 trips", image: "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=900&q=80", imageAlt: "New York City, USA", caption: "America's Most Iconic Destinations", captionDesc: "The United States packs extraordinary diversity into one nation — from the skyscrapers of Manhattan to the red canyons of Utah and the sun-drenched beaches of Miami.", countries: [["New York", "California", "USA", " Los Angeles"], ["San Francisco", "Texas"]] },
+  { id: "asia", name: "Asia", trips: "1,527 trips", image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=900&q=80", imageAlt: "Taj Mahal, India", caption: "Where Innovation Meets Tradition", captionDesc: "Asia connects global leaders, researchers, and innovators through impactful conferences across technology, healthcare, education, and business.", countries: [["Tokyo", "Japan", "Dubai", "UAE"], ["Australia", "Melbourne",]] },
+  { id: "europe", name: "Europe", trips: "2,184 trips", image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=900&q=80", imageAlt: "Paris, Europe", caption: "Where Research Meets Excellence", captionDesc: "Europe offers a strong platform for international conferences focused on innovation, academic growth, and global partnerships.", countries: [["Germany", "Berlin", "Europe", "Rome"], ["Italy", "France", "Paris"]] },
+  { id: "namerica", name: "North America", trips: "986 trips", image: "https://images.unsplash.com/photo-1534430480872-3498386e7856?w=900&q=80", imageAlt: "New York, North America", caption: "Driving Global Innovation Forward", captionDesc: "North America hosts world-class conferences that inspire collaboration, networking, and breakthrough ideas across industries.", countries: [["Canada", "Ontario", "Toronto", "Miami"], ["USA"]] },
+  { id: "usa", name: "USA", trips: "3,412 trips", image: "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=900&q=80", imageAlt: "New York City, USA", caption: "Empowering Ideas & Leadership", captionDesc: "The USA brings together professionals, educators, and entrepreneurs through high-impact global conferences and networking experiences.", countries: [["New York", "California", "USA", " Los Angeles"], ["San Francisco", "Texas"]] },
 ];
 
 /* ─── ICONS ─────────────────────────────────────── */
@@ -66,15 +65,22 @@ const ImageIcon = () => (
   </svg>
 );
 
+/* ─── SAFE NAVIGATION HELPER ────────────────────── */
+/* Avoids document.querySelector(route) crash — always use this */
+const safeNavigate = (route) => {
+  try {
+    window.location.href = route;
+  } catch (e) {
+    console.error("Navigation error:", e);
+  }
+};
+
 /* ─── MAIN COMPONENT ────────────────────────────── */
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
-
   const [activeId, setActiveId] = useState("asia");
   const active = regionData.find((r) => r.id === activeId);
-
   const regionsSectionRef = useRef(null);
 
   useEffect(() => {
@@ -96,17 +102,21 @@ export default function HomePage() {
   }, []);
 
   /* ─── NAVIGATION HANDLERS ─────────────────────── */
-  const scrollToRegions = () => { regionsSectionRef.current?.scrollIntoView({  behavior: "smooth", block: "start" }); };
-  const goToAbout = () => { navigate("/about"); };
-  const goToRegister = () => {navigate("/register");};
-  const goToRegion = (route) => { navigate(route); };
+  /* Using window.location.href instead of useNavigate to prevent
+     querySelector('/route') crash on deployed builds               */
+  const scrollToRegions = () => {
+    regionsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const goToAbout    = () => safeNavigate("/about");
+  const goToRegister = () => safeNavigate("/register");
+  const goToRegion   = (route) => safeNavigate(route);
 
   /* ─── FEATURES DATA ───────────────────────────── */
   const features = [
     { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"> <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>  <circle cx="9" cy="7" r="4"/> <path d="M23 21v-2a4 4 0 0 0-3-3.87"/> <path d="M16 3.13a4 4 0 0 1 0 7.75"/>  </svg>, 
-      title: "Executive Networking",desc: "Build meaningful relationships with executives, founders, professionals, and global decision-makers in one powerful space.", link: "Explore Networking"  },
+      title: "Executive Networking", desc: "Build meaningful relationships with executives, founders, professionals, and global decision-makers in one powerful space.", link: "Explore Networking"  },
     { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"> <path d="M12 20h9"/> <path d="M12 4c0 0 1.5 2 4 2s4-2 4-2v6c0 3.5-2.5 6-4 7-1.5-1-4-3.5-4-7V4z"/> <path d="M3 10h4M5 8v4"/> <circle cx="5" cy="18" r="3"/> </svg>, 
-      title: "World-Class Speakers", desc: "Gain insights from renowned keynote speakers, innovators, authors, and leaders shaping tomorrow’s world.", link: "Meet Our Speakers"  },
+      title: "World-Class Speakers", desc: "Gain insights from renowned keynote speakers, innovators, authors, and leaders shaping tomorrow's world.", link: "Meet Our Speakers"  },
     { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"> <path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2z"/> <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/> <path d="M9 12.5l1.5 4.5 1.5-3 1.5 3 1.5-4.5"/> </svg>, 
       title: "Women Leadership Growth", desc: "Empower women to lead with confidence, vision, and impact through mentorship, leadership sessions, and success strategies.",  link: "Explore Leadership" },
     { icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/> <circle cx="12" cy="12" r="4"/> </svg>, 
@@ -116,7 +126,6 @@ export default function HomePage() {
   /* ─── RENDER ──────────────────────────────────── */
   return (
     <div className="main-page">
-
 
       {/* ══ HERO ══ */}
       <section className="main-hero">
@@ -134,13 +143,11 @@ export default function HomePage() {
           <p className="main-hero-para main-anim main-d2"> Connect with industry leaders and visionaries at world-class events
             shaping the future of business, technology, and innovation. </p>
           <div className="main-hero-btns main-anim main-d3">
-            <button className="main-btn main-btn-gold" onClick={scrollToRegions}> Explore Conferences  </button>
+            <button className="main-btn main-btn-gold" onClick={scrollToRegions}> Explore Conferences </button>
             <button className="main-btn main-btn-ghost" onClick={goToAbout}> Learn More </button>
           </div>
         </div>
       </section>
-
-      
 
       {/* ══ REGIONS ══ */}
       <section className="main-regions" ref={regionsSectionRef}>
@@ -151,18 +158,26 @@ export default function HomePage() {
               Global Footprint
               <span className="main-eline" />
             </span>
-            <h2 className="main-sec-title">  Explore <span className="main-outline-gold">SGC</span> Regions </h2>
+            <h2 className="main-sec-title"> Explore <span className="main-outline-gold">SGC</span> Regions </h2>
             <p className="main-sec-sub">Attend the regions based conferences</p>
           </div>
 
           <div className="main-cards-grid">
             {regions.map((r, i) => (
-              <article  className={`main-card ${r.cls} main-observe`}  key={r.title}  style={{ "--i": i }} >
-  
+              <article
+                className={`main-card ${r.cls} main-observe`}
+                key={r.title}
+                style={{ "--i": i }}
+              >
                 <span className="main-card-dot" />
-                <div className="main-card-body"> <h3>{r.title}</h3>  </div>
+                <div className="main-card-body"> <h3>{r.title}</h3> </div>
                 <div className="main-card-footer">
-                  <button className="main-card-btn" onClick={() => goToRegion(r.route)}  > Explore <ArrowIcon /> </button>
+                  <button
+                    className="main-card-btn"
+                    onClick={() => goToRegion(r.route)}
+                  >
+                    Explore <ArrowIcon />
+                  </button>
                   <span className="main-card-more">More Information</span>
                 </div>
               </article>
@@ -180,7 +195,7 @@ export default function HomePage() {
             <span className="main-eyebrow-row main-left-align">
               <span className="main-eline" /> Who We Are <span className="main-eline" />
             </span>
-            <h2 className="main-sec-title main-left-align">  About <span className="main-outline-gold">Us</span> </h2>
+            <h2 className="main-sec-title main-left-align"> About <span className="main-outline-gold">Us</span> </h2>
             <p className="main-about-lead">
               Result: your trusted global platform for impactful conferences! We proudly create events that bring together visionary speakers, leaders, entrepreneurs, and innovators from around the world.
             </p>
@@ -231,7 +246,7 @@ export default function HomePage() {
                 <div className="main-fs-icon">{f.icon}</div>
                 <h3 className="main-fs-feat-title">{f.title}</h3>
                 <p className="main-fs-feat-desc">{f.desc}</p>
-                <a className="main-fs-link" href="#">{f.link} →</a>
+                <a className="main-fs-link" href="#">{f.link} </a>
               </div>
             ))}
             {features.slice(2,4).map((f,i) => (
@@ -239,7 +254,7 @@ export default function HomePage() {
                 <div className="main-fs-icon">{f.icon}</div>
                 <h3 className="main-fs-feat-title">{f.title}</h3>
                 <p className="main-fs-feat-desc">{f.desc}</p>
-                <a className="main-fs-link" href="#">{f.link} →</a>
+                <a className="main-fs-link" href="#">{f.link} </a>
               </div>
             ))}
             <div className="main-fs-img-card main-fs-img-right">
@@ -271,11 +286,15 @@ export default function HomePage() {
               </div>
             </div>
             <div className="main-re-accordion">
-              {regionData.map((r) => { 
-                const isOpen = r.id === activeId; 
+              {regionData.map((r) => {
+                const isOpen = r.id === activeId;
                 return (
                   <div key={r.id} className={`main-re-item${isOpen ? " main-re-item--open" : ""}`}>
-                    <button className="main-re-item-header" onClick={() => setActiveId(r.id)}>
+                    <button
+                      className="main-re-item-header"
+                      onClick={() => setActiveId(r.id)}
+                      type="button"
+                    >
                       <div className="main-re-item-left">
                         <span className="main-re-item-name">{r.name}</span>
                         <span className="main-re-item-trips">{r.trips}</span>
@@ -286,7 +305,7 @@ export default function HomePage() {
                     </button>
                     <div className="main-re-item-body">
                       <div className="main-re-countries">
-                        {r.countries.map((row, ri) => 
+                        {r.countries.map((row, ri) =>
                           row.map((c, ci) => (
                             <span key={`${ri}-${ci}`} className="main-re-country">{c}</span>
                           ))
@@ -294,7 +313,7 @@ export default function HomePage() {
                       </div>
                     </div>
                   </div>
-                ); 
+                );
               })}
             </div>
           </div>
@@ -306,13 +325,13 @@ export default function HomePage() {
         <div className="main-container">
           <div className="main-observe">
             <span className="main-eyebrow-row" style={{ justifyContent: "center" }}>
-              <span className="main-eline" /> Don't Miss Out  <span className="main-eline" />
+              <span className="main-eline" /> Don't Miss Out <span className="main-eline" />
             </span>
-            <h2 className="main-sec-title"> Reserve Your <span className="main-outline-gold">Seat</span> Today  </h2>
+            <h2 className="main-sec-title"> Reserve Your <span className="main-outline-gold">Seat</span> Today </h2>
             <p> Join thousands of global leaders at our upcoming conferences. <br />Early bird registrations now open.</p>
             <div className="main-cta-btns">
-              <button className="main-btn main-btn-gold" onClick={goToRegister}> Register Now <ArrowIcon /> </button>
-              <button className="main-btn main-btn-ghost">View Schedule</button>
+              <button className="main-btn main-btn-gold" onClick={goToRegister} type="button"> Register Now <ArrowIcon /> </button>
+              <button className="main-btn main-btn-ghost" type="button">View Schedule</button>
             </div>
           </div>
         </div>
