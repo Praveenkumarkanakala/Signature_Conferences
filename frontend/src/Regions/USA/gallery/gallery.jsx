@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { Navbar} from "../Landingpage/homepage.jsx";
+import { useNavigate } from "react-router-dom";
 import Footer from "../../../Components/Footer/footer";
-import { arcPhotos, bentoItems } from "./gallerydata.js";
+import { arcPhotos, bentoItems } from "./gallerydata.jsx";
 import "./gallery.css";
 import "../Landingpage/homepage.css";
+import { TempGallery } from "./TempGallery"; /* delete this later */
+
 
 const VISIBLE_SLOTS = 8;
 const ARC_SPAN_DEG = 160; 
@@ -313,8 +316,8 @@ function HeroSection() {
     advance(i);
   };
 
-  const scrollDown = () =>
-    window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
+  // const scrollDown = () =>
+  //   window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
 
   const slide = slides[current];
 
@@ -491,6 +494,7 @@ const POSITIONS = [
 ];
 
 function GalleryCarousel() {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const intervalRef = useRef(null);
@@ -539,11 +543,11 @@ function GalleryCarousel() {
           <span className="usa-sgc-gallery__eyebrow">Our Signature Events</span>
           <h2 className="usa-sgc-gallery__title"> Where Leaders <br /> Shape the World </h2>
           <p className="usa-sgc-gallery__subtitle">
-            Signature Global Conferences brings together the world's most
+            USA Signature Global Conferences brings together the world's most
             influential minds — across industries, borders, and disciplines —
             for transformative conversations that matter.
           </p>
-          <button className="usa-sgc-gallery__cta">Explore All Conferences</button>
+          <button className="usa-sgc-gallery__cta"  onClick={() => navigate("/usa-events")}>Explore All Conferences</button>
         </div>
 
         <div className="usa-sgc-gallery__stage-wrap">
@@ -860,15 +864,20 @@ function VideoSection() {
 
 /* ─── ROOT ──────────────────────────────────────────────────────────── */
 export default function Gallery() {
+ 
   return (
     <>
       <div className="usa-page">
         <Navbar />
-        <GalleryHero />
+        {/* <GalleryHero />
+        <BentoGrid />
         <HeroSection />
         <RegularGallery />
         <VideoSection />
-        <GalleryCarousel />
+        <GalleryCarousel /> */}
+
+        <TempGallery />     {/* ← temp until real data arrives */}
+        
         <Footer theme="usa"/>
       </div>
     </>

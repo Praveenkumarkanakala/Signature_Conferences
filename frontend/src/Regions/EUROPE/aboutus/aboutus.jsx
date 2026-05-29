@@ -1,19 +1,45 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Navbar } from "../Landingpage/eurohome.jsx";
 import Footer from "../../../Components/Footer/footer";
-import { stats, pillars, values, timeline, testimonial, missionText } from "./aboutusdata.js";
+import { stats, pillars, values, missionText } from "./aboutusdata.jsx";
 import "./aboutus.css";
 import "../Landingpage/eurohome.css";
 
+/* ─── SCROLL ANIMATION HOOK ─────────────── */
+function useScrollReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll("[data-animate]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
 /* ─── HERO ──────────────────────────────── */
 function AboutHero() {
+    const navigate = useNavigate();
+
+  const scrollToMission = () => {
+    document.querySelector(".europe-mission")?.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <section className="europe-hero">
       <div className="europe-hero__lines" />
       <div className="europe-hero__orb" />
       <div className="europe-hero__orb2" />
       <div className="europe-hero__inner">
-        <div>
+        <div data-animate="fade-up">
           <span className="europe-hero__eyebrow">About Us</span>
           <h1 className="europe-hero__title">
             More Than a <br /> Conference. <br /> <em>A Movement.</em>
@@ -24,37 +50,23 @@ function AboutHero() {
             stage, one story, one life at a time.
           </p>
           <div className="europe-hero__actions">
-            <button className="europe-btn europe-btn--primary">
-              Explore Conferences
-            </button>
-            <button className="europe-btn europe-btn--ghost">
-              Our Story ↓
-            </button>
+            <button className="europe-btn europe-btn--primary" onClick={() => navigate("/europe-events")} >Explore Conferences</button>
+            <button className="europe-btn europe-btn--ghost"  onClick={scrollToMission}>Our Story ↓</button>
           </div>
         </div>
-        <div>
+        <div data-animate="fade-up" style={{ animationDelay: "0.15s" }}>
           <div className="europe-hero__manifesto">
             <p className="europe-manifesto__quote">
               "Leadership is not a title. It is the courage to{" "}
               <span>inspire others."</span>
             </p>
             <div className="europe-manifesto__items">
-              <div className="europe-manifesto__item">
-                <div className="europe-manifesto__dot" />
-                Voices are heard
-              </div>
-              <div className="europe-manifesto__item">
-                <div className="europe-manifesto__dot" />
-                Stories inspire change
-              </div>
-              <div className="europe-manifesto__item">
-                <div className="europe-manifesto__dot" />
-                Leaders rise with confidence
-              </div>
-              <div className="europe-manifesto__item">
-                <div className="europe-manifesto__dot" />
-                Global impact begins here
-              </div>
+              {["Voices are heard", "Stories inspire change", "Leaders rise with confidence", "Global impact begins here"].map((item) => (
+                <div key={item} className="europe-manifesto__item">
+                  <div className="europe-manifesto__dot" />
+                  {item}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -68,8 +80,13 @@ function StatsBar() {
   return (
     <section className="europe-stats">
       <div className="europe-stats__inner">
-        {stats.map((s) => (
-          <div key={s.label} className="europe-stat">
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className="europe-stat"
+            data-animate="fade-up"
+            style={{ animationDelay: `${i * 0.1}s` }}
+          >
             <div className="europe-stat__num">{s.value}</div>
             <div className="europe-stat__label">{s.label}</div>
           </div>
@@ -85,28 +102,43 @@ function Mission() {
     <section className="europe-mission">
       <div className="europe-mission__bg" />
       <div className="europe-mission__inner">
-        <div className="europe-mission__grid">
-          <div>
-            <span className="europe-section__eyebrow">Our Mission</span>
-            <h2 className="europe-section__title">
-              Creating Spaces Where Voices Matter
-            </h2>
-            <div className="europe-mission__text">
-              {missionText.map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-            </div>
-          </div>
-          <div className="europe-pillars">
-            {pillars.map((p) => (
-              <div key={p.id} className="europe-pillar">
-                <span className="europe-pillar__icon">{p.icon}</span>
-                <div className="europe-pillar__title">{p.title}</div>
-                <p className="europe-pillar__desc">{p.desc}</p>
-              </div>
-            ))}
-          </div>
+
+        {/* ── Header centered ── */}
+        <div className="europe-mission__header" data-animate="fade-up">
+          <span className="europe-section__eyebrow europe-section__eyebrow--center">
+            Our Mission
+          </span>
+          <h2 className="europe-section__title europe-section__title--center">
+            Inspiring Voices. Empowering Leaders. Creating Global Impact.
+          </h2>
         </div>
+
+        {/* ── Full mission text ── */}
+        <div className="europe-mission__text-block" data-animate="fade-up">
+          {missionText.map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </div>
+
+        {/* ── Pillars 2x2 grid ── */}
+        <div className="europe-pillars">
+          {pillars.map((p, i) => (
+            <div
+              key={p.id}
+              className="europe-pillar"
+              data-animate="fade-up"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              <div className="europe-pillar__num">0{i + 1}</div>
+              <div className="europe-pillar__icon-wrap">
+                <span className="europe-pillar__icon">{p.icon}</span>
+              </div>
+              <div className="europe-pillar__title">{p.title}</div>
+              <p className="europe-pillar__desc">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );
@@ -117,7 +149,7 @@ function Values() {
   return (
     <section className="europe-values">
       <div className="europe-values__inner">
-        <div className="europe-values__header">
+        <div className="europe-values__header" data-animate="fade-up">
           <span className="europe-section__eyebrow europe-section__eyebrow--center">
             Our Values
           </span>
@@ -126,8 +158,13 @@ function Values() {
           </h2>
         </div>
         <div className="europe-values__grid">
-          {values.map((v) => (
-            <div key={v.id} className="europe-value-card">
+          {values.map((v, i) => (
+            <div
+              key={v.id}
+              className="europe-value-card"
+              data-animate="fade-up"
+              style={{ animationDelay: `${i * 0.08}s` }}
+            >
               <div className="europe-value-card__num">{v.num}</div>
               <div className="europe-value-card__title">{v.title}</div>
               <div className="europe-value-card__rule" />
@@ -140,51 +177,12 @@ function Values() {
   );
 }
 
-/* ─── STORY / TIMELINE ──────────────────── */
-function Story() {
-  return (
-    <section className="europe-story">
-      <div className="europe-story__inner">
-        <div>
-          <span className="europe-section__eyebrow">Our Story</span>
-          <h2 className="europe-section__title">How the Movement Began</h2>
-          <div className="europe-timeline">
-            {timeline.map((item) => (
-              <div key={item.id} className="europe-timeline__item">
-                <div className="europe-timeline__dot">{item.step}</div>
-                <div>
-                  <div className="europe-timeline__year">{item.year}</div>
-                  <div className="europe-timeline__title">{item.title}</div>
-                  <p className="europe-timeline__desc">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="europe-story__quote">
-          <div className="europe-quote-card">
-            <span className="europe-quote__mark">"</span>
-            <p className="europe-quote__text">{testimonial.quote}</p>
-            <div className="europe-quote__author">
-              <div className="europe-quote__avatar">{testimonial.initials}</div>
-              <div>
-                <div className="europe-quote__name">{testimonial.author}</div>
-                <div className="europe-quote__role">{testimonial.role}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─── CTA ────────────────────────────────── */
 function AboutCTA() {
   const navigate = useNavigate();
   return (
     <section className="europe-cta">
-      <div className="europe-cta__inner">
+      <div className="europe-cta__inner" data-animate="fade-up">
         <h2 className="europe-cta__title">
           Ready to Step Into
           <br />
@@ -195,16 +193,10 @@ function AboutCTA() {
           stepped into their purpose at Signature Global Conferences.
         </p>
         <div className="europe-cta__btns">
-          <button
-            className="europe-btn europe-btn--primary"
-            onClick={() => navigate("/europe-events")}
-          >
+          <button className="europe-btn europe-btn--primary" onClick={() => navigate("/europe-events")}>
             View Conferences
           </button>
-          <button
-            className="europe-btn europe-btn--ghost"
-            onClick={() => navigate("/europe-register")}
-          >
+          <button className="europe-btn europe-btn--ghost" onClick={() => navigate("/europe-register")}>
             Speak at an Event
           </button>
         </div>
@@ -215,6 +207,7 @@ function AboutCTA() {
 
 /* ─── ROOT ───────────────────────────────── */
 export default function AboutUs() {
+  useScrollReveal();
   return (
     <div className="europe-page">
       <Navbar />
@@ -222,7 +215,6 @@ export default function AboutUs() {
       <StatsBar />
       <Mission />
       <Values />
-      <Story />
       <AboutCTA />
       <Footer theme="europe" />
     </div>

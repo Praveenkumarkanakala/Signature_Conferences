@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { Navbar } from "../NAHome/Nahome";
+import { NaNavbar } from "../NAHome/Nahome";
 import { allCountries } from "country-telephone-data";
-import { submitToSheets } from "../utils/formSubmit.js";
+import { supabase } from "../../../lib/supabase.jsx";
 import Footer from "../../../Components/Footer/footer";
 import "./contact.css";
 
@@ -38,7 +38,7 @@ const INFO_CARDS = [
   },
   {
     title: "Media Inquiries",
-    body: "For media-related questions or press inquiries, please contact us at media@signatureglobal.com.",
+    body: "For media-related questions or press inquiries, please contact us at canada@signaturetalks.org.",
   },
 ];
 
@@ -190,27 +190,52 @@ export default function Contact() {
     }
     setErrors({});
     setSubmitting(true);
+
     try {
-      await submitToSheets({
-        formType: "contact",
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-        countryCode: form.countryCode,
-        phone: form.phone,
-        message: form.message,
-      });
+      // 1. Save to Supabase
+      const { error: dbError } = await supabase
+        .from("contact_submissions")
+        .insert({
+          first_name:   form.firstName,
+          last_name:    form.lastName,
+          email:        form.email,
+          country_code: form.countryCode,
+          phone:        form.phone || null,
+          message:      form.message,
+        });
+
+      if (dbError) throw new Error(dbError.message);
+
+      // 2. Trigger admin notification email (fire and forget)
+      fetch(
+        "https://tohlagjzvjoqrutolcwf.supabase.co/functions/v1/contact-notify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvaGxhZ2p6dmpvcXJ1dG9sY3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzM3MTUsImV4cCI6MjA5MzcwOTcxNX0.Xi1QPhzVjYYFfXNS8Z7mBdQHnEb42nsYXneTbo1lKzY",
+          },
+          body: JSON.stringify({
+            first_name:   form.firstName,
+            last_name:    form.lastName,
+            email:        form.email,
+            country_code: form.countryCode,
+            phone:        form.phone || "",
+            message:      form.message,
+          }),
+        }
+      ).catch((err) => console.error("Email trigger error:", err));
+
       setSubmitted(true);
     } catch (err) {
       console.error("Submission failed:", err);
     } finally {
       setSubmitting(false);
     }
-  };
-
+  }
   return (
     <div className="na-page">
-      <Navbar />
+      <NaNavbar />
       <main className="na-contact-page">
         {/* ── Glow blobs ── */}
         <div className="na-contact-blob na-contact-blob--1" />
@@ -228,10 +253,10 @@ export default function Contact() {
 
             <div className="na-contact-links">
               <a href="mailto:info@signatureglobal.com" className="na-contact-link">
-                info@signatureglobal.com
+                canada@signaturetalks.org
               </a>
               <a href="tel:+1234567890" className="na-contact-link">
-                +1 234 567 890
+                +1-202-571-5721
               </a>
               <a href="#" className="na-contact-link na-contact-link--underline">
                 Customer Support

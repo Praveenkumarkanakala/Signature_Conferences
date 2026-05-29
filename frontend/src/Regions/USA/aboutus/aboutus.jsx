@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Navbar} from "../Landingpage/homepage.jsx";
 import Footer from "../../../Components/Footer/footer";
-import {stats, pillars, values, timeline, testimonial, missionText,} from "./aboutusdata.js";
+import {stats, pillars, values, timeline, testimonial, missionText,} from "./aboutusdata.jsx";
 import "./aboutus.css";
 import "../Landingpage/homepage.css";
 
 /* ─── HERO ──────────────────────────────── */
 function AboutHero() {
+  const navigate = useNavigate();
   return (
     <section className="usa-ab-hero">
       <div className="usa-ab-hero__lines" />
@@ -17,12 +18,10 @@ function AboutHero() {
           <span className="usa-ab-hero__eyebrow">About Us</span>
           <h1 className="usa-ab-hero__title"> More Than a  <br />  Conference. <br /> <em>A Movement.</em> </h1>
           <p className="usa-ab-hero__sub">
-            A premier international platform dedicated to inspiring voices,
-            empowering leaders, and creating meaningful global impact — one
-            stage, one story, one life at a time.
+            USA Signature Global Conferences connects visionary women leaders, entrepreneurs, and professionals worldwide through the power of the 3C’s—Creating, Connections, and Conversions.
           </p>
           <div className="usa-ab-hero__actions">
-            <button className="usa-hp-btn usa-hp-btn--primary"> Explore Conferences </button>
+            <button className="usa-hp-btn usa-hp-btn--primary" onClick={() => navigate("/usa-events")}> Explore Conferences </button>
             <button className="usa-hp-btn usa-hp-btn--ghost">Our Story ↓</button>
           </div>
         </div>
@@ -71,7 +70,7 @@ function Mission() {
         <div className="usa-ab-mission__grid">
           <div>
             <span className="usa-ab-section__eyebrow">Our Mission</span>
-            <h2 className="usa-ab-section__title"> Creating Spaces Where Voices Matter </h2>
+            <h2 className="usa-ab-section__title"> USA Signature Global Conferences </h2>
             <div className="usa-ab-mission__text">
               {missionText.map((para, i) => (
                 <p key={i}>{para}</p>
@@ -99,8 +98,8 @@ function Values() {
     <section className="usa-ab-values">
       <div className="usa-ab-values__inner">
         <div className="usa-ab-values__header">
-          <span className="usa-ab-section__eyebrow usa-ab-section__eyebrow--center"> Our Values </span>
-          <h2 className="usa-ab-section__title usa-ab-section__title--center"> What We Stand For </h2>
+          {/* <span className="usa-ab-section__eyebrow usa-ab-section__eyebrow--center"> Our Values </span> */}
+          <h2 className="usa-ab-section__title usa-ab-section__title--center">Why You Should Join the USA Signature Global Conferences 🇺🇸✨ </h2>
         </div>
         <div className="usa-ab-values__grid">
           {values.map((v) => (
@@ -111,45 +110,6 @@ function Values() {
               <p className="usa-ab-value-card__desc">{v.desc}</p>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── STORY / TIMELINE ───────────────────── */
-function Story() {
-  return (
-    <section className="usa-ab-story">
-      <div className="usa-ab-story__inner">
-        <div>
-          <span className="usa-ab-section__eyebrow">Our Story</span>
-          <h2 className="usa-ab-section__title">How the Movement Began</h2>
-          <div className="usa-ab-timeline">
-            {timeline.map((item) => (
-              <div key={item.id} className="usa-ab-timeline__item">
-                <div className="usa-ab-timeline__dot">{item.step}</div>
-                <div>
-                  <div className="usa-ab-timeline__year">{item.year}</div>
-                  <div className="usa-ab-timeline__title">{item.title}</div>
-                  <p className="usa-ab-timeline__desc">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="usa-ab-story__quote">
-          <div className="usa-ab-quote-card">
-            <span className="usa-ab-quote__mark">"</span>
-            <p className="usa-ab-quote__text">{testimonial.quote}</p>
-            <div className="usa-ab-quote__author">
-              <div className="usa-ab-quote__avatar">{testimonial.initials}</div>
-              <div>
-                <div className="usa-ab-quote__name">{testimonial.author}</div>
-                <div className="usa-ab-quote__role">{testimonial.role}</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -168,8 +128,8 @@ function AboutCTA() {
           stepped into their purpose at Signature Global Conferences.
         </p>
         <div className="usa-ab-cta__btns">
-          <button className="usa-hp-btn usa-hp-btn--primary" onClick={() => navigate("/events")} >  View Conferences  </button>
-          <button className="usa-hp-btn usa-hp-btn--ghost" onClick={() => navigate("/register")} > Speak at an Event </button>
+          <button className="usa-hp-btn usa-hp-btn--primary" onClick={() => navigate("/usa-events")} >  View Conferences  </button>
+          <button className="usa-hp-btn usa-hp-btn--ghost" onClick={() => navigate("/usa-register")} > Speak at an Event </button>
         </div>
       </div>
     </section>
@@ -185,7 +145,6 @@ export default function AboutUs() {
       <StatsBar />
       <Mission />
       <Values />
-      <Story />
       <AboutCTA />
       <Footer theme="usa"/>
     </div>

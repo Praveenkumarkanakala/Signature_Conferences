@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Navbar } from "../Home/asia.jsx";
 import { allCountries } from "country-telephone-data";
-import { submitToSheets } from "../utils/formSubmit.js";
 import Footer from "../../../Components/Footer/footer";
 import "./contact.css";
 import "../Home/asia.css";
+import { supabase } from "../../../lib/supabase.jsx";
 
 /* ── Country data ── */
 const COUNTRY_LIST = (() => {
@@ -187,14 +187,48 @@ export default function AsiaContact() {
     }
     setErrors({});
     setSubmitting(true);
+
     try {
-      await submitToSheets({ formType: "contact", ...form });
-      setSubmitted(true);
-    } catch (err) {
-      console.error("Submission failed:", err);
-    } finally {
-      setSubmitting(false);
+  // 1. Save to Supabase
+  const { error: dbError } = await supabase
+    .from("contact_submissions")
+    .insert({
+      first_name:   form.firstName,
+      last_name:    form.lastName,
+      email:        form.email,
+      country_code: form.countryCode,
+      phone:        form.phone || null,
+      message:      form.message,
+    });
+
+  if (dbError) throw new Error(dbError.message);
+
+  // 2. Trigger admin notification email (fire and forget)
+  fetch(
+    "https://tohlagjzvjoqrutolcwf.supabase.co/functions/v1/contact-notify",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvaGxhZ2p6dmpvcXJ1dG9sY3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzM3MTUsImV4cCI6MjA5MzcwOTcxNX0.Xi1QPhzVjYYFfXNS8Z7mBdQHnEb42nsYXneTbo1lKzY",
+      },
+      body: JSON.stringify({
+        first_name:   form.firstName,
+        last_name:    form.lastName,
+        email:        form.email,
+        country_code: form.countryCode,
+        phone:        form.phone || "",
+        message:      form.message,
+      }),
     }
+  ).catch(err => console.error("Email trigger error:", err));
+
+  setSubmitted(true);
+} catch (err) {
+  console.error("Submission failed:", err);
+} finally {
+  setSubmitting(false);
+}
   };
 
   const resetForm = () => {
@@ -214,7 +248,6 @@ export default function AsiaContact() {
       <Navbar />
 
       <main className="as-ct-page">
-        {/* Decorative blobs */}
         <div className="as-ct-blob as-ct-blob--1" />
         <div className="as-ct-blob as-ct-blob--2" />
         <div className="as-ct-blob as-ct-blob--3" />
@@ -257,7 +290,6 @@ export default function AsiaContact() {
               </a>
             </div>
 
-            {/* Info cards */}
             <div className="as-ct-info-cards">
               {INFO_CARDS.map((c) => (
                 <div key={c.title} className="as-ct-info-card">
@@ -268,7 +300,6 @@ export default function AsiaContact() {
               ))}
             </div>
 
-            {/* Social strip */}
             <div className="as-ct-social">
               <span className="as-ct-social__label">Follow us</span>
               <div className="as-ct-social__links">
@@ -301,8 +332,7 @@ export default function AsiaContact() {
                   </div>
                   <h2 className="as-ct-card__success-title">Message Sent!</h2>
                   <p className="as-ct-card__success-sub">
-                    Thank you for reaching out. Our team will be in touch with
-                    you shortly.
+                    Thank you for reaching out. Our team will be in touch with you shortly.
                   </p>
                   <button className="as-ct-submit-btn" onClick={resetForm}>
                     Send Another Message
@@ -316,7 +346,6 @@ export default function AsiaContact() {
                   </div>
 
                   <div className="as-ct-form">
-                    {/* Name row */}
                     <div className="as-ct-row">
                       {["firstName", "lastName"].map((key) => (
                         <div className="as-ct-field" key={key}>
@@ -329,14 +358,11 @@ export default function AsiaContact() {
                             className={`as-ct-input${errors[key] ? " as-ct-input--error" : ""}`}
                             placeholder={key === "firstName" ? "John" : "Doe"}
                           />
-                          {errors[key] && (
-                            <span className="as-ct-error">{errors[key]}</span>
-                          )}
+                          {errors[key] && <span className="as-ct-error">{errors[key]}</span>}
                         </div>
                       ))}
                     </div>
 
-                    {/* Email */}
                     <div className="as-ct-field">
                       <label className="as-ct-label">Email Address</label>
                       <div className="as-ct-input-icon-wrap">
@@ -352,20 +378,15 @@ export default function AsiaContact() {
                           placeholder="john@example.com"
                         />
                       </div>
-                      {errors.email && (
-                        <span className="as-ct-error">{errors.email}</span>
-                      )}
+                      {errors.email && <span className="as-ct-error">{errors.email}</span>}
                     </div>
 
-                    {/* Phone */}
                     <div className="as-ct-field">
                       <label className="as-ct-label">Phone Number <span className="as-ct-label--opt">(optional)</span></label>
                       <div className="as-ct-phone-wrap">
                         <CountryDropdown
                           value={form.countryCode}
-                          onChange={(code) =>
-                            setForm((prev) => ({ ...prev, countryCode: code }))
-                          }
+                          onChange={(code) => setForm((prev) => ({ ...prev, countryCode: code }))}
                         />
                         <input
                           value={form.phone}
@@ -376,7 +397,6 @@ export default function AsiaContact() {
                       </div>
                     </div>
 
-                    {/* Message */}
                     <div className="as-ct-field">
                       <label className="as-ct-label">Message</label>
                       <div className="as-ct-textarea-wrap">
@@ -392,12 +412,9 @@ export default function AsiaContact() {
                           {form.message.length}/{MAX_MSG}
                         </span>
                       </div>
-                      {errors.message && (
-                        <span className="as-ct-error">{errors.message}</span>
-                      )}
+                      {errors.message && <span className="as-ct-error">{errors.message}</span>}
                     </div>
 
-                    {/* Submit */}
                     <button
                       className="as-ct-submit-btn"
                       onClick={handleSubmit}

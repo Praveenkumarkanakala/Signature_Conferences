@@ -7,7 +7,7 @@ const FOOTER_STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
 :root{--eout:cubic-bezier(.16,1,.3,1)}
 .footer{isolation:isolate;position:relative;z-index:1}
-.footer-wave{display:block;line-height:0;overflow:hidden;background:#0a1428}
+.footer-wave{display:block;line-height:0;overflow:hidden;background:transparent}
 .footer-wave svg{display:block;width:100%;height:48px}
 .footer-body{background:var(--ink);position:relative;overflow:hidden}
 .footer-body-texture{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px}
@@ -31,7 +31,8 @@ const FOOTER_STYLES = `
 .footer-address{font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);line-height:1.7;margin:0;display:flex;align-items:flex-start;gap:6px}
 .footer-address-title{display:block;font-family:'Manrope',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
 .footer-meta-icon{width:13px;height:13px;flex-shrink:0;margin-top:3px;opacity:.55}
-.footer-email{font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);line-height:1.8;margin:0 0 10px;display:flex;align-items:center;gap:6px;text-decoration:none;word-break:break-all;transition:color .2s}
+.footer-contact-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+.footer-email{font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);line-height:1.8;margin:0;display:flex;align-items:center;gap:6px;text-decoration:none;word-break:break-all;transition:color .2s}
 .footer-email:hover{color:var(--teal)}
 .footer-socials{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
 .footer-social-btn{position:relative;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);text-decoration:none;opacity:0;transform:translateY(10px);transition:opacity .4s var(--eout) calc(.5s + var(--si,0)*.07s),transform .4s var(--eout) calc(.5s + var(--si,0)*.07s),background .25s,color .25s,border-color .25s}
@@ -77,15 +78,18 @@ const FOOTER_STYLES = `
 .footer-bottom-inner{max-width:1200px;margin:0 auto;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;opacity:0;transition:opacity .6s var(--eout) .2s}
 .footer-bottom-inner.bot--on{opacity:1}
 .footer-legal{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.footer-legal a{font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;color:rgba(255,255,255,.35);text-decoration:none;text-transform:uppercase;transition:color .2s}
-.footer-legal a:hover{color:var(--teal)}
+.footer-legal-text{font-family:'Manrope',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;color:rgba(255,255,255,0.85);text-transform:uppercase;transition:color .2s}
+.footer-legal-text:hover{color:var(--teal)}
 .footer-legal-sep{width:3px;height:3px;border-radius:50%;background:var(--border)}
 .footer-bottom-logo{width:32px;height:32px;object-fit:contain;opacity:.5;filter:grayscale(1) brightness(2);transition:opacity .3s,filter .3s}
 .footer-bottom-logo:hover{opacity:1;filter:none}
-.footer-copy{font-family:'Manrope',sans-serif;font-size:10px;color:rgba(255,255,255,.3);margin:0;text-align:right;letter-spacing:.3px}
+.footer-copy{font-family:'Manrope',sans-serif;font-size:10.5px;color:rgba(255,255,255,0.85);margin:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;letter-spacing:0.3px}
+.footer-license-icons{display:inline-flex;align-items:center;gap:6px}
+.footer-cc-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center}
+.footer-cc-icon svg{width:100%;height:100%}
 @media(max-width:1024px){.footer-body-inner{padding:36px 28px 32px}.footer-brand{flex:0 0 300px;padding-right:24px}.footer-vdivider{margin:0 24px}}
 @media(max-width:860px){.footer-vdivider{display:none}.footer-brand{flex:0 0 100%;padding-right:0;padding-bottom:24px;border-bottom:1px solid var(--border)}.footer-address-grid{grid-template-columns:1fr 1fr}.footer-nav-cols{padding-top:24px}}
-@media(max-width:600px){.footer-body-inner{padding:28px 20px 24px}.footer-address-grid{grid-template-columns:1fr}.footer-nav-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}.footer-col--cta{grid-column:1/-1}.footer-bottom-inner{padding:12px 20px;flex-direction:column;align-items:flex-start}.footer-copy{text-align:left}.footer-bottom-logo{display:none}}
+@media(max-width:600px){.footer-body-inner{padding:28px 20px 24px}.footer-address-grid{grid-template-columns:1fr}.footer-nav-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}.footer-col--cta{grid-column:1/-1}.footer-bottom-inner{padding:12px 20px;flex-direction:column;align-items:flex-start;gap:14px}.footer-copy{justify-content:flex-start}.footer-bottom-logo{display:none}}
 `;
 
 const SOCIAL_LINKS = [
@@ -96,7 +100,7 @@ const SOCIAL_LINKS = [
 ];
 
 const REGIONS = [
-  { flag: "🌍", name: "North America", path: "/Northamerica", color: "#f59e0b" },
+  { flag: "", name: "North America", path: "/Northamerica", color: "#f59e0b" },
   { flag: "🌎", name: "USA",           path: "/usa",          color: "#4fc3d8" },
   { flag: "🌎", name: "Europe",        path: "/europe",       color: "#4fc3d8" },
   { flag: "🌍", name: "Asia",          path: "/asia",         color: "#a78bfa" },
@@ -138,6 +142,24 @@ const PinIcon = () => (
   </svg>
 );
 
+const CCIcon = () => (
+  <div className="footer-cc-icon">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+      <text x="12" y="16" textAnchor="middle" fontSize="11" fontWeight="700" fill="currentColor" fontFamily="Arial,sans-serif">cc</text>
+    </svg>
+  </div>
+);
+const BYIcon = () => (
+  <div className="footer-cc-icon">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+      <circle cx="12" cy="8.5" r="2.5" fill="currentColor"/>
+      <path d="M7 19c0-2.76 2.24-5 5-5s5 2.24 5 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  </div>
+);
+
 export default function Footer({ theme = "default" }) {
   const t = footerThemes[theme] ?? footerThemes.default;
 
@@ -163,7 +185,7 @@ export default function Footer({ theme = "default" }) {
   return (
     <footer className="footer" style={cssVars}>
 
-      <div className="footer-wave" style={{ background: "#0a1428" }}>
+      <div className="footer-wave" style={{ background: "transparent" }}>
         <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0,48 L0,24 Q180,0 360,20 Q540,40 720,20 Q900,0 1080,20 Q1260,40 1440,24 L1440,48 Z" style={{ fill: t.ink }} />
         </svg>
@@ -199,12 +221,21 @@ export default function Footer({ theme = "default" }) {
               ))}
             </div>
 
-            <a href="mailto:global@signaturetalks.org" className="footer-email">
-              <svg className="footer-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
-              global@signaturetalks.org
-            </a>
+            <div className="footer-contact-row">
+              <a href="mailto:global@signaturetalks.org" className="footer-email">
+                <svg className="footer-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                global@signaturetalks.org
+              </a>
+
+              <a href="tel:+12025715721" className="footer-email">
+                <svg className="footer-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+                +1-202-571-5721
+              </a>
+            </div>
 
             <div className="footer-socials">
               {SOCIAL_LINKS.map((s, i) => (
@@ -266,16 +297,19 @@ export default function Footer({ theme = "default" }) {
       <div className="footer-bottom" ref={botRef}>
         <div className={`footer-bottom-inner ${botVisible ? "bot--on" : ""}`}>
           <div className="footer-legal">
-            <Link to="/terms&conditions">Terms &amp; Conditions</Link>
+            <span className="footer-legal-text">Terms & Conditions</span>
             <span className="footer-legal-sep" />
-            <Link to="/policy">Privacy Policy</Link>
+            <span className="footer-legal-text">Privacy Policy</span>
           </div>
           <img src={logo} alt="SGC" className="footer-bottom-logo" />
-          <p className="footer-copy">
-            United Signature Conferences © 2025 by Signature Conferences is licensed under CC BY 4.0
-            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg"  alt="CC" style={{ width: "14px", marginLeft: "6px", verticalAlign: "middle", opacity: 0.7 }} />
-            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style={{ width: "14px", marginLeft: "4px", verticalAlign: "middle", opacity: 0.7 }} />
-          </p>
+          <div className="footer-copy">
+            <span>United Signature Conferences © 2025 by Signature Conferences</span>
+            Licensed under CC BY 4.0
+            <span className="footer-license-icons">
+              <CCIcon />
+              <BYIcon />
+            </span>
+          </div>
         </div>
       </div>
     </footer>

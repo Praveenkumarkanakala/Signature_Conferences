@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Navbar } from "../NAHome/Nahome"; // Kept your import path
+import { NaNavbar } from "../NAHome/Nahome";
 import Footer from "../../../Components/Footer/footer";
 import "./aboutus.css";
 
@@ -33,9 +33,10 @@ const DATA = {
   ],
   testimonial: { quote: "Signature Global Conferences didn't just give me a stage — it gave me the courage to believe my story was worth telling. I left transformed.", author: "Priya Menon", role: "Entrepreneur & Keynote Speaker, Dubai", initials: "PM" },
   missionText: [
-    "Signature Global Conferences was born from a simple belief: that every individual carries within them a story powerful enough to change the world. We exist to build the stages where those stories are told.",
-    "Hosted in some of the most influential cities across the globe, each conference is an immersive environment where entrepreneurs, professionals, coaches, and changemakers gather to grow, lead, and make lasting impact in their fields.",
-    "We go beyond traditional events. Our gatherings are curated experiences where clarity meets purpose, and where connection transforms into action."
+    "At North America Signature Global Conferences, we are deeply passionate about the 3C’s—Creating, Connections, and Conversions—bringing together visionary women leaders, researchers, entrepreneurs, and professionals on a global platform. It is designed to empower and integrate individuals and organizations, fostering meaningful collaborations that inspire growth, innovation, and impactful leadership.",
+    "This conferences aims to create a dynamic environment where women leaders and aspiring professionals can connect, communicate, cultivate, and convert ideas into powerful actions that contribute to society and human advancement. We strive to build a strong B2B and professional network that encourages collaboration and sustainable success. The conference endeavors to unite experts from diverse fields, providing an ideal platform for extraordinary, like-minded professionals to explore their potential while engaging in real-time interactions. It is a space to exchange ideas, share experiences, and inspire one another through meaningful conversations and thought leadership.",
+    "Our vision is to bring together high-profile speakers, researchers, authors, entrepreneurs, and coaches who will share their valuable insights on leadership, innovation, personal growth, and global challenges—both virtually and in person—with exceptional support and engagement. Through this initiative, we continue our legacy of organizing impactful global conferences across areas such as women’s leadership, mental health, technology, artificial intelligence, sustainability, and innovation, enabling participants to gain valuable knowledge and perspectives from around the world.",
+    "At its core, focuses on gathering and showcasing diverse ideas on one stage to create, build, and execute cutting-edge leadership conversations, ensuring lasting impact and “top-of-mind” awareness. It fosters strong connections among individuals, entrepreneurs, and business leaders, helping build a consistent and powerful network of opportunities."
   ]
 };
 
@@ -89,24 +90,39 @@ function StatsBar() {
 function Mission() {
   return (
     <section className="na-mission">
-      <div className="na-mission__bg" />
       <div className="na-mission__inner">
-        <div className="na-mission__grid">
-          <div>
-            <span className="na-section__eyebrow">Our Mission</span>
-            <h2 className="na-section__title">Creating Spaces Where Voices Matter</h2>
-            <div className="na-mission__text">{DATA.missionText.map((p, i) => <p key={i}>{p}</p>)}</div>
+
+        {/* ── Centered heading ── */}
+        <div className="na-mission__header">
+          <span className="na-section__eyebrow na-section__eyebrow--center">Our Mission</span>
+          <h2 className="na-section__title na-section__title--center">
+            Creating Spaces Where Voices Matter
+          </h2>
+        </div>
+
+        {/* ── Two-column text ── */}
+        <div className="na-mission__text-grid">
+          <div className="na-mission__col">
+            {DATA.missionText.slice(0, 2).map((p, i) => <p key={i}>{p}</p>)}
           </div>
-          <div className="na-pillars">
-            {DATA.pillars.map((p) => (
-              <div key={p.id} className="na-pillar">
-                <span className="na-pillar__icon">{p.icon}</span>
-                <div className="na-pillar__title">{p.title}</div>
-                <p className="na-pillar__desc">{p.desc}</p>
-              </div>
-            ))}
+          <div className="na-mission__col">
+            {DATA.missionText.slice(2).map((p, i) => <p key={i}>{p}</p>)}
           </div>
         </div>
+
+        {/* ── 4-column pillars ── */}
+        <div className="na-pillars">
+          {DATA.pillars.map((p) => (
+            <div key={p.id} className="na-pillar">
+              <div className="na-pillar__icon-wrap">
+                <span className="na-pillar__icon">{p.icon}</span>
+              </div>
+              <div className="na-pillar__title">{p.title}</div>
+              <p className="na-pillar__desc">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );
@@ -135,44 +151,6 @@ function Values() {
   );
 }
 
-function Story() {
-  return (
-    <section className="na-story">
-      <div className="na-story__inner">
-        <div>
-          <span className="na-section__eyebrow">Our Story</span>
-          <h2 className="na-section__title">How the Movement Began</h2>
-          <div className="na-timeline">
-            {DATA.timeline.map((item) => (
-              <div key={item.id} className="na-timeline__item">
-                <div className="na-timeline__dot">{item.step}</div>
-                <div>
-                  <div className="na-timeline__year">{item.year}</div>
-                  <div className="na-timeline__title">{item.title}</div>
-                  <p className="na-timeline__desc">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="na-story__quote">
-          <div className="na-quote-card">
-            <span className="na-quote__mark">"</span>
-            <p className="na-quote__text">{DATA.testimonial.quote}</p>
-            <div className="na-quote__author">
-              <div className="na-quote__avatar">{DATA.testimonial.initials}</div>
-              <div>
-                <div className="na-quote__name">{DATA.testimonial.author}</div>
-                <div className="na-quote__role">{DATA.testimonial.role}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function AboutCTA() {
   const navigate = useNavigate();
   return (
@@ -193,12 +171,11 @@ function AboutCTA() {
 export default function AboutUs() {
   return (
     <div className="na-page">
-      <Navbar />
+      <NaNavbar />
       <AboutHero />
       <StatsBar />
       <Mission />
       <Values />
-      <Story />
       <AboutCTA />
       <Footer theme="northamerica" />
     </div>

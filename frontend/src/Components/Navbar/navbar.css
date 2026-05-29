@@ -65,6 +65,24 @@
 }
 .logo:hover .logo-img { transform: scale(1.03); filter: drop-shadow(0 0 8px var(--gold-glow)); }
 
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.logo-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+.logo-sub {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+}
+
 /* ══ DESKTOP LINKS ══ */
 .nav-links { display: flex; align-items: center; gap: .25rem; list-style: none; }
 .link {
@@ -323,3 +341,6 @@
   outline-offset: -2px;
   border-radius: 4px;
 }
+
+
+

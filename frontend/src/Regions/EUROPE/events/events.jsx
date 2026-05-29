@@ -1,24 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../Landingpage/eurohome.jsx";
-import { categoryFilters, getConferencesByRegion } from "../globaldata/eventsglobaldata.js";
+import { supabase } from "../../../lib/supabase.jsx";
 import "./events.css";
 import Footer from "../../../Components/Footer/footer";
 import "../Landingpage/eurohome.css";
+import SEO from "../../../Components/SEO.jsx";
 
 const REGION = "europe";
-const conferences = getConferencesByRegion(REGION);
-const cities = [...new Set(conferences.map((conference) => conference.city))];
 
-const categoryLabels = {
-  "women-leadership": "Women Leadership",
-  wellness: "Wellness",
-  "ai-stem": "AI & STEM",
-  business: "Business",
-};
+function normalizeRow(row) {
+  return {
+    ...row,
+    image: row.image_path,
+    date: row.date_text,
+    fullDescription: row.full_description,
+    slug: row.slug || row.id,
+  };
+}
 
 /* ─── HERO ──────────────────────────────── */
-function EventsHero() {
+function EventsHero({ conferences }) {
+  const cities = [...new Set(conferences.map((c) => c.city))];
+
   return (
     <section className="europe-events-hero">
       <div className="europe-events-hero__glow" />
@@ -50,27 +54,6 @@ function EventsHero() {
   );
 }
 
-/* ─── FILTER BAR ─────────────────────────── */
-function FilterBar({ active, onChange }) {
-  return (
-    <div className="europe-events-filters">
-      <div className="europe-events-filters__inner">
-        {categoryFilters.map((f) => (
-          <button
-            key={f.id}
-            className={`europe-events-filters__pill${
-              active === f.id ? " europe-events-filters__pill--active" : ""
-            }`}
-            onClick={() => onChange(f.id)}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /* ─── CONFERENCE CARD ────────────────────── */
 function ConferenceCard({ conf }) {
   const navigate = useNavigate();
@@ -79,9 +62,6 @@ function ConferenceCard({ conf }) {
     <div className="europe-events-card">
       <div className="europe-events-card__img">
         <img src={conf.image} alt={conf.title} />
-        <span className="europe-events-card__cat">
-          {categoryLabels[conf.category]}
-        </span>
       </div>
       <div className="europe-events-card__body">
         <h3 className="europe-events-card__title">{conf.title}</h3>
@@ -98,13 +78,13 @@ function ConferenceCard({ conf }) {
         <div className="europe-events-card__actions">
           <button
             className="europe-events-card__btn europe-events-card__btn--outline"
-            onClick={() => navigate(`/europe-events/${conf.id}`)}
+            onClick={() => navigate(`/europe-events/${conf.slug}`)}
           >
             Learn More
           </button>
           <button
             className="europe-events-card__btn europe-events-card__btn--primary"
-            onClick={() => navigate("/europe-register")}
+            onClick={() => navigate("/europe-register", { state: { conferenceId: String(conf.id) } })}
           >
             Register
           </button>
@@ -115,21 +95,12 @@ function ConferenceCard({ conf }) {
 }
 
 /* ─── GRID ──────────────────────────────── */
-function ConferencesGrid({ filter }) {
-  const filtered =
-    filter === "all"
-      ? conferences
-      : conferences.filter((c) => c.category === filter);
-
+function ConferencesGrid({ conferences }) {
   return (
     <section className="europe-events-grid-section">
       <div className="europe-events-grid-section__inner">
-        <p className="europe-events-grid-section__count">
-          Showing <strong>{filtered.length}</strong> conference
-          {filtered.length !== 1 ? "s" : ""}
-        </p>
         <div className="europe-events-grid">
-          {filtered.map((conf) => (
+          {conferences.map((conf) => (
             <ConferenceCard key={conf.id} conf={conf} />
           ))}
         </div>
@@ -140,14 +111,36 @@ function ConferencesGrid({ filter }) {
 
 /* ─── ROOT ───────────────────────────────── */
 export default function Events() {
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [conferences, setConferences] = useState([]);
+
+  useEffect(() => {
+    async function fetchFromSupabase() {
+      const { data, error } = await supabase
+        .from("conferences")
+        .select("*")
+        .eq("region", REGION)
+        .eq("is_published", true)
+        .order("display_order", { ascending: true });
+
+      if (error) {
+        console.error("Supabase fetch error:", error.message);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setConferences(data.map(normalizeRow));
+      }
+    }
+
+    fetchFromSupabase();
+  }, []);
 
   return (
     <div className="europe-page">
+      <SEO title="Europe Conferences & Events" description="Explore upcoming Signature Global Conferences in Europe." />
       <Navbar />
-      <EventsHero />
-      <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <ConferencesGrid filter={activeFilter} />
+      <EventsHero conferences={conferences} />
+      <ConferencesGrid conferences={conferences} />
       <Footer theme="europe" />
     </div>
   );

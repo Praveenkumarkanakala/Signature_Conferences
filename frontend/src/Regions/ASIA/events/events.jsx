@@ -1,17 +1,29 @@
-﻿import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../Home/asia.jsx";
-import { categoryFilters, getConferencesByRegion } from "../Globaldata/eventdata.js";
+import { categoryFilters } from "../../globaldata/eventsglobaldata";
+import { supabase } from "../../../lib/supabase.jsx";
 import "./events.css";
 import "../Home/asia.css";
 import Footer from "../../../Components/Footer/footer";
+import SEO from "../../../Components/SEO.jsx";
 
 const REGION = "asia";
-const conferences = getConferencesByRegion(REGION);
-const cities = [...new Set(conferences.map((conference) => conference.city))];
+
+function normalizeRow(row) {
+  return {
+    ...row,
+    image: row.image_path,
+    date: row.date_text,
+    fullDescription: row.full_description,
+    slug: row.slug || row.id,
+  };
+}
 
 /* ─── HERO ──────────────────────────────── */
-function EventsHero() {
+function EventsHero({ conferences }) {
+  const cities = [...new Set(conferences.map((c) => c.city))];
+
   return (
     <section className="as-ev-hero">
       <div className="as-ev-hero__glow" />
@@ -95,13 +107,13 @@ function ConferenceCard({ conf }) {
         <div className="as-ev-card__actions">
           <button
             className="as-ev-card__btn as-ev-card__btn--outline"
-            onClick={() => navigate(`/asiaevents/${conf.id}`)}
+            onClick={() => navigate(`/asiaevents/${conf.slug}`)}
           >
             Learn More
           </button>
           <button
             className="as-ev-card__btn as-ev-card__btn--primary"
-            onClick={() => navigate("/asiaregsiter")}
+            onClick={() => navigate("/asiaregsiter", { state: { conferenceId: String(conf.id) } })}
           >
             Register
           </button>
@@ -112,7 +124,7 @@ function ConferenceCard({ conf }) {
 }
 
 /* ─── GRID ─────────────────────────────── */
-function ConferencesGrid({ filter }) {
+function ConferencesGrid({ conferences, filter }) {
   const filtered =
     filter === "all"
       ? conferences
@@ -138,14 +150,37 @@ function ConferencesGrid({ filter }) {
 /* ─── ROOT ─────────────────────────────── */
 export default function AsiaEvents() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [conferences, setConferences] = useState([]);
+
+  useEffect(() => {
+    async function fetchFromSupabase() {
+      const { data, error } = await supabase
+        .from("conferences")
+        .select("*")
+        .eq("region", REGION)
+        .eq("is_published", true)
+        .order("display_order", { ascending: true });
+
+      if (error) {
+        console.error("Supabase fetch error:", error.message);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setConferences(data.map(normalizeRow));
+      }
+    }
+
+    fetchFromSupabase();
+  }, []);
 
   return (
-    // ✅ Root wrapper to prevent CSS leakage
     <div className="as-page">
+      <SEO title="Asia Conferences & Events" description="Explore upcoming Signature Global Conferences in Asia." />
       <Navbar />
-      <EventsHero />
+      <EventsHero conferences={conferences} />
       <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <ConferencesGrid filter={activeFilter} />
+      <ConferencesGrid conferences={conferences} filter={activeFilter} />
       <Footer theme="asia" />
     </div>
   );

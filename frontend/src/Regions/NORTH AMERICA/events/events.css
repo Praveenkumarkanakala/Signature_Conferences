@@ -33,7 +33,7 @@
   position: relative;
   overflow: hidden;
   padding: 130px 60px 70px;
-  background-color: var(--bg-dark);
+  background-color: #e8e4db;
 }
 
 .na-ev-hero__glow {
@@ -61,7 +61,7 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--primary);
+  color:  #1e3a2f;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -73,7 +73,7 @@
   display: block;
   width: 36px;
   height: 2px;
-  background: var(--primary);
+  background:  #1e3a2f;
   flex-shrink: 0;
 }
 
@@ -81,7 +81,7 @@
   font-family: var(--font-heading);
   font-size: clamp(2.6rem, 5vw, 4.8rem);
   font-weight: 900;
-  color: var(--white);
+  color: #1e3a2f;
   line-height: 0.95;
   margin-bottom: 20px;
   letter-spacing: 0.02em;
@@ -91,7 +91,7 @@
   font-family: var(--font-body);
   font-size: 1rem;
   font-style: italic;
-  color: var(--text-light);
+  color:  #1e3a2f;
   margin-bottom: 40px;
   max-width: 520px;
   line-height: 1.6;
@@ -111,14 +111,14 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-light);
+  color: #1e3a2f;
 }
 
 .na-ev-hero__stat span {
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 900;
-  color: var(--primary);
+  color:#1e3a2f;
   line-height: 1.1;
   margin-bottom: 2px;
 }
@@ -126,7 +126,7 @@
 .na-ev-hero__stat-div {
   width: 1px;
   height: 40px;
-  background: rgba(52, 211, 153, 0.15);
+  background: #1e3a2f;
 }
 
 /* ─── FILTER BAR ────────────────────────────── */
@@ -134,7 +134,7 @@
   position: sticky;
   top: var(--nav-height);
   z-index: 100;
-  background: rgba(2, 30, 26, 0.92);
+  background: #1e3a2f;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(52, 211, 153, 0.1);
@@ -155,27 +155,27 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-light);
+  color:  #b8952a;
   background: transparent;
   border: 1px solid rgba(52, 211, 153, 0.18);
   border-radius: 999px;
   padding: 8px 20px;
   /* ✅ Keep cursor/transition for interactive filter buttons */
   cursor: pointer;
-  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  transition: color #1e3a2f, border-color var(--transition), background #2a5240;
 }
 
 .na-ev-filters__pill:hover {
-  color: var(--white);
+  color: #f5f5f4;
   border-color: rgba(52, 211, 153, 0.4);
   background: rgba(52, 211, 153, 0.06);
 }
 
 .na-ev-filters__pill--active {
-  color: var(--bg-dark);
-  background: var(--primary);
+  color: #ffffff;
+  background:#2a5240;
   border-color: transparent;
-  box-shadow: 0 4px 16px rgba(52, 211, 153, 0.35);
+  box-shadow: 0 4px 16px rgba(24, 88, 65, 0.35);
 }
 
 .na-ev-filters__pill--active:hover {
@@ -186,7 +186,7 @@
 /* ─── GRID SECTION ──────────────────────────── */
 .na-ev-grid-section {
   padding: 60px 60px 100px;
-  background-color: var(--bg-dark);
+  background-color: #e8e4db;
 }
 
 .na-ev-grid-section__inner {
@@ -197,7 +197,7 @@
 .na-ev-grid-section__count {
   font-family: var(--font-body);
   font-size: 0.78rem;
-  color: var(--text-light);
+  color: #1e3a2f;
   margin-bottom: 32px;
   letter-spacing: 0.04em;
 }
@@ -214,7 +214,7 @@
 
 /* ─── CONFERENCE CARD ───────────────────────── */
 .na-ev-card {
-  background-color: var(--bg-darker);
+  background-color: #1e3a2f;
   border: 1px solid rgba(52, 211, 153, 0.1);
   border-radius: 20px;
   overflow: hidden;
@@ -247,8 +247,8 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--bg-dark);
-  background-color: var(--primary);
+  color: #fff;
+  background-color: #20704c;
   padding: 5px 12px;
   border-radius: 999px;
   box-shadow: 0 4px 12px rgba(52, 211, 153, 0.35);
@@ -266,7 +266,8 @@
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 700;
-  color: var(--white);
+  /* color:#fffefc; */
+  color:#e8e4db;
   line-height: 1.4;
 }
 
@@ -280,7 +281,7 @@
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 500;
-  color: var(--text-light);
+  color: #e8e4db;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -289,7 +290,7 @@
 .na-ev-card__icon {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--primary);
+  color: #dce8e3;
 }
 
 .na-ev-card__desc {
@@ -313,7 +314,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-light);
-  border: 1px solid rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(21, 48, 38, 0.15);
   border-radius: 999px;
   padding: 4px 10px;
 }
@@ -341,24 +342,26 @@
   padding: 9px 20px;
   /* ✅ Keep cursor/transition for interactive buttons */
   cursor: pointer;
-  transition: background var(--transition), transform 0.15s ease, box-shadow var(--transition);
+  transition: background  #2a5240, transform 0.15s ease, box-shadow var(--transition);
   border: none;
 }
 
 .na-ev-card__btn--primary {
-  color: var(--bg-dark);
-  background: var(--primary);
-  box-shadow: 0 4px 14px rgba(52, 211, 153, 0.3);
+  color: #b8952a;
+  background: rgba(52, 211, 153, 0.06);
+  border: 1.5px solid rgba(52, 211, 153, 0.22);
+  /* box-shadow: 0 4px 14px#286549; */
 }
 
 .na-ev-card__btn--primary:hover {
-  background: var(--primary-dark);
+  background:  rgba(52, 211, 153, 0.06);
+  color: var(--primary);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4);
+  /* box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4); */
 }
 
 .na-ev-card__btn--outline {
-  color: var(--white);
+  color: #b8952a;
   background: transparent;
   border: 1.5px solid rgba(52, 211, 153, 0.22);
 }

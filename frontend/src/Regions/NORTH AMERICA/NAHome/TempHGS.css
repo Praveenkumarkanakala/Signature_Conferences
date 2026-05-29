@@ -1,0 +1,734 @@
+/* ================================================================
+   GALLERY SECTION  (.na-thg2-*)  — redesigned two-column layout
+   Replaces old .na-thg-* styles. Integrates with --na-* variables.
+   ================================================================ */
+
+/* ── Root wrapper ── */
+.na-thg2-root {
+  width: 100%;
+  background-color: var(--na-bg, #e8e4db);
+  padding: 80px 5% 88px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Two-column split ── */
+.na-thg2-split {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 52px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .na-thg2-split {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* ================================================================
+   LEFT PANEL
+   ================================================================ */
+.na-thg2-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+/* Badge */
+.na-thg2-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--na-green, #1e3a2f);
+  border-radius: 999px;
+  padding: 7px 16px 7px 10px;
+  width: fit-content;
+  margin-bottom: 28px;
+}
+
+.na-thg2-badge__icon {
+  color: var(--na-gold, #b8952a);
+  display: flex;
+  align-items: center;
+}
+
+.na-thg2-badge__label {
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  color: var(--na-green, #1e3a2f);
+}
+
+/* Headline */
+.na-thg2-headline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 0 20px;
+  line-height: 1.0;
+}
+
+.na-thg2-headline__line {
+  display: block;
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.na-thg2-headline__line--dark {
+  color: var(--na-green, #1e3a2f);
+}
+
+.na-thg2-headline__line--gold {
+  color: var(--na-gold, #b8952a);
+}
+
+/* Divider */
+.na-thg2-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.na-thg2-divider__line {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--na-gold, #b8952a);
+  border-radius: 2px;
+}
+
+.na-thg2-divider__diamond {
+  font-size: 0.6rem;
+  color: var(--na-gold, #b8952a);
+  line-height: 1;
+}
+
+/* Body copy */
+.na-thg2-body {
+  font-family: var(--na-font-body, "DM Sans", sans-serif);
+  font-size: clamp(0.88rem, 1.3vw, 1rem);
+  color: var(--na-muted, rgba(30, 58, 47, 0.65));
+  line-height: 1.72;
+  margin: 0 0 32px;
+  max-width: 400px;
+}
+
+/* CTA button */
+.na-thg2-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--na-green, #1e3a2f);
+  color: var(--na-white, #fff);
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 24px;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.22s ease, transform 0.22s ease;
+  margin-bottom: 32px;
+}
+
+.na-thg2-cta:hover {
+  background: var(--na-green-mid, #2a5240);
+  transform: translateX(3px);
+}
+
+.na-thg2-cta svg {
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+
+.na-thg2-cta:hover svg {
+  transform: translateX(4px);
+}
+
+/* Bottom dots on left */
+.na-thg2-left__dots-bottom {
+  position: relative;
+  margin-top: 4px;
+}
+
+/* ================================================================
+   DOT GRID
+   ================================================================ */
+.na-thg2-dots {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 5), 1fr);
+  gap: 7px;
+  pointer-events: none;
+}
+
+.na-thg2-dots__dot {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--na-gold, #b8952a);
+  opacity: 0.4;
+}
+
+/* ================================================================
+   RIGHT PANEL — asymmetric card grid
+   ================================================================ */
+.na-thg2-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Rows */
+.na-thg2-row {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+}
+
+.na-thg2-row--1 { }
+.na-thg2-row--2 { align-items: stretch; }
+.na-thg2-row--3 { }
+
+/* ── Base card ── */
+.na-thg2-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: default;
+  animation: na-thg2-card-in 0.5s ease both;
+  animation-delay: var(--stagger, 0s);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+@keyframes na-thg2-card-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.na-thg2-card--hovered {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(30, 58, 47, 0.14);
+}
+
+/* Size variants */
+.na-thg2-card--lg {
+  width: 100%;
+  height: 200px;
+}
+
+.na-thg2-card--md {
+  width: 55%;
+  height: 200px;
+}
+
+.na-thg2-card--sm {
+  flex: 1;
+  height: 200px;
+}
+
+@media (max-width: 520px) {
+  .na-thg2-card--lg { height: 160px; }
+  .na-thg2-card--md { height: 160px; }
+  .na-thg2-card--sm { height: 160px; }
+  .na-thg2-row--2 { flex-direction: column; }
+  .na-thg2-card--md, .na-thg2-card--sm { width: 100%; }
+}
+
+/* Color variants */
+.na-thg2-card--light {
+  background-color: #ddd9ce;
+  border: 1px solid rgba(30, 58, 47, 0.08);
+}
+
+.na-thg2-card--dark {
+  background-color: var(--na-green, #1e3a2f);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.na-thg2-card--sage {
+  background-color: #b5beaa;
+  border: 1px solid rgba(30, 58, 47, 0.1);
+}
+
+/* Card inner */
+.na-thg2-card__inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Dark card circle background */
+.na-thg2-card__circle {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+/* Icon wrapper */
+.na-thg2-card__icon-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s ease;
+}
+
+.na-thg2-card--light .na-thg2-card__icon-wrap {
+  color: rgba(30, 58, 47, 0.3);
+}
+
+.na-thg2-card--dark .na-thg2-card__icon-wrap {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.na-thg2-card--sage .na-thg2-card__icon-wrap {
+  color: rgba(30, 58, 47, 0.3);
+}
+
+.na-thg2-card--hovered .na-thg2-card__icon-wrap {
+  opacity: 0.75;
+}
+
+/* ── Decorative card elements ── */
+
+/* Dot grids inside cards */
+.na-thg2-card__dots {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.na-thg2-card__dots--tr {
+  top: 14px;
+  right: 14px;
+}
+
+.na-thg2-card__dots--tl {
+  top: 14px;
+  left: 14px;
+}
+
+.na-thg2-card__dots--bl {
+  bottom: 14px;
+  left: 14px;
+}
+
+/* Wave lines (light small card) */
+.na-thg2-card__waves {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    rgba(30, 58, 47, 0.09) 4px,
+    rgba(30, 58, 47, 0.09) 5px
+  );
+  border-radius: 0 0 14px 0;
+  mask-image: radial-gradient(circle at bottom right, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at bottom right, black 40%, transparent 80%);
+}
+
+/* Arc / quarter-circle (sage card bottom-right) */
+.na-thg2-card__arc {
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 16px solid var(--na-gold, #b8952a);
+  opacity: 0.75;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ================================================================
+   SPEAKERS SECTION  (.na-ths-*)  — redesigned two-column layout
+   Integrates with existing --na-* and --na-* CSS variables
+   ================================================================ */
+
+/* ── Root wrapper ── */
+.na-ths-root {
+  width: 100%;
+  background-color: var(--na-bg, #e8e4db);
+  padding: 72px 5% 80px;
+  box-sizing: border-box;
+}
+
+/* ── Two-column split ── */
+.na-ths-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .na-ths-split {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+
+/* ================================================================
+   LEFT PANEL
+   ================================================================ */
+.na-ths-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Badge */
+.na-ths-left__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--na-green, #1e3a2f);
+  border-radius: 999px;
+  padding: 7px 16px 7px 10px;
+  width: fit-content;
+  margin-bottom: 28px;
+}
+
+.na-ths-left__badge-icon {
+  color: var(--na-gold, #b8952a);
+  display: flex;
+  align-items: center;
+}
+
+.na-ths-left__badge-label {
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  color: var(--na-green, #1e3a2f);
+}
+
+/* Headline */
+.na-ths-left__headline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 0 20px;
+  line-height: 1.0;
+}
+
+.na-ths-left__line {
+  display: block;
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: clamp(2.8rem, 5.5vw, 4.6rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.na-ths-left__line--dark {
+  color: var(--na-green, #1e3a2f);
+}
+
+.na-ths-left__line--gold {
+  color: var(--na-gold, #b8952a);
+}
+
+/* Divider */
+.na-ths-left__divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.na-ths-left__divider-line {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--na-gold, #b8952a);
+  border-radius: 2px;
+}
+
+.na-ths-left__divider-diamond {
+  font-size: 0.6rem;
+  color: var(--na-gold, #b8952a);
+  line-height: 1;
+}
+
+/* Body copy */
+.na-ths-left__body {
+  font-family: var(--na-font-body, "DM Sans", sans-serif);
+  font-size: clamp(0.88rem, 1.3vw, 1rem);
+  color: var(--na-muted, rgba(30,58,47,0.65));
+  line-height: 1.72;
+  margin: 0 0 36px;
+  max-width: 460px;
+}
+
+/* Feature pills row */
+.na-ths-left__features {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.na-ths-left__feat-sep {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(30, 58, 47, 0.18);
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 520px) {
+  .na-ths-left__features {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .na-ths-left__feat-sep {
+    display: none;
+  }
+}
+
+/* Individual pill */
+.na-ths-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  animation: na-ths-fade-up 0.55s ease both;
+}
+
+@keyframes na-ths-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.na-ths-pill__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--na-green, #1e3a2f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--na-gold, #b8952a);
+  flex-shrink: 0;
+}
+
+.na-ths-pill__body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.na-ths-pill__title {
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--na-green, #1e3a2f);
+  display: block;
+}
+
+.na-ths-pill__desc {
+  font-family: var(--na-font-body, "DM Sans", sans-serif);
+  font-size: 0.82rem;
+  color: var(--na-muted, rgba(30,58,47,0.65));
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ================================================================
+   RIGHT PANEL — deep green card
+   ================================================================ */
+.na-ths-right {
+  position: relative;
+  background: var(--na-green, #1e3a2f);
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 52px 44px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 520px) {
+  .na-ths-right {
+    padding: 40px 28px 40px;
+  }
+}
+
+/* Topographic SVG texture overlay */
+.na-ths-right__topo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.055)' stroke-width='1'%3E%3Cellipse cx='820' cy='300' rx='160' ry='520'/%3E%3Cellipse cx='820' cy='300' rx='220' ry='560'/%3E%3Cellipse cx='820' cy='300' rx='280' ry='600'/%3E%3Cellipse cx='820' cy='300' rx='340' ry='640'/%3E%3Cellipse cx='820' cy='300' rx='400' ry='680'/%3E%3Cellipse cx='820' cy='300' rx='460' ry='720'/%3E%3Cellipse cx='820' cy='300' rx='520' ry='760'/%3E%3Cellipse cx='820' cy='300' rx='580' ry='800'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: right center;
+}
+
+.na-ths-right__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  width: 100%;
+}
+
+/* Diamond */
+.na-ths-right__diamond {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--na-gold, #b8952a);
+  margin-bottom: 14px;
+  letter-spacing: 0;
+}
+
+/* Heading */
+.na-ths-right__heading {
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--na-white, #fff);
+  line-height: 1.1;
+  margin: 0 0 28px;
+}
+
+.na-ths-right__heading-gold {
+  color: var(--na-gold, #b8952a);
+}
+
+/* Mic circle */
+.na-ths-right__mic-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.na-ths-right__mic-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(184, 149, 42, 0.35);
+}
+
+.na-ths-right__mic-icon {
+  color: var(--na-gold, #b8952a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: na-ths-mic-pulse 3s ease-in-out infinite;
+}
+
+@keyframes na-ths-mic-pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.06); }
+}
+
+/* Burst / ray lines around mic */
+.na-ths-right__burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 1.5px;
+  background: var(--na-gold, #b8952a);
+  opacity: 0.5;
+  border-radius: 2px;
+  transform-origin: left center;
+  transform: rotate(calc(var(--i) * 60deg)) translateX(72px);
+  animation: na-ths-burst-pulse 3s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+@keyframes na-ths-burst-pulse {
+  0%, 100% { opacity: 0.3; width: 14px; }
+  50%       { opacity: 0.7; width: 20px; }
+}
+
+/* "Something Incredible / is coming." */
+.na-ths-right__coming-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 22px;
+}
+
+.na-ths-right__coming-label {
+  font-family: var(--na-font-heading, "Bebas Neue", sans-serif);
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--na-white, #fff);
+  margin: 0 0 2px;
+}
+
+.na-ths-right__coming-script {
+  font-family: "Dancing Script", "Pacifico", cursive;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--na-gold, #b8952a);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.na-ths-right__coming-underline {
+  display: block;
+  width: 80px;
+  height: 2px;
+  background: var(--na-gold, #b8952a);
+  border-radius: 2px;
+  margin-top: 6px;
+  opacity: 0.6;
+}
+
+/* Body */
+.na-ths-right__body {
+  font-family: var(--na-font-body, "DM Sans", sans-serif);
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.72;
+  margin: 0;
+  max-width: 340px;
+}

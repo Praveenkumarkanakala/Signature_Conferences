@@ -1,20 +1,23 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Navbar } from "../Landingpage/homepage.jsx";
-import {
-  speakerCategories,
-  getSpeakersByCategory,
-  speakers,
-  allConferences,
-} from "./speakerdata.js";
 import "./Speakers.css";
 import Footer from "../../../Components/Footer/footer";
 import "../Landingpage/homepage.css";
+import USASpeakersSection from "./tempspeakers.jsx";
 
+import speaker1 from "../Landingpage/images/galleryimg.jpeg";
+import speaker2 from "../Landingpage/images/galleryimg1.jpeg";
+import speaker3 from "../Landingpage/images/galleryimg2.jpeg";
+import speaker4 from "../Landingpage/images/galleryimg3.jpeg";
+import speaker5 from "../Landingpage/images/galleryimg4.jpeg";
+import speaker6 from "../Landingpage/images/galleryimg5.jpeg";
+import speaker7 from "../Landingpage/images/galleryimg6.jpeg";
+import speaker8 from "../Landingpage/images/galleryimg7.jpeg";
+import speaker9 from "../Landingpage/images/galleryimg8.jpeg";
+import speaker10 from "../Landingpage/images/galleryimg9.jpeg";
 
 function unlockScroll() {
   const scrollY = Math.abs(parseInt(document.body.style.top || "0", 10));
-
   const targets = [document.documentElement, document.body];
   targets.forEach((el) => {
     el.style.removeProperty("overflow");
@@ -28,16 +31,22 @@ function unlockScroll() {
     el.style.removeProperty("width");
     el.style.removeProperty("padding-right");
   });
-
   if (scrollY > 0) window.scrollTo(0, scrollY);
 }
 
-const categoryLabels = {
-  "women-leadership": "Women & Leadership",
-  "ai-stem": "AI & STEM",
-  business: "Business",
-  wellness: "Wellness",
-};
+const speakers = [
+  { id: 1, name: "Speaker ",  image: speaker1 },
+  { id: 2, name: "Keynote Speaker ",  image: speaker2 },
+  { id: 3, name: "Keynote Speaker ",  image: speaker3 },
+  { id: 4, name: "Speaker ",  image: speaker4 },
+  { id: 5, name: "Keynote Speaker ",  image: speaker5 },
+  { id: 6, name: "Keynote Speaker ", image: speaker6 },
+  { id: 7, name: "Keynote Speaker ",  image: speaker7 },
+  { id: 8, name: "Speaker ",  image: speaker8 },
+  { id: 9, name: "Keynote Speaker ", image: speaker9 },
+  { id: 10, name: "Speaker ", image: speaker10 },
+
+];
 
 /* ─── HERO ──────────────────────────────────── */
 function SpeakersHero() {
@@ -45,7 +54,7 @@ function SpeakersHero() {
     <section className="usa-sp-hero">
       <div className="usa-sp-hero__glow" />
       <div className="usa-sp-hero__content">
-        <span className="usa-sp-hero__tag">Sgnature Global Conferenes - Speakers</span>
+        <span className="usa-sp-hero__tag">Signature Global Conferences - Speakers</span>
         <h1 className="usa-sp-hero__title">
           Voices That
           <br />
@@ -53,27 +62,6 @@ function SpeakersHero() {
         </h1>
       </div>
     </section>
-  );
-}
-
-/* ─── FILTER BAR ─────────────────────────────── */
-function FilterBar({ active, onChange }) {
-  return (
-    <div className="usa-sp-filters">
-      <div className="usa-sp-filters__inner">
-        {speakerCategories.map((f) => (
-          <button
-            key={f.id}
-            className={`usa-sp-filters__pill${
-              active === f.id ? " usa-sp-filters__pill--active" : ""
-            }`}
-            onClick={() => onChange(f.id)}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -98,14 +86,12 @@ function SpeakerCard({ speaker }) {
 }
 
 /* ─── GRID ───────────────────────────────────── */
-function SpeakersGrid({ filter }) {
-  const filtered = getSpeakersByCategory(filter);
-
+function SpeakersGrid() {
   return (
     <section className="usa-sp-grid-section">
       <div className="usa-sp-grid-section__inner">
         <div className="usa-sp-grid">
-          {filtered.map((speaker) => (
+          {speakers.map((speaker) => (
             <SpeakerCard key={speaker.id} speaker={speaker} />
           ))}
         </div>
@@ -116,9 +102,6 @@ function SpeakersGrid({ filter }) {
 
 /* ─── ROOT ───────────────────────────────────── */
 export default function Speakers() {
-  const [activeFilter, setActiveFilter] = useState("all");
-
-  /* ✅ SCROLL FIX — unlock on mount + after paint, no restore on unmount */
   useEffect(() => {
     unlockScroll();
     const raf = requestAnimationFrame(unlockScroll);
@@ -128,9 +111,9 @@ export default function Speakers() {
   return (
     <div className="usa-page">
       <Navbar />
-      <SpeakersHero />
-      <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <SpeakersGrid filter={activeFilter} />
+      {/* <SpeakersHero /> */}
+      {/* <SpeakersGrid /> */}
+      <USASpeakersSection/>
       <Footer theme="usa" />
     </div>
   );

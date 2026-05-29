@@ -261,22 +261,6 @@
   transform: scale(1.06);
 }
 
-.usa-page .ev-card__cat {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  font-family: var(--ev-font-body);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ev-dark);
-  padding: 5px 12px;
-  border-radius: var(--ev-radius-pill);
-  background-color: var(--ev-accent);
-  box-shadow: var(--ev-shadow-sm);
-}
-
 .usa-page .ev-card__body {
   padding: 24px;
   display: flex;

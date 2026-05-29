@@ -1,12 +1,39 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { TempHomeSpeakers } from "./TempHomeSpeakers";
+import { TempHomeGallery } from "./TempHomeGallery";
+import { supabase } from "../../../lib/supabase.jsx";
+import SEO from "../../../Components/SEO.jsx";
+
+
 
 import "./eurohome.css";
 import BgImage from "./imgs/texture_bg_2.jpg";
-import FloatingImage from "./imgs/paris_2.png";
-import RightImage from "./imgs/paris_3.png";
-import sgcLogo from "../globaldata/sgc_logo.jpeg";
+import sgcLogo from "../../globaldata/sgc_logo.jpeg";
 import Footer from "../../../Components/Footer/footer";
+
+import img1 from "../speakers/images/euroimg1.jpeg";
+import img2 from "../speakers/images/euroimg2.jpeg";
+import img3 from "../speakers/images/euroimg3.jpeg";
+import img4 from "../speakers/images/euroimg4.jpeg";
+import img5 from "../speakers/images/euroimg5.jpeg";
+import img6 from "../speakers/images/euroimg6.jpeg";
+import img7 from "../speakers/images/euroimg7.jpeg";
+import img8 from "../speakers/images/euroimg8.jpeg";
+import img9 from "../speakers/images/euroimg9.jpeg";
+import img10 from "../speakers/images/euroimg10.jpeg";
+import img11 from "../speakers/images/euroimg11.jpeg";
+
+
+
+
+import EuroHimg from "./imgs/EuroHimg.webp";
+import EuroHimg1 from "./imgs/EuroHimg1.webp";
+import EuroHimg2 from "./imgs/EuroHimg2.webp";
+import EuroHimg3 from "./imgs/EuroHimg3.webp";
+
+
+
 
 /*=================== DATA EXPORTS ============================== */
 export const stats = [
@@ -92,23 +119,22 @@ const NAV_LINKS = [
   
 ];
 
-const EVENTS = [
-  { id: 1, title: "Global Women Leadership & Mental Resilience Signature Conference", date: "August 08-09, 2026", location: "Paris, France", category: "Women Leadership", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop" },
-  { id: 2, title: "Future Technology & Innovation Summit", date: "September 15-16, 2026", location: "New York, USA", category: "Technology", image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&auto=format&fit=crop" },
-  { id: 3, title: "Global Business Leadership & Strategy Forum", date: "October 10-11, 2026", location: "London, UK", category: "Business", image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&auto=format&fit=crop" },
-  { id: 4, title: "International Health & Wellness Conference", date: "November 20-21, 2026", location: "Dubai, UAE", category: "Health & Wellness", image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&auto=format&fit=crop" },
-];
+
 
 const SWAY_CLASSES = ["europe-sway-a", "europe-sway-b", "europe-sway-c", "europe-sway-d"];
 
 const SPEAKERS = [
-  { id: 1, name: "Dr. Amara Osei", title: "AI Ethics Lead", org: "DeepMind", topic: "Responsible AI in the Wild", image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=600&fit=crop&crop=face" },
-  { id: 2, name: "Lena Marchetti", title: "CTO & Co-Founder", org: "NeuralEdge", topic: "Scaling LLMs for Enterprises", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop&crop=face" },
-  { id: 3, name: "James Thornton", title: "Principal Engineer", org: "Anthropic", topic: "The Future of Code Generation", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face" },
-  { id: 4, name: "Priya Nair", title: "Head of Product", org: "OpenSpark", topic: "Building Human-Centered AI", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=600&fit=crop&crop=face" },
-  { id: 5, name: "Carlos Vega", title: "Research Scientist", org: "MIT CSAIL", topic: "Multimodal Models Explained", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop&crop=face" },
-  { id: 6, name: "Yuki Tanaka", title: "Design Director", org: "Figma AI", topic: "AI-Augmented Creativity", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=600&fit=crop&crop=face" },
-  { id: 7, name: "Fatima Al-Rashid", title: "VP Engineering", org: "Cohere", topic: "RAG at Production Scale", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&crop=face" },
+  { id: 1, image: img1 },
+  { id: 2, image: img2 },
+  { id: 3, image: img3 },
+  { id: 4, image: img4 },
+  { id: 5, image: img5 },
+  { id: 6, image: img6 },
+  { id: 7, image: img7 },
+  { id: 8, image: img8 },
+  { id: 9, image: img9 },
+  { id: 10, image: img10 },
+  { id: 11, image: img11 },
 ];
 
 const photos = [
@@ -239,26 +265,90 @@ function Navbar() {
 
 function HeroSection() {
   const navigate = useNavigate();
+
+    const strips = [
+    { src: EuroHimg2, alt: "Paris – Eiffel Tower" },
+    { src: EuroHimg1, alt: "London – Westminster" },
+    { src: EuroHimg3,  alt: "Berlin – Germany" },
+    { src: EuroHimg, alt: "Rome – Pantheon" },
+  ];
+
   return (
-    <section className="europe-hero" style={{ backgroundImage: `url(${BgImage})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}>
-      <div className="europe-hero__overlay" />
-      <img src={FloatingImage} alt="floating decoration" className="europe-hero__floating-image" />
-      <img src={RightImage} alt="right building" className="europe-hero__floating-image--right" />
-      <div className="europe-hero__content">
-        <h1 className="europe-hero__title">EUROPE SIGNATURE GLOBAL CONFERENCES</h1>
-        <p className="europe-hero__tagline">WHERE LEADERS RISE AND IMPACT</p>
-        <div className="europe-hero__buttons">
-          <Link to="/europe-events" className="europe-hero__btn primary">View Conferences</Link>
-          <button className="europe-hero__btn secondary" onClick={() => navigate("/europe-register")}>Register Now</button>
+    <section className="europe-hero-v2">
+      {/* ── LEFT: Text block ── */}
+      <div className="europe-hero-v2__left">
+        <p className="europe-hero-v2__script">Europe</p>
+
+        <h1 className="europe-hero-v2__headline">
+          SIGNATURE<br />GLOBAL<br />CONFERENCES
+        </h1>
+
+        <p className="europe-hero-v2__tagline">
+          Inspiring Voices. Empowering Leaders. Creating Global Impact.
+        </p>
+
+        <div className="europe-hero-v2__btns">
+          <Link to="/europe-events" className="europe-hero-v2__btn europe-hero-v2__btn--primary">
+            Explore Conferences
+          </Link>
+          <button
+            className="europe-hero-v2__btn europe-hero-v2__btn--secondary"
+            onClick={() => navigate("/europe-register")}
+          >
+            Become a Speaker
+          </button>
         </div>
+      </div>
+
+      <div className="europe-hero-v2__strips">
+        {strips.map((strip, i) => (
+          <div
+            key={i}
+            className="europe-hero-v2__strip"
+            style={{ animationDelay: `${i * 0.12}s` }}
+          >
+            <img src={strip.src} alt={strip.alt} loading="lazy" />
+          </div>
+        ))}
       </div>
     </section>
   );
 }
 
 function FutureEvents() {
+  const [events, setEvents] = useState([]);
   const cardsRef = useRef([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchEvents() {
+      const { data, error } = await supabase
+        .from("conferences")
+        .select("id, title, date_text, location, image_path, category")
+        .eq("region", "europe")
+        .eq("is_published", true)
+        .order("display_order", { ascending: true })
+        .limit(4);
+
+      if (error) {
+        console.error("Failed to fetch Europe future events:", error.message);
+        return;
+      }
+
+      setEvents(
+        (data || []).map((row) => ({
+          id:       row.id,
+          title:    row.title,
+          date:     row.date_text,
+          location: row.location,
+          image:    row.image_path,
+          category: row.category,
+        }))
+      );
+    }
+
+    fetchEvents();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -274,7 +364,7 @@ function FutureEvents() {
     );
     cardsRef.current.forEach((el) => { if (el) observer.observe(el); });
     return () => observer.disconnect();
-  }, []);
+  }, [events]);
 
   return (
     <section className="europe-fe-section" style={{ backgroundImage: `url(${BgImage})` }}>
@@ -286,7 +376,7 @@ function FutureEvents() {
       <div className="europe-fe-rope-wrapper">
         <div className="europe-fe-rope-line" />
         <div className="europe-fe-cards-row">
-          {EVENTS.map((event, index) => (
+          {events.map((event, index) => (
             <div key={event.id} className="europe-fe-card-wrap" ref={(el) => (cardsRef.current[index] = el)} style={{ animationDelay: `${index * 0.12}s` }}>
               <div className="europe-fe-clip"><span className="europe-fe-clip-shine" /></div>
               <article className={`europe-fe-card ${SWAY_CLASSES[index % SWAY_CLASSES.length]}`}>
@@ -301,7 +391,7 @@ function FutureEvents() {
                     <div className="europe-fe-card__meta-item"><PinIcon />{event.location}</div>
                   </div>
                 </div>
-                <button className="europe-fe-card__cta" onClick={() => navigate("/europe-register")}>Register Now</button>
+                <button className="europe-fe-card__cta" onClick={() => navigate("/europe-register", { state: { conferenceId: String(event.id) } })}>Register Now</button>
               </article>
             </div>
           ))}
@@ -446,12 +536,6 @@ function SpeakersCarousel() {
                   <img src={sp.image} alt={sp.name} draggable={false} />
                   <div className="europe-sc-pill-photo-fade" />
                 </div>
-                <div className="europe-sc-pill-footer">
-                  {isCenter && <span className="europe-sc-pill-tag">{sp.topic}</span>}
-                  <p className="europe-sc-pill-name">{sp.name}</p>
-                  {isCenter && <p className="europe-sc-pill-role">{sp.title} &middot; <span>{sp.org}</span></p>}
-                </div>
-                {isCenter && <div className="europe-sc-pill-crown">Featured Speaker</div>}
               </div>
             );
           })}
@@ -540,13 +624,17 @@ export { Navbar };
 export default function HomePage() {
   return (
     <div className="europe-page">
+      <SEO title="Europe Conferences" />
       <div className="europe-page-wrapper">
         <Navbar />
         <HeroSection />
         <FutureEvents />
         <WhyJoinUs />
-        <SpeakersCarousel />
-        <GalleryGrid />
+        {/* <SpeakersCarousel /> */}
+        <TempHomeSpeakers />
+      
+        {/* <GalleryGrid /> */}
+         <TempHomeGallery />  
         <Footer theme="europe" />
       </div>
     </div>

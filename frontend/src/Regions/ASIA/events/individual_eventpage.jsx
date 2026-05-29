@@ -1,17 +1,18 @@
-﻿import { useParams, useNavigate } from "react-router-dom";
-import { getConferenceByRegionAndId } from "../Globaldata/eventdata.js";
+import { useParams, useNavigate } from "react-router-dom";
+import { getConferenceByRegionAndSlug } from "../../globaldata/eventsglobaldata";
 import { Navbar } from "../Home/asia.jsx";
 
 import "./individual_eventpage.css";
 import Footer from "../../../Components/Footer/footer";
+import SEO from "../../../Components/SEO.jsx";
 
 const REGION = "asia";
 const CATEGORY_LABELS = { "women-leadership": "Women Leadership", wellness: "Wellness", "ai-stem": "AI & STEM", business: "Business" };
 
 export default function AsiaEventDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
-  const conf = getConferenceByRegionAndId(REGION, id);
+  const conf = getConferenceByRegionAndSlug(REGION, slug);
 
   if (!conf) {
     return (
@@ -50,6 +51,7 @@ export default function AsiaEventDetail() {
   return (
     // ✅ Root wrapper to prevent CSS leakage
     <div className="as-page">
+      <SEO title={`${conf.title} | Asia`} description={conf.description?.substring(0, 160)} image={conf.image} />
       <Navbar />
       <section className="as-ed-hero">
         <div className="as-ed-hero__img-wrap">
@@ -79,7 +81,7 @@ export default function AsiaEventDetail() {
                 <CtaRow label="Venue" value={conf.location} />
                 <CtaRow label="Category" value={category} />
               </div>
-              <button className="as-ed-cta-card__btn" onClick={() => navigate("/asiaregsiter")}>Register Now</button>
+              <button className="as-ed-cta-card__btn" onClick={() => navigate("/asiaregsiter", { state: { conferenceId: String(conf.id) } })}>Register Now</button>
               <button className="as-ed-cta-card__btn as-ed-cta-card__btn--outline" onClick={() => navigate("/asiaevents")}>Browse All Events</button>
             </div>
           </div>

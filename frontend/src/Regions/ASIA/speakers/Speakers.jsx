@@ -3,10 +3,11 @@ import { Navbar } from "../Home/asia.jsx";
 import {
   speakerCategories,
   getSpeakersByCategory,
-} from "./speakerdata.js";
+} from "./speakerdata.jsx";
 import "./Speakers.css";
 import "../Home/asia.css";
 import Footer from "../../../Components/Footer/footer";
+import { TempSpeakersHero, TempSpeakersFilter, TempSpeakersComingSoon } from "./tempspeakers";
 
 function FilterBar({ active, onChange }) {
   return (
@@ -62,8 +63,14 @@ export default function AsiaSpeakers() {
     // ✅ Root wrapper to prevent CSS leakage
     <div className="as-page">
       <Navbar />
-      <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <SpeakersGrid filter={activeFilter} />
+
+<TempSpeakersHero />
+      <TempSpeakersFilter active={activeFilter} onChange={setActiveFilter} />
+      <TempSpeakersComingSoon />
+
+
+      {/* <FilterBar active={activeFilter} onChange={setActiveFilter} />
+      <SpeakersGrid filter={activeFilter} /> */}
       <Footer theme="asia" />
     </div>
   );

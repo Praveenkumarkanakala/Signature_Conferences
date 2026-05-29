@@ -1,7 +1,8 @@
 ﻿import React, { useEffect, useRef, useCallback, useState } from "react";
 import { Navbar } from "../Home/asia.jsx";
 import Footer from "../../../Components/Footer/footer";
-import { arcPhotos, bentoItems } from "./gallerydata.js";
+import { arcPhotos, bentoItems } from "./gallerydata.jsx";
+import { TempGallery } from "./TempGallery.jsx";
 import "./gallery.css";
 
 const VISIBLE_SLOTS = 8;
@@ -521,11 +522,12 @@ export default function AsiaGallery() {
     // ✅ KEY CHANGE: Scoped root class matches Asia pattern
     <div className="as-page">
       <Navbar />
-      <GalleryHero />
-      <HeroSection />
-      <RegularGallery />
-      <VideoSection />
-      <GalleryCarousel />
+      {/* <GalleryHero /> */}
+      {/* <HeroSection /> */}
+      {/* <RegularGallery /> */}
+      {/* <VideoSection /> */}
+      {/* <GalleryCarousel /> */}
+      < TempGallery/>
       <Footer theme="asia" />
     </div>
   );

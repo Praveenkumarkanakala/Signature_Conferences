@@ -2,8 +2,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, useCallback } from "react";
 import "./asia.css";
 import HERO_IMAGE from "./ASIA_IMG.jpg";
-import { getConferencesByRegion } from "../Globaldata/eventdata";
+import { getConferencesByRegion } from "../../globaldata/eventsglobaldata";
 import Footer from "../../../Components/Footer/footer";
+import { TempHomeGallery, TempHomeSpeakers } from "./TempHGS";
+import { supabase } from "../../../lib/supabase.jsx";
+import sgcLogo from "../../globaldata/sgc_logo.jpeg";
+import SEO from "../../../Components/SEO.jsx";
+
 
 /* ─── DATA ──────────────────────────────────── */
 const stats = [
@@ -129,13 +134,12 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const sectionLinks = { Home: "/asia", Events:"/asiaevents", Speakers: "/asiaspeakers", Gallery: "/asiagallery", About: "/aboutasgc", Contact: "/asiacontact" };
-  const links = ["Home","About", "Events", "Speakers", "Gallery", "Contact"];
+  const sectionLinks = { Home: "/asia", Events: "/asiaevents", Speakers: "/asiaspeakers", Gallery: "/asiagallery", About: "/aboutasgc", Contact: "/asiacontact" };
+  const links = ["Home", "About", "Events", "Speakers", "Gallery", "Contact"];
   const normalizedPath = location.pathname.toLowerCase().replace(/\/+$/, "") || "/";
   const isAsiaHome = normalizedPath === "/asia";
 
   useEffect(() => {
-    // ✅ Scoped class: only affects .as-page subtree
     document.documentElement.classList.add("as-route-active");
     const handler = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handler);
@@ -147,10 +151,19 @@ export function Navbar() {
 
   return (
     <nav className={`as-hp-navbar${!isAsiaHome ? " as-hp-navbar--solid" : ""}${scrolled ? " as-hp-navbar--scrolled" : ""}`}>
+
       <div className="as-hp-navbar__logo" onClick={() => navigate("/")}>
-        <span className="as-hp-navbar__logo-sig">SIGNATURE</span>
-        <span className="as-hp-navbar__logo-sub">Conferences</span>
+        <img
+          src={sgcLogo}
+          alt="SGC Logo"
+          className="as-hp-navbar__logo-img"
+        />
+        <div className="as-hp-navbar__logo-text">
+          <span className="as-hp-navbar__logo-region">ASIA</span>
+          <span className="as-hp-navbar__logo-name">Signature Global Conferences</span>
+        </div>
       </div>
+
       <ul className="as-hp-navbar__links">
         {links.map((l) => (
           <li key={l}>
@@ -158,7 +171,10 @@ export function Navbar() {
           </li>
         ))}
       </ul>
-      <button className="as-hp-navbar__cta" onClick={() => navigate("/asiaregsiter")}>Register Now</button>
+
+      <button className="as-hp-navbar__cta" onClick={() => navigate("/asiaregsiter")}>
+        Register Now
+      </button>
     </nav>
   );
 }
@@ -234,9 +250,39 @@ function Stats() {
   );
 }
 
-/* ─── UPCOMING ──────────────────────────────── */
-function Upcoming() {
+function FutureEvents() {
+  const [events, setEvents] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchEvents() {
+      const { data, error } = await supabase
+        .from("conferences")
+        .select("id, title, date_text, location, image_path")
+        .eq("region", "asia")
+        .eq("is_published", true)
+        .order("display_order", { ascending: true })
+        .limit(4);
+
+      if (error) {
+        console.error("Failed to fetch Asia upcoming events:", error.message);
+        return;
+      }
+
+      setEvents(
+        (data || []).map((row) => ({
+          id:       row.id,
+          title:    row.title,
+          date:     row.date_text,
+          location: row.location,
+          image:    row.image_path,
+        }))
+      );
+    }
+
+    fetchEvents();
+  }, []);
+
   return (
     <section className="as-hp-upcoming" id="events">
       <div className="as-hp-upcoming__inner">
@@ -252,7 +298,7 @@ function Upcoming() {
         <FadeUp delay={100}>
           <div className="as-hp-upcoming__container">
             <div className="as-hp-upcoming__grid">
-              {conferences.slice(0, 4).map((ev) => (
+              {events.map((ev) => (
                 <div className="as-hp-event-card" key={ev.id}>
                   <div className="as-hp-event-card__img"><img src={ev.image} alt={ev.title} /></div>
                   <div className="as-hp-event-card__body">
@@ -271,7 +317,6 @@ function Upcoming() {
     </section>
   );
 }
-
 /* ─── PHILOSOPHY ────────────────────────────── */
 function Philosophy() {
   const doubled = [...philosophyLines, ...philosophyLines];
@@ -448,20 +493,23 @@ export default function Homepage() {
   return (
     // ✅ KEY CHANGE: Scoped root class
     <div className="as-page">
+      <SEO title="Asia Conferences" />
       <Navbar />
       <Hero />
       <Stats />
       <div className="as-hp-divider" />
-      <Upcoming />
+      <FutureEvents />
       <div className="as-hp-divider" />
       <Philosophy />
       <div className="as-hp-divider" />
       <WhyJoin />
       <div className="as-hp-divider" />
-      <Speakers />
+      {/* <Speakers /> */}
+      < TempHomeSpeakers/>
       <div className="as-hp-divider" />
-      <Highlights />
-      <PastConferences />
+      <TempHomeGallery/>
+      {/* <Highlights /> */}
+      {/* <PastConferences /> */}
       <CTABanner />
       <Footer theme="asia" />
     </div>

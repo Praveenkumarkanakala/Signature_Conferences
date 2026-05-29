@@ -71,7 +71,7 @@ html { scroll-behavior: smooth; }
 /* ─── HERO ──────────────────────────────────── */
 .europe-event-hero {
   position: relative;
-  min-height: 75vh;
+  min-height: 55vh;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -87,8 +87,9 @@ html { scroll-behavior: smooth; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  filter: brightness(0.4);
+  object-position: center 25%;
+  filter: brightness(0.45);
+  transform: scale(1);
 }
 
 .europe-event-hero__overlay {
@@ -111,7 +112,6 @@ html { scroll-behavior: smooth; }
   padding: 140px 60px 60px;
 }
 
-/* ── title + CTA side by side inside hero ── */
 .europe-event-hero__top-row {
   display: flex;
   align-items: flex-end;
@@ -121,21 +121,6 @@ html { scroll-behavior: smooth; }
 .europe-event-hero__title-block {
   flex: 1;
   min-width: 0;
-}
-
-.europe-event-hero__cat {
-  font-family: var(--font-body);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--color-dark);
-  background: var(--color-accent);
-  padding: 6px 16px;
-  border-radius: 50px;
-  display: inline-block;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 14px rgba(212, 165, 90, 0.4);
 }
 
 .europe-event-hero__title {
@@ -182,7 +167,7 @@ html { scroll-behavior: smooth; }
   background: rgba(244, 244, 244, 0.15);
 }
 
-/* ─── CTA CARD (inside hero) ────────────────── */
+/* ─── CTA CARD ──────────────────────────────── */
 .europe-event-cta-card {
   width: 300px;
   flex-shrink: 0;
@@ -208,9 +193,9 @@ html { scroll-behavior: smooth; }
 }
 
 .europe-event-cta-card__title {
-  font-family: var(--font-heading);
-  font-size: 0.88rem;
-  font-weight: 800;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--color-white);
   line-height: 1.4;
   margin: 0;
@@ -417,69 +402,28 @@ html { scroll-behavior: smooth; }
 
 /* ─── RESPONSIVE ────────────────────────────── */
 @media (max-width: 1024px) {
-  .europe-event-hero__top-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 30px;
-  }
-  .europe-event-cta-card {
-    width: 100%;
-    max-width: 400px;
-  }
-  .europe-event-hero__content {
-    padding: 130px 30px 50px;
-  }
-  .europe-event-body {
-    padding: 50px 30px 80px;
-  }
-  .europe-event-themes-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .europe-event-hero__top-row { flex-direction: column; align-items: flex-start; gap: 30px; }
+  .europe-event-cta-card { width: 100%; max-width: 400px; }
+  .europe-event-hero__content { padding: 130px 30px 50px; }
+  .europe-event-body { padding: 50px 30px 80px; }
+  .europe-event-themes-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-  .europe-event-hero__content {
-    padding: 120px 24px 40px;
-  }
-  .europe-event-hero__meta {
-    gap: 16px;
-  }
-  .europe-event-hero__meta-div {
-    display: none;
-  }
-  .europe-event-themes-grid {
-    grid-template-columns: 1fr;
-  }
-  .europe-event-body {
-    padding: 40px 24px 70px;
-  }
-  .europe-event-hero__title {
-    font-size: clamp(1.6rem, 6vw, 2.4rem);
-  }
-  .europe-event-cta-card {
-    padding: 20px 18px;
-  }
+  .europe-event-hero__content { padding: 120px 24px 40px; }
+  .europe-event-hero__meta { gap: 16px; }
+  .europe-event-hero__meta-div { display: none; }
+  .europe-event-themes-grid { grid-template-columns: 1fr; }
+  .europe-event-body { padding: 40px 24px 70px; }
+  .europe-event-hero__title { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+  .europe-event-cta-card { padding: 20px 18px; }
 }
 
 @media (max-width: 480px) {
-  .europe-event-hero {
-    min-height: 65vh;
-  }
-  .europe-event-hero__content {
-    padding: 100px 20px 30px;
-  }
-  .europe-event-hero__cat {
-    font-size: 0.55rem;
-    padding: 4px 12px;
-  }
-  .europe-event-cta-card__btn {
-    font-size: 0.65rem;
-    padding: 10px 16px;
-  }
-  .europe-event-back-btn {
-    font-size: 0.65rem;
-    padding: 6px 16px;
-  }
+  .europe-event-hero { min-height: 50vh; }
+  .europe-event-hero__content { padding: 100px 20px 30px; }
+  .europe-event-cta-card__btn { font-size: 0.65rem; padding: 10px 16px; }
+  .europe-event-back-btn { font-size: 0.65rem; padding: 6px 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,839 +1,675 @@
-import { useState } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+// import { Navbar } from "../Landingpage/homepage.jsx";
+import { allCountries } from "country-telephone-data";
+// import Footer from "../../Components/Footer/footer.jsx";
+import "./register.css";
+import "../Home/homepage.css";
 
-const CONFERENCES = {
-  Asia: ["Asia Tech Summit 2025", "APAC Innovation Forum", "Singapore FinTech Expo"],
-  USA: ["Silicon Valley AI Congress", "New York Global Leaders Forum", "Austin Innovation Week"],
-  Europe: ["London Future of Work Summit", "Berlin Digital Transformation Expo", "Paris Climate & Tech Forum"],
-  "North America": ["Toronto Emerging Markets Summit", "Chicago Global Finance Forum", "Mexico City Trade Innovation Expo"],
-};
+import {
+  REGIONS,
+  INITIAL_FORM,
+  STEP_META,
+  validateStep1,
+  validateStep2,
+  calculateTotal,
+  submitRegistration,
+  applyCoupon,
+  fetchAllConferences,
+  fetchAllPackages,
+  fetchCompanionPrice,
+  fetchExtraNightPrice,
+  filterConferencesByRegion,
+} from "./registerdata.jsx";
 
-const COUNTRIES = [
-  "United States","United Kingdom","Germany","France","India","Singapore",
-  "Japan","Australia","Canada","UAE","Brazil","South Korea",
-];
+/* ── Country Data ── */
+const COUNTRY_LIST = (() => {
+  const seen = new Set();
+  const mapped = allCountries.map((c) => ({ name: c.name, code: `+${c.dialCode}`, dialCode: c.dialCode, iso: c.iso2 }));
+  const us = mapped.find((c) => c.iso === "us");
+  const rest = mapped.filter((c) => { const k = `${c.name}-${c.dialCode}`; if (seen.has(k)) return false; seen.add(k); return c.iso !== "us"; });
+  return us ? [us, ...rest] : rest;
+})();
+const DEFAULT_COUNTRY = COUNTRY_LIST[0];
 
-const IN_PERSON_PACKAGES = [
-  { id: "sp", name: "Standard Speaker Pass", desc: null, price: 699 },
-  { id: "da", name: "Deal A", desc: "Speaker + 2 Nights Stay", price: 999 },
-  { id: "db", name: "Deal B", desc: "Speaker + 3 Nights Stay", price: 1099 },
-];
+/* ── Country Dropdown ── */
+function CountryDropdown({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const wrapRef = useRef(null);
+  const inputRef = useRef(null);
+  const selected = COUNTRY_LIST.find((c) => c.code === value) || DEFAULT_COUNTRY;
+  const filtered = query.trim()
+    ? COUNTRY_LIST.filter((c) => c.name.toLowerCase().includes(query.toLowerCase()) || c.code.includes(query))
+    : COUNTRY_LIST;
 
-const VIRTUAL_PACKAGES = [
-  { id: "vs", name: "Virtual Speaker", desc: null, price: 299 },
-  { id: "vk", name: "Virtual Keynote Speaker", desc: null, price: 399 },
-];
+  useEffect(() => {
+    const h = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) { setOpen(false); setQuery(""); } };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
 
-const ADDONS = [
-  { id: "ap", name: "Accompanying Person", price: 199 },
-  { id: "ea", name: "Extra Accommodation", price: 150 },
-];
+  const toggle = () => { setOpen((o) => !o); if (!open) setTimeout(() => inputRef.current?.focus(), 50); };
+  const pick   = (c) => { onChange(c.code); setOpen(false); setQuery(""); };
 
-const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+  return (
+    <div className="rh-cd" ref={wrapRef}>
+      <div className={`rh-cd__trigger${open ? " open" : ""}`} onClick={toggle}
+        role="button" tabIndex={0} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggle()} aria-expanded={open}>
+        {open
+          ? <input ref={inputRef} className="rh-cd__search" value={query}
+              onChange={(e) => setQuery(e.target.value)} placeholder="Search…"
+              autoComplete="off" onClick={(e) => e.stopPropagation()} />
+          : <span className="rh-cd__selected">
+              <span className="rh-cd__code">{selected.code}</span>
+              <span className="rh-cd__name">{selected.name}</span>
+            </span>
+        }
+        <svg className={`rh-cd__chevron${open ? " up" : ""}`} viewBox="0 0 10 6" fill="none" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      </div>
+      {open && (
+        <div className="rh-cd__list" role="listbox">
+          {filtered.length === 0
+            ? <div className="rh-cd__empty">No results</div>
+            : filtered.map((c) => (
+                <div key={`${c.iso}-${c.dialCode}`}
+                  className={`rh-cd__option${c.code === value ? " active" : ""}`}
+                  onMouseDown={(e) => { e.preventDefault(); pick(c); }}
+                  role="option" aria-selected={c.code === value}>
+                  <span className="rh-cd__option-code">{c.code}</span>
+                  <span className="rh-cd__option-name">{c.name}</span>
+                </div>
+              ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
-  :root {
-    --gold: #FCA311;
-    --gold-dim: rgba(252,163,17,.15);
-    --gold-glow: rgba(252,163,17,.32);
-    --navy: #14213D;
-    --navy-d: #0d1728;
-    --navy-l: #1c2d52;
-    --white: #FFFFFF;
-    --mute: rgba(255,255,255,.48);
-  }
+/* ── Field ── */
+function Field({ label, required, error, full, children }) {
+  return (
+    <div className={`rh-field${full ? " full" : ""}`}>
+      <label className="rh-label">{label}{required && <span aria-hidden="true"> *</span>}</label>
+      {children}
+      {error && <span className="rh-err" role="alert">{error}</span>}
+    </div>
+  );
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Step Indicator ── */
+function StepIndicator({ currentStep }) {
+  return (
+    <div className="rh-steps" role="navigation">
+      {[{ n: 1, l: "Personal" }, { n: 2, l: "Package" }, { n: 3, l: "Confirm" }].map((s, i) => (
+        <div key={s.n} className="rh-steps__item">
+          <div className={`rh-steps__dot${currentStep > s.n ? " done" : currentStep === s.n ? " active" : ""}`}>
+            {currentStep > s.n
+              ? <svg viewBox="0 0 12 10" fill="none" width="12" height="10"><path d="M1 5l3.5 3.5L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              : s.n}
+          </div>
+          <span className={`rh-steps__lbl${currentStep === s.n ? " active" : ""}`}>{s.l}</span>
+          {i < 2 && <div className={`rh-steps__line${currentStep > s.n ? " done" : ""}`} aria-hidden="true" />}
+        </div>
+      ))}
+    </div>
+  );
+}
 
-  .sgc-root {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--navy-d);
-    color: var(--white);
-    min-height: 100vh;
-  }
+/* ── Hero ── */
+function Hero() {
+  return (
+    <section className="rh-hero">
+      <div className="rh-hero__glow" aria-hidden="true" />
+      <div className="rh-hero__dots"  aria-hidden="true" />
+      <div className="rh-hero__content">
+        <span className="rh-hero__tag">Speaker Registration 2026 / 2027</span>
+        <h1 className="rh-hero__title">Claim Your <em>Global Stage</em></h1>
 
-  /* ── HERO ── */
-  .sgc-hero {
-    background: linear-gradient(160deg, #060b15 0%, #0d1728 45%, #101e35 100%);
-    padding: 90px 24px 100px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .sgc-hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 65% 55% at 50% 55%, rgba(252,163,17,.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .sgc-hero::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 80%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(252,163,17,.3), transparent);
-  }
-  .sgc-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--gold-dim);
-    border: 1px solid rgba(252,163,17,.35);
-    border-radius: 40px; padding: 6px 18px;
-    font-size: 11px; font-weight: 600;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 28px;
-    position: relative; z-index: 1;
-  }
-  .sgc-badge-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--gold); flex-shrink: 0;
-    box-shadow: 0 0 6px var(--gold);
-  }
-  .sgc-hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 6vw, 72px);
-    font-weight: 800; line-height: 1.05;
-    color: var(--white);
-    margin-bottom: 6px;
-    position: relative; z-index: 1;
-  }
-  .sgc-hero-title em { font-style: italic; color: var(--gold); }
-  .sgc-divider {
-    width: 56px; height: 3px;
-    background: linear-gradient(90deg, var(--gold), transparent);
-    border-radius: 2px; margin: 22px auto;
-    position: relative; z-index: 1;
-  }
-  .sgc-hero-sub {
-    font-size: clamp(13px, 1.8vw, 16px);
-    color: var(--mute); max-width: 500px;
-    margin: 0 auto; line-height: 1.75;
-    position: relative; z-index: 1;
-  }
-  .sgc-stats {
-    display: flex; justify-content: center;
-    gap: 48px; flex-wrap: wrap;
-    margin-top: 40px; position: relative; z-index: 1;
-  }
-  .sgc-stat-n { font-size: 24px; font-weight: 700; color: var(--gold); }
-  .sgc-stat-l { font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
-  .sgc-cta-btn {
-    margin-top: 40px; position: relative; z-index: 1;
-    background: var(--gold); color: var(--navy-d);
-    border: none; padding: 15px 40px;
-    border-radius: 8px; font-size: 15px; font-weight: 700;
-    cursor: pointer; letter-spacing: .3px;
-    transition: background .2s, transform .2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .sgc-cta-btn:hover { background: #e5920a; transform: translateY(-2px); }
+        <p className="rh-hero__sub">Register now to secure your speaking slot at one of our world-class conferences. Limited seats available.</p>
+              <p className="rh-hero__sub">sponsered by NAVA KUMAR BHAI ltd Limited seats available.</p>
 
-  /* ── REGISTRATION SECTION ── */
-  .sgc-reg {
-    background: var(--navy-d);
-    padding: 60px 20px 80px;
-  }
-  .sgc-reg-inner { max-width: 700px; margin: 0 auto; }
-  .sgc-reg-heading {
-    text-align: center; font-size: 22px; font-weight: 700;
-    color: var(--white); margin-bottom: 6px;
-    font-family: 'Playfair Display', serif;
-  }
-  .sgc-reg-heading em { font-style: italic; color: var(--gold); }
-  .sgc-reg-sub {
-    text-align: center; font-size: 13px; color: var(--mute); margin-bottom: 40px;
-  }
+      </div>
+    </section>
+  );
+}
 
-  /* ── FORM CARD ── */
-  .sgc-card {
-    background: var(--navy);
-    border: 1px solid rgba(252,163,17,.15);
-    border-radius: 14px; padding: 36px 32px;
-  }
-  .sgc-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .sgc-form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
-  .sgc-label {
-    font-size: 11px; font-weight: 600;
-    color: rgba(252,163,17,.8);
-    text-transform: uppercase; letter-spacing: .7px;
-  }
-  .sgc-optional { color: rgba(255,255,255,.25); font-size: 10px; font-weight: 400; margin-left: 4px; text-transform: none; }
-  .sgc-input, .sgc-select {
-    background: var(--navy-d);
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 8px; padding: 12px 15px;
-    color: var(--white); font-size: 14px;
-    outline: none; transition: border-color .2s;
-    width: 100%; font-family: 'DM Sans', sans-serif;
-    -webkit-appearance: none; appearance: none;
-  }
-  .sgc-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23FCA311'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 36px; cursor: pointer;
-  }
-  .sgc-input:focus, .sgc-select:focus { border-color: var(--gold); background: #0f1828; }
-  .sgc-input::placeholder { color: rgba(255,255,255,.2); }
-  .sgc-select option { background: #0d1728; color: #fff; }
+/* ── Price Bar ── */
+function PriceBar({ pkg, companions, extraNights = 0, isVirtual, total, discount, couponCode, label, companionPrice, extraNightPrice }) {
+  const parts = [
+    pkg ? `${pkg.name}  $${pkg.price.toLocaleString()}` : "Select a package to see pricing",
+    companions > 0 && !isVirtual  ? ` + ${companions} companion${companions > 1 ? "s" : ""}  $${companions * companionPrice}` : "",
+    extraNights > 0 && !isVirtual ? ` + ${extraNights} extra night${extraNights > 1 ? "s" : ""}  $${extraNights * extraNightPrice}` : "",
+    discount > 0 && couponCode    ? `  ·  Coupon ${couponCode} −$${discount}` : "",
+  ].join("");
 
-  /* ── BUTTONS ── */
-  .sgc-next-btn {
-    width: 100%; margin-top: 6px;
-    background: var(--gold); color: var(--navy-d);
-    border: none; padding: 14px;
-    border-radius: 8px; font-size: 15px; font-weight: 700;
-    cursor: pointer; transition: background .2s;
-    font-family: 'DM Sans', sans-serif; letter-spacing: .3px;
-  }
-  .sgc-next-btn:hover { background: #e5920a; }
-  .sgc-back-btn {
-    width: 100%; margin-top: 10px;
-    background: transparent; color: var(--mute);
-    border: 1px solid rgba(255,255,255,.1);
-    padding: 13px; border-radius: 8px;
-    font-size: 14px; font-weight: 500;
-    cursor: pointer; transition: all .2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .sgc-back-btn:hover { border-color: var(--gold); color: var(--gold); }
+  return (
+    <div className="rh-pricebar">
+      <div>
+        <div className="rh-pricebar__label">{label}</div>
+        <div className="rh-pricebar__breakdown">{parts}</div>
+      </div>
+      <div className="rh-pricebar__amount">${total.toLocaleString()}</div>
+    </div>
+  );
+}
 
-  /* ── PACKAGES ── */
-  .sgc-pkg-section { margin-bottom: 24px; }
-  .sgc-pkg-title {
-    font-size: 11px; font-weight: 700; color: var(--gold);
-    text-transform: uppercase; letter-spacing: 1px;
-    margin-bottom: 12px; padding-bottom: 8px;
-    border-bottom: 1px solid rgba(252,163,17,.15);
-  }
-  .sgc-pkg-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 16px;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 9px; margin-bottom: 8px;
-    cursor: pointer; transition: all .2s;
-    position: relative;
-  }
-  .sgc-pkg-item:hover { border-color: rgba(252,163,17,.3); background: var(--gold-dim); }
-  .sgc-pkg-item.selected { border-color: var(--gold); background: var(--gold-dim); }
-  .sgc-pkg-item.selected::before {
-    content: ''; position: absolute;
-    left: 0; top: 0; bottom: 0; width: 3px;
-    background: var(--gold); border-radius: 9px 0 0 9px;
-  }
-  .sgc-pkg-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
-  .sgc-pkg-radio {
-    width: 18px; height: 18px; border-radius: 50%;
-    border: 2px solid rgba(255,255,255,.2);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all .2s;
-  }
-  .sgc-pkg-item.selected .sgc-pkg-radio { border-color: var(--gold); background: var(--gold); }
-  .sgc-pkg-radio-dot {
-    width: 7px; height: 7px; background: var(--navy-d); border-radius: 50%;
-  }
-  .sgc-pkg-name { font-size: 14px; font-weight: 500; color: var(--white); }
-  .sgc-pkg-desc { font-size: 12px; color: var(--mute); margin-top: 2px; }
+/* ── Step 1 — Personal + Region + Conference ── */
+function Step1({ fields, errors, set, setField, allConferences }) {
+  const conferences = useMemo(
+    () => filterConferencesByRegion(allConferences, fields.regionId),
+    [allConferences, fields.regionId]
+  );
 
-  /* ── PKG RIGHT (price + qty) ── */
-  .sgc-pkg-right {
-    display: flex; align-items: center; gap: 12px; flex-shrink: 0;
-  }
-  .sgc-pkg-price { font-size: 15px; font-weight: 700; color: var(--gold); min-width: 56px; text-align: right; }
-  .sgc-pkg-subtotal {
-    font-size: 11px; color: var(--mute); margin-top: 2px; text-align: right;
-  }
-
-  /* ── QUANTITY COUNTER ── */
-  .sgc-qty {
-    display: flex; align-items: center; gap: 0;
-    background: var(--navy-d);
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 7px; overflow: hidden;
-    flex-shrink: 0;
-  }
-  .sgc-qty-btn {
-    width: 30px; height: 30px;
-    background: transparent; border: none;
-    color: var(--gold); font-size: 16px; font-weight: 700;
-    cursor: pointer; transition: background .15s;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Sans', sans-serif;
-    flex-shrink: 0;
-  }
-  .sgc-qty-btn:hover { background: var(--gold-dim); }
-  .sgc-qty-btn:disabled { color: rgba(255,255,255,.2); cursor: default; }
-  .sgc-qty-btn:disabled:hover { background: transparent; }
-  .sgc-qty-val {
-    width: 32px; text-align: center;
-    font-size: 14px; font-weight: 600; color: var(--white);
-    border-left: 1px solid rgba(255,255,255,.1);
-    border-right: 1px solid rgba(255,255,255,.1);
-    line-height: 30px;
-    flex-shrink: 0;
-  }
-
-  /* ── ADDONS ── */
-  .sgc-addon-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 16px;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 9px; margin-bottom: 8px;
-    cursor: pointer; transition: all .2s;
-  }
-  .sgc-addon-item:hover { border-color: rgba(252,163,17,.25); }
-  .sgc-addon-item.selected { border-color: rgba(252,163,17,.5); background: var(--gold-dim); }
-  .sgc-addon-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
-  .sgc-addon-check {
-    width: 18px; height: 18px; border-radius: 4px;
-    border: 2px solid rgba(255,255,255,.2);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; font-size: 11px; font-weight: 700;
-    transition: all .2s; color: transparent;
-  }
-  .sgc-addon-item.selected .sgc-addon-check { background: var(--gold); border-color: var(--gold); color: var(--navy-d); }
-  .sgc-addon-name { font-size: 14px; font-weight: 500; color: var(--white); }
-  .sgc-addon-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-  .sgc-addon-price { font-size: 14px; font-weight: 600; color: var(--gold); min-width: 56px; text-align: right; }
-  .sgc-addon-subtotal { font-size: 11px; color: var(--mute); margin-top: 2px; text-align: right; }
-
-  /* ── TOTAL BAR ── */
-  .sgc-total-bar {
-    background: var(--navy-d);
-    border: 1px solid rgba(252,163,17,.2);
-    border-radius: 9px; padding: 16px 18px;
-    margin-top: 20px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .sgc-total-label { font-size: 13px; color: var(--mute); }
-  .sgc-total-breakdown { font-size: 11px; color: rgba(255,255,255,.25); margin-top: 3px; max-width: 350px; line-height: 1.5; }
-  .sgc-total-amount { font-size: 26px; font-weight: 800; color: var(--gold); flex-shrink: 0; }
-
-  /* ── REVIEW ── */
-  .sgc-review-section { margin-bottom: 22px; }
-  .sgc-review-title {
-    font-size: 11px; font-weight: 700; color: var(--gold);
-    text-transform: uppercase; letter-spacing: 1px;
-    margin-bottom: 10px; padding-bottom: 8px;
-    border-bottom: 1px solid rgba(252,163,17,.15);
-  }
-  .sgc-review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .sgc-review-item {
-    padding: 10px 14px; background: var(--navy-d);
-    border-radius: 7px; border: 1px solid rgba(255,255,255,.06);
-  }
-  .sgc-review-label { font-size: 10px; color: rgba(252,163,17,.6); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
-  .sgc-review-value { font-size: 13px; font-weight: 500; color: var(--white); }
-  .sgc-pkg-summary {
-    padding: 14px 16px; background: var(--gold-dim);
-    border: 1px solid rgba(252,163,17,.2);
-    border-radius: 8px; margin-bottom: 6px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .sgc-pkg-summary-name { font-size: 14px; font-weight: 600; color: var(--gold); }
-  .sgc-pkg-summary-meta { font-size: 12px; color: var(--mute); margin-top: 3px; }
-  .sgc-pkg-summary-price { font-size: 15px; font-weight: 700; color: var(--gold); flex-shrink: 0; margin-left: 12px; }
-
-  /* ── COMPLETE BTN ── */
-  .sgc-complete-btn {
-    width: 100%; background: var(--gold); color: var(--navy-d);
-    border: none; padding: 16px;
-    border-radius: 8px; font-size: 15px; font-weight: 800;
-    cursor: pointer; transition: all .2s; margin-top: 16px;
-    font-family: 'DM Sans', sans-serif; letter-spacing: .3px;
-  }
-  .sgc-complete-btn:hover { background: #e5920a; transform: translateY(-1px); }
-
-  /* ── DONE SCREEN ── */
-  .sgc-done { text-align: center; padding: 16px 0 8px; }
-  .sgc-done-icon {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: var(--gold-dim); border: 2px solid var(--gold);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 20px; font-size: 28px; color: var(--gold);
-  }
-  .sgc-done-title {
-    font-size: 24px; font-weight: 800; color: var(--white);
-    margin-bottom: 8px; font-family: 'Playfair Display', serif;
-  }
-  .sgc-done-title em { font-style: italic; color: var(--gold); }
-  .sgc-done-sub { font-size: 14px; color: var(--mute); max-width: 380px; margin: 0 auto; line-height: 1.75; }
-  .sgc-done-ref {
-    margin-top: 28px; padding: 18px 22px;
-    background: var(--navy-d); border-radius: 10px;
-    border: 1px solid rgba(252,163,17,.2); text-align: left;
-  }
-  .sgc-done-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.05);
-  }
-  .sgc-done-row:last-child { border-bottom: none; }
-  .sgc-done-rlabel { font-size: 12px; color: var(--mute); }
-  .sgc-done-rvalue { font-size: 13px; font-weight: 600; color: var(--white); }
-  .sgc-done-total { font-size: 22px; font-weight: 800; color: var(--gold); }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 620px) {
-    .sgc-hero { padding: 60px 20px 70px; }
-    .sgc-stats { gap: 24px; }
-    .sgc-card { padding: 22px 16px; }
-    .sgc-form-row { grid-template-columns: 1fr; }
-    .sgc-review-grid { grid-template-columns: 1fr; }
-    .sgc-total-bar { flex-direction: column; gap: 10px; text-align: center; }
-    .sgc-pkg-item { flex-wrap: wrap; gap: 10px; }
-    .sgc-pkg-right { width: 100%; justify-content: flex-end; }
-  }
-`;
-
-export default function SignatureConferenceRegistration() {
-  const [step, setStep] = useState(1);
-  const [form, setForm] = useState({
-    fname: "", lname: "", email: "", phone: "",
-    country: "", desig: "", region: "", conference: "",
-  });
-  // pkgQtys: { [id]: quantity }  — selected if qty > 0
-  const [pkgQtys, setPkgQtys] = useState({});
-  // addonQtys: { [id]: quantity } — selected if qty > 0
-  const [addonQtys, setAddonQtys] = useState({});
-  const [errors, setErrors] = useState({});
-
-  const updateForm = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
-    if (field === "region") setForm((prev) => ({ ...prev, region: value, conference: "" }));
-  };
-
-  const setPkgQty = (id, delta) => {
-    setPkgQtys((prev) => {
-      const cur = prev[id] || 0;
-      const next = Math.max(0, cur + delta);
-      return { ...prev, [id]: next };
-    });
-  };
-
-  const setAddonQty = (id, delta) => {
-    setAddonQtys((prev) => {
-      const cur = prev[id] || 0;
-      const next = Math.max(0, cur + delta);
-      return { ...prev, [id]: next };
-    });
-  };
-
-  // All packages combined
-  const allPackages = [...IN_PERSON_PACKAGES, ...VIRTUAL_PACKAGES];
-
-  // Selected packages with qty > 0
-  const selectedPkgs = allPackages.filter((p) => (pkgQtys[p.id] || 0) > 0);
-  const selectedAddons = ADDONS.filter((a) => (addonQtys[a.id] || 0) > 0);
-
-  const pkgTotal = selectedPkgs.reduce((s, p) => s + p.price * (pkgQtys[p.id] || 0), 0);
-  const addonTotal = selectedAddons.reduce((s, a) => s + a.price * (addonQtys[a.id] || 0), 0);
-  const total = pkgTotal + addonTotal;
-
-  const breakdownParts = [
-    ...selectedPkgs.map((p) => `${p.name} x${pkgQtys[p.id]} $${p.price * pkgQtys[p.id]}`),
-    ...selectedAddons.map((a) => `${a.name} x${addonQtys[a.id]} $${a.price * addonQtys[a.id]}`),
-  ];
-  const breakdown = breakdownParts.length > 0 ? breakdownParts.join(" + ") : "No items selected";
-
-  const validateStep1 = () => {
-    const e = {};
-    if (!form.fname.trim()) e.fname = "Required";
-    if (!form.lname.trim()) e.lname = "Required";
-    if (!form.email.includes("@")) e.email = "Valid email required";
-    if (!form.country) e.country = "Required";
-    if (!form.desig.trim()) e.desig = "Required";
-    if (!form.region) e.region = "Required";
-    if (!form.conference) e.conference = "Required";
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleNext1 = () => { if (validateStep1()) setStep(2); };
-  const handleNext2 = () => {
-    if (selectedPkgs.length === 0) { alert("Please select at least one package."); return; }
-    setStep(3);
-  };
-  const handleComplete = () => setStep(4);
-
-  const scrollToReg = () => {
-    document.getElementById("sgc-register")?.scrollIntoView({ behavior: "smooth" });
+  const handleRegionChange = (e) => {
+    setField("regionId",     e.target.value);
+    setField("conferenceId", "");
   };
 
   return (
-    <>
-      <style>{styles}</style>
-      <div className="sgc-root">
+    <div className="rh-body">
+      <div className="rh-divider">Personal Information</div>
 
-        {/* ── HERO ── */}
-        <section className="sgc-hero">
-          <div className="sgc-badge">
-            <span className="sgc-badge-dot" />
-            Annual Global Summit 2025
+      <div className="rh-row">
+        <Field label="First Name" required error={errors.firstName}>
+          <input value={fields.firstName} onChange={set("firstName")}
+            className={`rh-input${errors.firstName ? " err" : ""}`} placeholder="Jane" autoComplete="given-name" />
+        </Field>
+        <Field label="Last Name" required error={errors.lastName}>
+          <input value={fields.lastName} onChange={set("lastName")}
+            className={`rh-input${errors.lastName ? " err" : ""}`} placeholder="Smith" autoComplete="family-name" />
+        </Field>
+      </div>
+
+      <div className="rh-row">
+        <Field label="Email Address" required error={errors.email}>
+          <input value={fields.email} onChange={set("email")} type="email"
+            className={`rh-input${errors.email ? " err" : ""}`} placeholder="jane@example.com" autoComplete="email" />
+        </Field>
+        <Field label="Phone Number" required error={errors.phone}>
+          <div className="rh-phone">
+            <CountryDropdown value={fields.countryCode} onChange={(code) => setField("countryCode", code)} />
+            <input value={fields.phone} onChange={set("phone")} type="tel"
+              className={`rh-input${errors.phone ? " err" : ""}`} placeholder="Phone number" autoComplete="tel-national" />
           </div>
-          <h1 className="sgc-hero-title">
-            Signature<br /><em>Global Conference</em>
-          </h1>
-          <div className="sgc-divider" />
-          <p className="sgc-hero-sub">
-            Where visionaries converge. Connect with world-class leaders, innovators,
-            and changemakers across four continents.
-          </p>
-          <div className="sgc-stats">
-            {[["50+","Speakers"],["4","Regions"],["2,000+","Attendees"],["3","Days"]].map(([n,l]) => (
-              <div key={l}>
-                <div className="sgc-stat-n">{n}</div>
-                <div className="sgc-stat-l">{l}</div>
+        </Field>
+      </div>
+
+      <div className="rh-row">
+        <Field label="Country" required error={errors.country}>
+          <input value={fields.country} onChange={set("country")}
+            className={`rh-input${errors.country ? " err" : ""}`} placeholder="United States" autoComplete="country-name" />
+        </Field>
+        <Field label="Organization">
+          <input value={fields.organization} onChange={set("organization")}
+            className="rh-input" placeholder="Company / Brand" autoComplete="organization" />
+        </Field>
+      </div>
+
+      <div className="rh-row">
+        <Field label="Job Title / Role">
+          <input value={fields.jobTitle} onChange={set("jobTitle")}
+            className="rh-input" placeholder="CEO, Coach, Author…" autoComplete="organization-title" />
+        </Field>
+      </div>
+
+      <div className="rh-divider">Conference Selection</div>
+
+      <div className="rh-row">
+        <Field label="Region" required error={errors.regionId}>
+          <div className="rh-select-wrap">
+            <select value={fields.regionId} onChange={handleRegionChange}
+              className={`rh-select${errors.regionId ? " err" : ""}`} aria-required="true">
+              <option value="">— Select a region —</option>
+              {REGIONS.map((r) => (
+                <option key={r.id} value={r.id}>{r.flag}  {r.label}</option>
+              ))}
+            </select>
+          </div>
+        </Field>
+
+        <Field label="Conference" required error={errors.conferenceId}>
+          <div className="rh-select-wrap">
+            <select value={fields.conferenceId} onChange={set("conferenceId")}
+              className={`rh-select${errors.conferenceId ? " err" : ""}${!fields.regionId ? " disabled" : ""}`}
+              disabled={!fields.regionId} aria-required="true">
+              <option value="">
+                {fields.regionId ? "— Choose a conference —" : "— Select region first —"}
+              </option>
+              {conferences.map((c) => (
+                <option key={c.id} value={String(c.id)}>{c.title} · {c.location} · {c.date}</option>
+              ))}
+            </select>
+          </div>
+        </Field>
+      </div>
+    </div>
+  );
+}
+
+/* ── Step 2 — Speaker Type + Package + Extras ── */
+function Step2({ fields, errors, setField, allPackages, companionPrice, extraNightPrice }) {
+  const isVirtual   = fields.speakerType === "virtual";
+  const activePkgs  = allPackages.filter((p) => p.type === (isVirtual ? "virtual" : "physical"));
+  const selectedPkg = allPackages.find((p) => p.id === fields.packageId);
+  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
+
+  const switchType = (type) => { setField("speakerType", type); setField("packageId", ""); setField("extraNights", 0); };
+
+  return (
+    <div className="rh-body">
+      <div className="rh-divider">Participation Type</div>
+      {errors.speakerType && <span className="rh-err rh-err--block" role="alert">{errors.speakerType}</span>}
+
+      <div className="rh-type-grid" role="radiogroup" aria-label="Participation type">
+        {[{ type: "physical", icon: "🎤", label: "Physical Speaker", sub: "In-person at venue" },
+          { type: "virtual",  icon: "💻", label: "Virtual Speaker",  sub: "Present via Zoom / Airmeet" }
+        ].map(({ type, icon, label, sub }) => (
+          <button key={type} type="button"
+            className={`rh-type-btn${fields.speakerType === type ? ` active${type === "virtual" ? " virtual" : ""}` : ""}`}
+            onClick={() => switchType(type)} role="radio" aria-checked={fields.speakerType === type}>
+            <span className="rh-type-btn__icon" aria-hidden="true">{icon}</span>
+            <span className="rh-type-btn__label">{label}</span>
+            <span className="rh-type-btn__sub">{sub}</span>
+          </button>
+        ))}
+      </div>
+
+      {fields.speakerType && (
+        <>
+          <div className="rh-divider">Choose Your Package</div>
+          {errors.packageId && <span className="rh-err rh-err--block" role="alert">{errors.packageId}</span>}
+          <div className="rh-pkg-grid" role="radiogroup" aria-label="Package options">
+            {activePkgs.map((pkg) => (
+              <div key={pkg.id}
+                className={`rh-pkg${fields.packageId === pkg.id ? " active" : ""}`}
+                onClick={() => setField("packageId", pkg.id)}
+                role="radio" aria-checked={fields.packageId === pkg.id}
+                tabIndex={0} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setField("packageId", pkg.id)}>
+                <div className="rh-pkg__radio" aria-hidden="true">{fields.packageId === pkg.id && "✓"}</div>
+                {pkg.badge && <div className="rh-pkg__badge">{pkg.badge}</div>}
+                <div className="rh-pkg__head">
+                  <div className="rh-pkg__icon" aria-hidden="true">{pkg.icon}</div>
+                  <div className="rh-pkg__name">{pkg.name}</div>
+                  <div className="rh-pkg__price">${pkg.price.toLocaleString()}</div>
+                </div>
+                <ul className="rh-pkg__list" aria-label={`${pkg.name} benefits`}>
+                  {(pkg.benefits || []).map((b, i) => <li key={i}>{b}</li>)}
+                </ul>
               </div>
             ))}
           </div>
-          <div>
-            <button className="sgc-cta-btn" onClick={scrollToReg}>
-              Register Now →
-            </button>
-          </div>
-        </section>
+        </>
+      )}
 
-        {/* ── REGISTRATION ── */}
-        <section className="sgc-reg" id="sgc-register">
-          <div className="sgc-reg-inner">
-            <div className="sgc-reg-heading">
-              Complete Your <em>Registration</em>
+      {fields.speakerType === "physical" && (
+        <>
+          <div className="rh-divider">Extras</div>
+          {[{ icon: "👥", title: "Accompanying Person(s)", sub: `$${companionPrice} each`, key: "companions" },
+            { icon: "🌙", title: "Extra Night(s)",          sub: `$${extraNightPrice} each`, key: "extraNights" }
+          ].map(({ icon, title, sub, key }) => (
+            <div key={key} className="rh-extra">
+              <div className="rh-extra__info">
+                <div className="rh-extra__title"><span aria-hidden="true">{icon}</span> {title}</div>
+                <div className="rh-extra__sub">{sub}</div>
+              </div>
+              <div className="rh-counter" role="group" aria-label={`Number of ${key}`}>
+                <button className="rh-counter__btn" type="button" aria-label={`Decrease ${key}`}
+                  disabled={(fields[key] || 0) === 0}
+                  onClick={() => setField(key, Math.max(0, (fields[key] || 0) - 1))}>−</button>
+                <span className="rh-counter__val" aria-live="polite">{fields[key] || 0}</span>
+                <button className="rh-counter__btn" type="button" aria-label={`Increase ${key}`}
+                  onClick={() => setField(key, (fields[key] || 0) + 1)}>+</button>
+              </div>
             </div>
-            <p className="sgc-reg-sub">3 simple steps to secure your spot at the conference</p>
+          ))}
+        </>
+      )}
 
-            {/* ── STEP 1 ── */}
-            {step === 1 && (
-              <div className="sgc-card">
-                <div className="sgc-form-row">
-                  <FormGroup label="First Name" error={errors.fname}>
-                    <input className="sgc-input" placeholder="John"
-                      value={form.fname} onChange={(e) => updateForm("fname", e.target.value)} />
-                  </FormGroup>
-                  <FormGroup label="Last Name" error={errors.lname}>
-                    <input className="sgc-input" placeholder="Smith"
-                      value={form.lname} onChange={(e) => updateForm("lname", e.target.value)} />
-                  </FormGroup>
-                </div>
-                <FormGroup label="Email Address" error={errors.email}>
-                  <input className="sgc-input" type="email" placeholder="john@company.com"
-                    value={form.email} onChange={(e) => updateForm("email", e.target.value)} />
-                </FormGroup>
-                <FormGroup label={<>Phone <span className="sgc-optional">(optional)</span></>}>
-                  <input className="sgc-input" type="tel" placeholder="+1 (555) 000-0000"
-                    value={form.phone} onChange={(e) => updateForm("phone", e.target.value)} />
-                </FormGroup>
-                <div className="sgc-form-row">
-                  <FormGroup label="Country" error={errors.country}>
-                    <select className="sgc-select" value={form.country}
-                      onChange={(e) => updateForm("country", e.target.value)}>
-                      <option value="">Select Country</option>
-                      {COUNTRIES.map((c) => <option key={c}>{c}</option>)}
-                    </select>
-                  </FormGroup>
-                  <FormGroup label="Designation" error={errors.desig}>
-                    <input className="sgc-input" placeholder="e.g. CEO, CTO, Director"
-                      value={form.desig} onChange={(e) => updateForm("desig", e.target.value)} />
-                  </FormGroup>
-                </div>
-                <div className="sgc-form-row">
-                  <FormGroup label="Region" error={errors.region}>
-                    <select className="sgc-select" value={form.region}
-                      onChange={(e) => { updateForm("region", e.target.value); }}>
-                      <option value="">Select Region</option>
-                      {Object.keys(CONFERENCES).map((r) => <option key={r}>{r}</option>)}
-                    </select>
-                  </FormGroup>
-                  <FormGroup label="Conference" error={errors.conference}>
-                    <select className="sgc-select" value={form.conference}
-                      onChange={(e) => updateForm("conference", e.target.value)}
-                      disabled={!form.region}>
-                      <option value="">{form.region ? "Select Conference" : "Select Region First"}</option>
-                      {(CONFERENCES[form.region] || []).map((c) => <option key={c}>{c}</option>)}
-                    </select>
-                  </FormGroup>
-                </div>
-                <button className="sgc-next-btn" onClick={handleNext1}>
-                  Next: Choose Package →
-                </button>
-              </div>
-            )}
+      <PriceBar pkg={selectedPkg} companions={fields.companions} extraNights={fields.extraNights || 0}
+        isVirtual={isVirtual} total={total} discount={fields.discount} couponCode={fields.couponCode}
+        label="Estimated Total" companionPrice={companionPrice} extraNightPrice={extraNightPrice} />
+    </div>
+  );
+}
 
-            {/* ── STEP 2 ── */}
-            {step === 2 && (
-              <div className="sgc-card">
-                <PkgSection
-                  title="In-Person Passes"
-                  packages={IN_PERSON_PACKAGES}
-                  pkgQtys={pkgQtys}
-                  onQtyChange={setPkgQty}
-                />
-                <PkgSection
-                  title="Virtual Passes"
-                  packages={VIRTUAL_PACKAGES}
-                  pkgQtys={pkgQtys}
-                  onQtyChange={setPkgQty}
-                />
+/* ── Coupon Widget ── */
+function CouponWidget({ couponCode, discount, onApply, onRemove }) {
+  const [input,  setInput]  = useState(couponCode || "");
+  const [status, setStatus] = useState(discount > 0 ? "applied" : "idle");
+  const [shake,  setShake]  = useState(false);
+  const [loading, setLoad]  = useState(false);
 
-                <div className="sgc-pkg-section">
-                  <div className="sgc-pkg-title">Add-ons</div>
-                  {ADDONS.map((addon) => {
-                    const qty = addonQtys[addon.id] || 0;
-                    const selected = qty > 0;
-                    return (
-                      <div
-                        key={addon.id}
-                        className={`sgc-addon-item${selected ? " selected" : ""}`}
-                        onClick={(e) => {
-                          // Only toggle if not clicking the qty buttons
-                          if (e.target.closest(".sgc-qty")) return;
-                          if (qty === 0) setAddonQty(addon.id, 1);
-                        }}
-                      >
-                        <div className="sgc-addon-left">
-                          <div
-                            className="sgc-addon-check"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (qty > 0) setAddonQtys((prev) => ({ ...prev, [addon.id]: 0 }));
-                              else setAddonQty(addon.id, 1);
-                            }}
-                          >
-                            {selected ? "✓" : ""}
-                          </div>
-                          <div>
-                            <div className="sgc-addon-name">{addon.name}</div>
-                            {selected && qty > 1 && (
-                              <div style={{ fontSize: 11, color: "var(--mute)", marginTop: 2 }}>
-                                ${addon.price} × {qty}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="sgc-addon-right">
-                          {selected && (
-                            <QuantityCounter
-                              qty={qty}
-                              onDecrement={() => setAddonQty(addon.id, -1)}
-                              onIncrement={() => setAddonQty(addon.id, 1)}
-                            />
-                          )}
-                          <div>
-                            <div className="sgc-addon-price">
-                              {selected && qty > 1
-                                ? `$${(addon.price * qty).toLocaleString()}`
-                                : `+$${addon.price}`}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+  const handleApply = async () => {
+    if (!input.trim()) return;
+    setLoad(true);
+    try {
+      const r = await applyCoupon(input);
+      if (r.valid) { onApply(r.code, r.discount); setStatus("applied"); }
+      else { setStatus("error"); setShake(true); setTimeout(() => setShake(false), 500); }
+    } finally { setLoad(false); }
+  };
 
-                <div className="sgc-total-bar">
-                  <div>
-                    <div className="sgc-total-label">Total Amount</div>
-                    <div className="sgc-total-breakdown">{breakdown}</div>
-                  </div>
-                  <div className="sgc-total-amount">${total.toLocaleString()}</div>
-                </div>
+  return (
+    <div className="rh-coupon">
+      <div className="rh-coupon__label">🏷 Have a Coupon Code?</div>
+      {status === "applied" ? (
+        <div className="rh-coupon__applied" role="status" aria-live="polite">
+          <span>🎉 <strong>{couponCode}</strong> — ${discount} off applied</span>
+          <button type="button" className="rh-coupon__remove"
+            onClick={() => { setInput(""); setStatus("idle"); onRemove(); }}>Remove</button>
+        </div>
+      ) : (
+        <div className={`rh-coupon__row${shake ? " shake" : ""}`}>
+          <input value={input} onChange={(e) => { setInput(e.target.value.toUpperCase()); setStatus("idle"); }}
+            onKeyDown={(e) => e.key === "Enter" && handleApply()}
+            className={`rh-input rh-coupon__input${status === "error" ? " err" : ""}`}
+            placeholder="ENTER CODE" maxLength={20} aria-label="Coupon code" />
+          <button type="button" className="rh-coupon__btn" onClick={handleApply} disabled={!input.trim() || loading}>
+            {loading ? "…" : "Apply"}
+          </button>
+        </div>
+      )}
+      {status === "error" && <span className="rh-err" role="alert" style={{ marginTop: 6, display: "block" }}>Invalid coupon code. Please try again.</span>}
 
-                <button className="sgc-next-btn" style={{ marginTop: 16 }} onClick={handleNext2}>
-                  Review Registration →
-                </button>
-                <button className="sgc-back-btn" onClick={() => setStep(1)}>← Back</button>
-              </div>
-            )}
+    </div>
+  );
+}
 
-            {/* ── STEP 3 ── */}
-            {step === 3 && (
-              <div className="sgc-card">
-                <div className="sgc-review-section">
-                  <div className="sgc-review-title">Personal Information</div>
-                  <div className="sgc-review-grid">
-                    {[
-                      ["First Name", form.fname], ["Last Name", form.lname],
-                      ["Email", form.email], ["Phone", form.phone || "—"],
-                      ["Country", form.country], ["Designation", form.desig],
-                      ["Region", form.region], ["Conference", form.conference],
-                    ].map(([label, value]) => (
-                      <div className="sgc-review-item" key={label}>
-                        <div className="sgc-review-label">{label}</div>
-                        <div className="sgc-review-value">{value}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+/* ── Step 3 — Review & Confirm ── */
+function Step3({ fields, allConferences, allPackages, companionPrice, extraNightPrice, onEdit, setField }) {
+  const conf        = allConferences.find((c) => String(c.id) === fields.conferenceId);
+  const pkg         = allPackages.find((p) => p.id === fields.packageId);
+  const isVirtual   = fields.speakerType === "virtual";
+  const regionLabel = REGIONS.find((r) => r.id === fields.regionId)?.label || "—";
+  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
+  const origTotal   = calculateTotal(fields.packageId, fields.companions, 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
 
-                <div className="sgc-review-section" style={{ marginTop: 20 }}>
-                  <div className="sgc-review-title">Selected Packages & Add-ons</div>
-                  {selectedPkgs.map((p) => (
-                    <div className="sgc-pkg-summary" key={p.id}>
-                      <div>
-                        <div className="sgc-pkg-summary-name">{p.name}</div>
-                        <div className="sgc-pkg-summary-meta">
-                          ${p.price.toLocaleString()} × {pkgQtys[p.id]}
-                          {p.desc ? ` · ${p.desc}` : ""}
-                        </div>
-                      </div>
-                      <div className="sgc-pkg-summary-price">
-                        ${(p.price * pkgQtys[p.id]).toLocaleString()}
-                      </div>
-                    </div>
-                  ))}
-                  {selectedAddons.map((a) => (
-                    <div className="sgc-pkg-summary" key={a.id}
-                      style={{ borderColor: "rgba(252,163,17,.15)" }}>
-                      <div>
-                        <div className="sgc-pkg-summary-name" style={{ fontSize: 13 }}>+ {a.name}</div>
-                        <div className="sgc-pkg-summary-meta">
-                          ${a.price} × {addonQtys[a.id]}
-                        </div>
-                      </div>
-                      <div className="sgc-pkg-summary-price" style={{ fontSize: 13 }}>
-                        ${(a.price * addonQtys[a.id]).toLocaleString()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="sgc-total-bar" style={{ marginTop: 4 }}>
-                  <div>
-                    <div className="sgc-total-label">Total Amount Due</div>
-                    <div className="sgc-total-breakdown">{breakdown}</div>
-                  </div>
-                  <div className="sgc-total-amount">${total.toLocaleString()}</div>
-                </div>
-
-                <button className="sgc-complete-btn" onClick={handleComplete}>
-                  Complete Registration
-                </button>
-                <button className="sgc-back-btn" onClick={() => setStep(2)}>← Back to Packages</button>
-              </div>
-            )}
-
-            {/* ── DONE ── */}
-            {step === 4 && (
-              <div className="sgc-card">
-                <div className="sgc-done">
-                  <div className="sgc-done-icon">✓</div>
-                  <div className="sgc-done-title">You're <em>Registered!</em></div>
-                  <p className="sgc-done-sub">
-                    Thank you for registering for{" "}
-                    <strong style={{ color: "#fff" }}>Signature Global Conference 2025</strong>.
-                    A confirmation has been sent to your email.
-                  </p>
-                  <div className="sgc-done-ref">
-                    {[
-                      ["Name", `${form.fname} ${form.lname}`],
-                      ["Email", form.email],
-                      ["Conference", form.conference],
-                      ["Packages", selectedPkgs.map((p) => `${p.name} ×${pkgQtys[p.id]}`).join(", ")],
-                    ].map(([l, v]) => (
-                      <div className="sgc-done-row" key={l}>
-                        <span className="sgc-done-rlabel">{l}</span>
-                        <span className="sgc-done-rvalue">{v}</span>
-                      </div>
-                    ))}
-                    {selectedAddons.map((a) => (
-                      <div className="sgc-done-row" key={a.id}>
-                        <span className="sgc-done-rlabel">{a.name}</span>
-                        <span className="sgc-done-rvalue">×{addonQtys[a.id]}</span>
-                      </div>
-                    ))}
-                    <div className="sgc-done-row" style={{ marginTop: 6 }}>
-                      <span className="sgc-done-rlabel" style={{ fontWeight: 600, color: "var(--gold)" }}>Total Paid</span>
-                      <span className="sgc-done-total">${total.toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </section>
+  const Sec = ({ title, step, children }) => (
+    <div className="rh-rev-sec">
+      <div className="rh-rev-sec__head">
+        <span className="rh-rev-sec__title">{title}</span>
+        <button className="rh-edit-btn" onClick={() => onEdit(step)} type="button" aria-label={`Edit ${title}`}>Edit</button>
       </div>
-    </>
-  );
-}
-
-/* ── Quantity Counter ── */
-function QuantityCounter({ qty, onDecrement, onIncrement }) {
-  return (
-    <div className="sgc-qty" onClick={(e) => e.stopPropagation()}>
-      <button className="sgc-qty-btn" onClick={onDecrement} disabled={qty <= 0}>−</button>
-      <span className="sgc-qty-val">{qty}</span>
-      <button className="sgc-qty-btn" onClick={onIncrement}>+</button>
-    </div>
-  );
-}
-
-/* ── Helper Components ── */
-function FormGroup({ label, error, children }) {
-  return (
-    <div className="sgc-form-group">
-      <label className="sgc-label">{label}</label>
       {children}
-      {error && <span style={{ fontSize: 11, color: "#f87171", marginTop: 2 }}>{error}</span>}
+    </div>
+  );
+
+  const Row = ({ label, value, full }) => (
+    <div className={`rh-rev-row${full ? " full" : ""}`}>
+      <span className="rh-rev-label">{label}</span>
+      <span className="rh-rev-value">{value}</span>
+    </div>
+  );
+
+  return (
+    <div className="rh-body">
+      <Sec title="Personal Details" step={1}>
+        <div className="rh-rev-grid">
+          {[
+            ["Full Name",    `${fields.firstName} ${fields.lastName}`],
+            ["Email",        fields.email],
+            ["Phone",        `${fields.countryCode} ${fields.phone}`],
+            ["Country",      fields.country],
+            ...(fields.organization ? [["Organization", fields.organization]] : []),
+            ...(fields.jobTitle     ? [["Job Title",    fields.jobTitle]]     : []),
+          ].map(([l, v]) => <Row key={l} label={l} value={v} />)}
+        </div>
+      </Sec>
+
+      <Sec title="Conference" step={1}>
+        <div className="rh-rev-grid">
+          <Row label="Region"     value={regionLabel} />
+          <Row label="Conference" value={conf ? `${conf.title} · ${conf.location} · ${conf.date}` : "—"} full />
+        </div>
+      </Sec>
+
+      <Sec title="Package & Extras" step={2}>
+        <div className="rh-rev-grid" style={{ marginBottom: 12 }}>
+          <Row label="Participation" value={<span style={{ textTransform: "capitalize" }}>{fields.speakerType || "—"}</span>} />
+        </div>
+        {pkg && (
+          <div className="rh-rev-pkg">
+            <span className="rh-rev-pkg__icon" aria-hidden="true">{pkg.icon}</span>
+            <span className="rh-rev-pkg__name">{pkg.name}</span>
+            <span className="rh-rev-pkg__price">${pkg.price.toLocaleString()}</span>
+          </div>
+        )}
+        {!isVirtual && (
+          <div className="rh-rev-grid" style={{ marginTop: 12 }}>
+            <Row label="Companions"
+              value={fields.companions === 0 ? "None" : `${fields.companions} person${fields.companions > 1 ? "s" : ""} (+$${fields.companions * companionPrice})`} />
+            <Row label="Extra Nights"
+              value={(fields.extraNights || 0) === 0 ? "None" : `${fields.extraNights} night${fields.extraNights > 1 ? "s" : ""} (+$${fields.extraNights * extraNightPrice})`} />
+          </div>
+        )}
+      </Sec>
+
+      <CouponWidget
+        couponCode={fields.couponCode} discount={fields.discount}
+        onApply={(code, disc) => { setField("couponCode", code); setField("discount", disc); }}
+        onRemove={() => { setField("couponCode", ""); setField("discount", 0); }} />
+
+      <div className="rh-pricebar">
+        <div>
+          <div className="rh-pricebar__label">Total Amount Due</div>
+          <div className="rh-pricebar__breakdown">
+            {fields.discount > 0
+              ? `Coupon "${fields.couponCode}" saves you $${fields.discount}`
+              : "Our team will contact you to confirm payment details"}
+          </div>
+        </div>
+        <div className="rh-pricebar__amount">
+          {fields.discount > 0 && <span className="rh-pricebar__orig">${origTotal.toLocaleString()}</span>}
+          <span>${total.toLocaleString()}</span>
+        </div>
+      </div>
     </div>
   );
 }
 
-function PkgSection({ title, packages, pkgQtys, onQtyChange }) {
+/* ── Success Screen ── */
+function SuccessScreen({ fields, allConferences, allPackages, companionPrice, extraNightPrice, onReset }) {
+  const conf      = allConferences.find((c) => String(c.id) === fields.conferenceId);
+  const pkg       = allPackages.find((p) => p.id === fields.packageId);
+  const isVirtual = fields.speakerType === "virtual";
+  const total     = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
+
+  const rows = [
+    ["Name",         `${fields.firstName} ${fields.lastName}`],
+    ["Email",        fields.email],
+    ["Phone",        `${fields.countryCode} ${fields.phone}`],
+    ["Region",       REGIONS.find((r) => r.id === fields.regionId)?.label || "—"],
+    ["Conference",   conf ? `${conf.title} · ${conf.location}` : "—"],
+    ["Date",         conf?.date || "—"],
+    ["Type",         fields.speakerType ? fields.speakerType.charAt(0).toUpperCase() + fields.speakerType.slice(1) : "—"],
+    ["Package",      pkg ? `${pkg.name} — $${pkg.price.toLocaleString()}` : "—"],
+    ["Companions",   isVirtual ? "N/A" : fields.companions > 0 ? `${fields.companions} person(s) (+$${fields.companions * companionPrice})` : "None"],
+    ["Extra Nights", isVirtual ? "N/A" : (fields.extraNights || 0) > 0 ? `${fields.extraNights} night(s) (+$${fields.extraNights * extraNightPrice})` : "None"],
+    ...(fields.discount > 0 ? [["Discount", `-$${fields.discount} (${fields.couponCode})`]] : []),
+    ["Total",        `$${total.toLocaleString()}`],
+  ];
+
   return (
-    <div className="sgc-pkg-section">
-      <div className="sgc-pkg-title">{title}</div>
-      {packages.map((pkg) => {
-        const qty = pkgQtys[pkg.id] || 0;
-        const selected = qty > 0;
-        return (
-          <div
-            key={pkg.id}
-            className={`sgc-pkg-item${selected ? " selected" : ""}`}
-            onClick={(e) => {
-              if (e.target.closest(".sgc-qty")) return;
-              if (qty === 0) onQtyChange(pkg.id, 1);
-            }}
-          >
-            <div className="sgc-pkg-left">
-              <div
-                className="sgc-pkg-radio"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (qty > 0) onQtyChange(pkg.id, -qty); // deselect all
-                  else onQtyChange(pkg.id, 1);
-                }}
-              >
-                {selected && <div className="sgc-pkg-radio-dot" />}
-              </div>
-              <div>
-                <div className="sgc-pkg-name">{pkg.name}</div>
-                {pkg.desc && <div className="sgc-pkg-desc">{pkg.desc}</div>}
-                {selected && qty > 1 && (
-                  <div style={{ fontSize: 11, color: "var(--mute)", marginTop: 2 }}>
-                    ${pkg.price.toLocaleString()} × {qty}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="sgc-pkg-right">
-              {selected && (
-                <QuantityCounter
-                  qty={qty}
-                  onDecrement={() => onQtyChange(pkg.id, -1)}
-                  onIncrement={() => onQtyChange(pkg.id, 1)}
-                />
-              )}
-              <div>
-                <div className="sgc-pkg-price">
-                  {selected && qty > 1
-                    ? `$${(pkg.price * qty).toLocaleString()}`
-                    : `$${pkg.price}`}
-                </div>
-              </div>
-            </div>
+    <section className="rh-result rh-result--success" role="main" aria-label="Registration successful">
+      <div className="rh-result__card">
+        <div className="rh-result__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
+            <path d="M4 12l5 5L20 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <h2 className="rh-result__title">You're <em>Registered!</em></h2>
+        <p className="rh-result__sub">Welcome to Signature Global Conferences. Our team will shortly contact you to confirm details.</p>
+        <div className="rh-email-notice" aria-label="Email confirmation">
+          <span aria-hidden="true">📧</span>
+          <div>
+            <strong>Confirmation Email Sent</strong><br />
+            A confirmation has been sent to <strong>{fields.email}</strong>. Check your inbox and spam folder.
           </div>
-        );
-      })}
+        </div>
+        <div className="rh-result__summary" role="list" aria-label="Registration summary">
+          {rows.map(([l, v]) => (
+            <div key={l} className="rh-result__row" role="listitem">
+              <span className="rh-result__row-label">{l}</span>
+              <span className="rh-result__row-value">{v}</span>
+            </div>
+          ))}
+        </div>
+        <div className="rh-result__actions">
+          <button className="rh-btn-primary" onClick={onReset}>Register Another</button>
+          <button className="rh-btn-ghost">View Conferences</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Fail Screen ── */
+function FailScreen({ onRetry }) {
+  return (
+    <section className="rh-result rh-result--fail" role="main" aria-label="Registration failed">
+      <div className="rh-result__card">
+        <div className="rh-result__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
+            <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+        </div>
+        <h2 className="rh-result__title">Submission <em>Failed</em></h2>
+        <p className="rh-result__sub">Something went wrong. Please try again or contact us directly.</p>
+        <div className="rh-result__actions">
+          <button className="rh-btn-primary" onClick={onRetry}>Try Again</button>
+          <button className="rh-btn-ghost">Contact Support</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Main Form ── */
+function RegistrationForm({ onSuccess, onFail, allConferences, allPackages, companionPrice, extraNightPrice, preselectedConferenceId }) {
+  const [fields, setFields] = useState({ ...INITIAL_FORM, countryCode: DEFAULT_COUNTRY.code });
+
+  // Pre-fill region + conference when navigated from an event page
+  useEffect(() => {
+    if (preselectedConferenceId && allConferences.length > 0) {
+      const selectedConf = allConferences.find((c) => String(c.id) === String(preselectedConferenceId));
+      if (selectedConf) {
+        setFields((prev) => ({
+          ...prev,
+          regionId:     selectedConf.region,
+          conferenceId: String(preselectedConferenceId),
+        }));
+      }
+    }
+  }, [preselectedConferenceId, allConferences]);
+  const [errors, setErrors] = useState({});
+  const [step,   setStep]   = useState(1);
+  const [submitting, setSub] = useState(false);
+
+  const set      = (key) => (e) => setFields((p) => ({ ...p, [key]: e.target.value }));
+  const setField = (key, val) => setFields((p) => ({ ...p, [key]: val }));
+  const top      = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  const goNext = () => {
+    const errs = step === 1 ? validateStep1(fields) : validateStep2(fields);
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    setErrors({}); setStep((s) => s + 1); top();
+  };
+  const goBack   = () => { setErrors({}); setStep((s) => s - 1); top(); };
+  const goToStep = (n) => { setErrors({}); setStep(n); top(); };
+
+  const handleSubmit = async () => {
+    setSub(true);
+    try {
+      await submitRegistration(fields, allConferences, allPackages, companionPrice, extraNightPrice, "home");
+      onSuccess(fields);
+    } catch { onFail(); }
+    finally { setSub(false); }
+  };
+
+  const meta = STEP_META[step];
+
+  return (
+    <div className="rh-card">
+      <div className="rh-card__header">
+        <StepIndicator currentStep={step} />
+        <div className="rh-card__step">{meta.step}</div>
+        <div className="rh-card__title">{meta.title}</div>
+      </div>
+
+      {step === 1 && <Step1 fields={fields} errors={errors} set={set} setField={setField} allConferences={allConferences} />}
+      {step === 2 && <Step2 fields={fields} errors={errors} setField={setField} allPackages={allPackages} companionPrice={companionPrice} extraNightPrice={extraNightPrice} />}
+      {step === 3 && <Step3 fields={fields} allConferences={allConferences} allPackages={allPackages} companionPrice={companionPrice} extraNightPrice={extraNightPrice} onEdit={goToStep} setField={setField} />}
+
+      <div className="rh-card__footer">
+        <div className="rh-card__actions">
+          {step > 1 && <button className="rh-back-btn" onClick={goBack} type="button" aria-label="Go back">← Back</button>}
+          {step < 3
+            ? <button className="rh-submit-btn" onClick={goNext} type="button">Continue →</button>
+            : <button className="rh-submit-btn" onClick={handleSubmit} disabled={submitting} type="button" aria-busy={submitting}>
+                {submitting ? <><span className="rh-spinner" aria-hidden="true" /> Submitting…</> : "Complete Registration →"}
+              </button>}
+        </div>
+        <p className="rh-note">
+          By registering you agree to our <a href="#" className="rh-note__link">Terms &amp; Conditions</a>. Your data will only be used for conference coordination.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ── Root Page ── */
+export default function RegisterHome() {
+  const location = useLocation();
+  const preselectedConferenceId = location.state?.conferenceId || null;
+  const [status,  setStatus]           = useState("form");
+  const [submitted, setData]           = useState(null);
+  const [allConferences, setConfs]     = useState([]);
+  const [allPackages,    setPkgs]      = useState([]);
+  const [companionPrice, setCompPrice] = useState(199);
+  const [extraNightPrice, setNightP]   = useState(149);
+  const [loading, setLoading]          = useState(true);
+
+  useEffect(() => {
+    Promise.all([fetchAllConferences(), fetchAllPackages(), fetchCompanionPrice(), fetchExtraNightPrice()])
+      .then(([c, p, cp, enp]) => { setConfs(c); setPkgs(p); setCompPrice(cp); setNightP(enp); })
+      .catch((e) => console.error("Failed to load data:", e))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSuccess = (data) => { setData(data); setStatus("success"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const handleFail    = ()     => { setStatus("fail"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const handleReset   = ()     => { setData(null); setStatus("form"); };
+
+  return (
+    <div className="main-page rh-page">
+      {status === "success" && (
+        <SuccessScreen fields={submitted} allConferences={allConferences} allPackages={allPackages}
+          companionPrice={companionPrice} extraNightPrice={extraNightPrice} onReset={handleReset} />
+      )}
+      {status === "fail" && <FailScreen onRetry={() => setStatus("form")} />}
+      {status === "form" && (
+        <>
+          <Hero />
+          <section className="rh-section">
+            <div className="rh-section__inner">
+              {loading ? (
+                <div className="rh-loading">
+                  <span className="rh-spinner" aria-hidden="true" />
+                  <span>Loading registration details…</span>
+                </div>
+              ) : (
+                <RegistrationForm onSuccess={handleSuccess} onFail={handleFail}
+                  allConferences={allConferences} allPackages={allPackages}
+                  companionPrice={companionPrice} extraNightPrice={extraNightPrice}
+                  preselectedConferenceId={preselectedConferenceId} />
+              )}
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 }

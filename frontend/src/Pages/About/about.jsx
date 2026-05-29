@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import heroMain       from "./SGCTeam.jpg";
 import missionMain    from "./aboutimg.jpg";
 import missionOverlay from "./Team.jpg";
-import gallery1       from "./regionimg1.jpg";
+import gallery1       from "./regionimg1.webp";
 import gallery2       from "./regionimg2.jpeg";
 import gallery3       from "./regionimg3.jpeg";
 import gallery4       from "./regionimg.jpeg";

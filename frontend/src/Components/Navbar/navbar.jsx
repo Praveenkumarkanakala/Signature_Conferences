@@ -91,9 +91,14 @@ const Navbar = () => {
       <div className="nav-inner">
 
         {/* LOGO */}
-        <div className="logo" onClick={(e) => handleNav(e, LINKS[0])}>
-          <img src={logo} alt="Logo" className="logo-img" />
-        </div>
+        {/* LOGO */}
+<div className="logo" onClick={(e) => handleNav(e, LINKS[0])}>
+  <img src={logo} alt="Logo" className="logo-img" />
+  <div className="logo-text">
+    <span className="logo-name">SIGNATURE</span>
+    <span className="logo-sub">GLOBAL CONFERENCES</span>
+  </div>
+</div>
 
         {/* DESKTOP */}
         <ul className="nav-links">
@@ -176,7 +181,7 @@ const Navbar = () => {
                       <a
                         href={sub.path}
                         className="m-dropdown-item"
-                        onClick={(e) => handleNav(e, { ...sub, type: "scroll" })}
+                        onClick={(e) => handleNav(e, sub)}
                       >
                         {sub.label}
                       </a>

@@ -1,30 +1,32 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Navbar } from "../NAHome/Nahome";
-import { speakerCategories, getSpeakersByCategory, speakers, allConferences } from "./speakerdata.js";
+import { NaNavbar } from "../NAHome/Nahome";
 import "./Speakers.css";
 import Footer from "../../../Components/Footer/footer";
+import speakerImg from "./image.png";
 
-const categoryLabels = { "women-leadership": "Women & Leadership", "ai-stem": "AI & STEM", business: "Business", wellness: "Wellness" };
+export const speakerCategories = [
+  { id: "all", label: "All Speakers" },
+  { id: "women-leadership", label: "Women & Leadership" },
+  { id: "ai-stem", label: "AI & STEM" },
+  { id: "business", label: "Business" },
+  { id: "wellness", label: "Wellness" },
+];
 
-/* ─── HERO ──────────────────────────────────── */
 function SpeakersHero() {
   return (
     <section className="na-speakers-hero">
-      <div className="na-speakers-hero__glow" />
       <div className="na-speakers-hero__content">
-        <span className="na-speakers-hero__tag">North America SIgnature Global Conferences - Speakers</span>
+        <span className="na-speakers-hero__tag">
+          North America Signature Global Conferences – Speakers
+        </span>
         <h1 className="na-speakers-hero__title">
-          Voices That
-          <br />
-          Move the World
+          Our Speakers Are <em>Coming Soon</em>
         </h1>
       </div>
     </section>
   );
 }
 
-/* ─── FILTER BAR ─────────────────────────────── */
 function FilterBar({ active, onChange }) {
   return (
     <div className="na-speakers-filters">
@@ -32,7 +34,9 @@ function FilterBar({ active, onChange }) {
         {speakerCategories.map((f) => (
           <button
             key={f.id}
-            className={`na-speakers-filters__pill${active === f.id ? " na-speakers-filters__pill--active" : ""}`}
+            className={`na-speakers-filters__pill${
+              active === f.id ? " na-speakers-filters__pill--active" : ""
+            }`}
             onClick={() => onChange(f.id)}
           >
             {f.label}
@@ -43,43 +47,61 @@ function FilterBar({ active, onChange }) {
   );
 }
 
-function SpeakerCard({ speaker }) {
+function ComingSoonSection() {
   return (
-    <div className="na-speakers-card">
-      <div className="na-speakers-card__imageWrap">
-        <img src={speaker.image} alt={speaker.name} className="na-speakers-card__img" />
+    <section className="na-speakers-split">
+      <div className="na-speakers-split__img-wrap">
+        <img
+          src={speakerImg}
+          alt="Speaker presenting to audience"
+          className="na-speakers-split__img"
+        />
+        <div className="na-speakers-split__img-overlay" />
+
+        {/* Quote overlay on image for mobile */}
+        <div className="na-speakers-split__mobile-quote">
+          <span className="na-speakers-split__quote-mark">"</span>
+          <p className="na-speakers-split__journey-text">
+            Every great journey starts with a first step.
+          </p>
+          <p className="na-speakers-split__quote-text">
+            We are curating a powerful lineup of global speakers, industry
+            leaders, and changemakers. Stay tuned as we unveil inspiring voices
+            for our upcoming conferences.
+          </p>
+          <div className="na-speakers-split__quote-line" />
+        </div>
       </div>
-    </div>
-  );
-}
 
-/* ─── GRID ───────────────────────────────────── */
-function SpeakersGrid({ filter }) {
-  const filtered = getSpeakersByCategory(filter);
-
-  return (
-    <section className="na-speakers-grid-section">
-      <div className="na-speakers-grid-section__inner">
-        <div className="na-speakers-grid">
-          {filtered.map((speaker) => (
-            <SpeakerCard key={speaker.id} speaker={speaker} />
-          ))}
+      {/* Desktop quote panel */}
+      <div className="na-speakers-split__quote">
+        <div className="na-speakers-split__quote-inner">
+          <span className="na-speakers-split__quote-mark">"</span>
+          <h2 className="na-speakers-split__journey-heading">
+            Every great journey<br />starts with a<br />
+            <em>first step.</em>
+          </h2>
+          <p className="na-speakers-split__quote-text">
+            We are curating a powerful lineup of global speakers, industry
+            leaders, and changemakers. Stay tuned as we unveil inspiring voices
+            for our upcoming conferences.
+          </p>
+          <div className="na-speakers-split__quote-line" />
         </div>
       </div>
     </section>
   );
 }
 
-/* ─── ROOT ───────────────────────────────────── */
 export default function Speakers() {
   const [activeFilter, setActiveFilter] = useState("all");
 
   return (
     <div className="na-page">
-      <Navbar />
+      <NaNavbar />
       <SpeakersHero />
       <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <SpeakersGrid filter={activeFilter} />
+      <ComingSoonSection />
       <Footer theme="northamerica" />
     </div>
   );

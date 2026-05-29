@@ -3,24 +3,48 @@ import { Navbar } from "../Landingpage/eurohome.jsx";
 import Footer from "../../../Components/Footer/footer";
 import "./gallery.css";
 import "../Landingpage/eurohome.css";
+import { TempGallery } from "./TempGallery"; /* delete this later */
+
+import spimg from "../speakers/images/euroimg.jpeg";
+import spimg1 from "../speakers/images/euroimg1.jpeg";
+import spimg2 from "../speakers/images/euroimg2.jpeg";
+import spimg3 from "../speakers/images/euroimg3.jpeg";
+import spimg4 from "../speakers/images/euroimg4.jpeg";
+import spimg5 from "../speakers/images/euroimg5.jpeg";
+import spimg6 from "../speakers/images/euroimg6.jpeg";
+import spimg7 from "../speakers/images/euroimg7.jpeg";
+import spimg8 from "../speakers/images/euroimg8.jpeg";
+import spimg9 from "../speakers/images/euroimg9.jpeg";
+import spimg10 from "../speakers/images/euroimg10.jpeg";
+import spimg11 from "../speakers/images/euroimg11.jpeg";
+import spimg12 from "../speakers/images/euroimg12.jpeg";
+import spimg13 from "../speakers/images/euroimg13.jpeg";
+
+import galleryslide from "./galleryslide.jpeg";
+import galleryslide1 from "./galleryslide1.jpeg";
+import galleryslide2 from "./galleryslide2.jpeg";
+import galleryslide3 from "./galleryslide3.jpeg";
+
+
+
 
 export const arcPhotos = [
-  { id: "a1", url: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400&h=520&fit=crop&q=80", alt: "Vibrant abstract" },
-  { id: "a2", url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&h=520&fit=crop&q=80", alt: "Colorful interior" },
-  { id: "a3", url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=520&fit=crop&q=80", alt: "Lush nature" },
-  { id: "a4", url: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400&h=520&fit=crop&q=80", alt: "Abstract painting" },
-  { id: "a5", url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=520&fit=crop&q=80", alt: "Mountain landscape" },
-  { id: "a6", url: "https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=400&h=520&fit=crop&q=80", alt: "Purple gradient" },
-  { id: "a7", url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=520&fit=crop&q=80", alt: "Pink abstract" },
-  { id: "a8", url: "https://images.unsplash.com/photo-1617791160588-241658ad0d3f?w=400&h=520&fit=crop&q=80", alt: "Fluid art" },
-  { id: "a9", url: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&h=520&fit=crop&q=80", alt: "Aerial landscape" },
-  { id: "a10", url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=520&fit=crop&q=80", alt: "Lake reflection" },
-  { id: "a11", url: "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=400&h=520&fit=crop&q=80", alt: "Snowy peaks" },
-  { id: "a12", url: "https://images.unsplash.com/photo-1477346611705-65d1883cee1e?w=400&h=520&fit=crop&q=80", alt: "Forest mist" },
-  { id: "a13", url: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=400&h=520&fit=crop&q=80", alt: "Colorful wall" },
-  { id: "a14", url: "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=400&h=520&fit=crop&q=80", alt: "Ocean cliff" },
-  { id: "a15", url: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&h=520&fit=crop&q=80", alt: "Desert dunes" },
-  { id: "a16", url: "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=400&h=520&fit=crop&q=80", alt: "Cute dog" },
+  { id: "a1",  url: spimg,   alt: "Speaker 1" },
+  { id: "a2",  url: spimg1,  alt: "Speaker 2" },
+  { id: "a3",  url: spimg2,  alt: "Speaker 3" },
+  { id: "a4",  url: spimg3,  alt: "Speaker 4" },
+  { id: "a5",  url: spimg4,  alt: "Speaker 5" },
+  { id: "a6",  url: spimg5,  alt: "Speaker 6" },
+  { id: "a7",  url: spimg6,  alt: "Speaker 7" },
+  { id: "a8",  url: spimg7,  alt: "Speaker 8" },
+  { id: "a9",  url: spimg8,  alt: "Speaker 9" },
+  { id: "a10", url: spimg9,  alt: "Speaker 10" },
+  { id: "a11", url: spimg10, alt: "Speaker 11" },
+  { id: "a12", url: spimg11, alt: "Speaker 12" },
+  { id: "a13", url: spimg12, alt: "Speaker 13" },
+  { id: "a14", url: spimg13, alt: "Speaker 14" },
+  { id: "a15", url: spimg,   alt: "Speaker 15" },  // reuse or remove
+  { id: "a16", url: spimg1,  alt: "Speaker 16" },  // reuse or remove
 ];
 
 export const bentoItems = [
@@ -222,12 +246,10 @@ function TextCard({ item }) {
 /*===============================   GALLERY SLIDING CARDS   =============================================*/
 
 const slides = [
-  { id: 1, src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1100&q=85", eyebrow: "Keynote Session", heading: ["World Leaders,", "One Stage"], meta: "March 14–16, 2025  ·  Dubai World Trade Centre", description: "Back-to-back keynotes from the world's most visionary thinkers — reshaping industries and inspiring the next generation of global leaders.", anim: "zoom", accent: "#d4a55a" },
-  { id: 2, src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1100&q=85", eyebrow: "Opening Address", heading: ["A Vision", "for Tomorrow"], meta: "March 14, 2025  ·  Main Hall  ·  09:00 AM", description: "The conference opens with a powerful address setting the tone for three days of breakthrough conversations and transformative ideas.", anim: "slide-left", accent: "#b8845a" },
-  { id: 3, src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1100&q=85", eyebrow: "Networking & Dining", heading: ["Ideas Meet", "Over Dinner"], meta: "Each Evening  ·  Sky Lounge, Level 12", description: "Curated dining experiences designed to spark conversations between delegates from 60+ countries — where the real deals happen.", anim: "slide-right", accent: "#c0724a" },
-  { id: 4, src: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1100&q=85", eyebrow: "The Venue", heading: ["Architecture", "of Ambition"], meta: "Dubai World Trade Centre  ·  Hall 7", description: "An iconic venue purpose-built for the world's most important conversations — 12,000 sq ft of immersive, state-of-the-art conference space.", anim: "slide-top", accent: "#d4a55a" },
-  { id: 5, src: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1100&q=85", eyebrow: "Panel Discussion", heading: ["Three Minds.", "One Truth."], meta: "March 15, 2025  ·  Panel Room B  ·  14:00 PM", description: "Industry pioneers clash and collaborate on stage — challenging assumptions and rewriting the rules of modern leadership and innovation.", anim: "slide-bottom", accent: "#b8845a" },
-  { id: 6, src: "https://images.unsplash.com/photo-1560523160-754a9e25c68f?auto=format&fit=crop&w=1100&q=85", eyebrow: "Live Audience", heading: ["5,000 Minds.", "One Movement."], meta: "March 14–16, 2025  ·  All Sessions", description: "Join a sold-out crowd of executives, founders, and policymakers united by a shared hunger to shape the future of our world.", anim: "rotate-fade", accent: "#c0724a" },
+  { id: 1, src: galleryslide,  heading: ["Global Voices,", "One Stage"],           description: "Join influential leaders, speakers, and visionaries from across the world sharing powerful ideas that shape the future.",        anim: "zoom" },
+  { id: 2, src: galleryslide1, heading: ["Where Connections", "Become Opportunities"], description: "Build meaningful relationships with global professionals, founders, and decision-makers in a high-value environment.",            anim: "slide-left" },
+  { id: 3, src: galleryslide2, heading: ["Inspiring Minds", "Transforming Futures."],  description: "Experience impactful sessions from thought leaders who are redefining leadership, innovation, and influence.",                  anim: "slide-right" },
+  { id: 4, src: galleryslide3, heading: ["A Premium", "Global Experience"],            description: "From world-class venues to curated sessions, every moment is designed to elevate your experience.",                              anim: "slide-top" },
 ];
 
 const INTERVAL = 5500;
@@ -246,86 +268,65 @@ function HeroSection() {
   useEffect(() => {
     const start = Date.now();
     let raf;
-
     const tick = () => {
       const elapsed = Date.now() - start;
-      const pct = Math.min((elapsed / INTERVAL) * 100, 100);
-      setProgress(pct);
-      if (elapsed >= INTERVAL) {
-        advance((current + 1) % slides.length);
-        return;
-      }
+      setProgress(Math.min((elapsed / INTERVAL) * 100, 100));
+      if (elapsed >= INTERVAL) { advance((current + 1) % slides.length); return; }
       raf = requestAnimationFrame(tick);
     };
-
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [current, advance]);
 
-  const goTo = (i) => {
-    if (i === current) return;
-    advance(i);
-  };
-
-  const scrollDown = () => window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
-
   const slide = slides[current];
 
   return (
-    <section className="europe-hs">
-      <div className="europe-hs__grain" aria-hidden="true" />
-      <div className="europe-hs__inner">
-        <div className="europe-hs__text" key={`text-${animKey}`}>
-          <span className="europe-hs__eyebrow">{slide.eyebrow}</span>
+    <section className="hs">
+      <div className="hs__grain" aria-hidden="true" />
+      <div className="hs__inner">
 
-          <h1 className="europe-hs__heading" aria-label={slide.heading.join(" ")}>
+        <div className="hs__text" key={`text-${animKey}`}>
+          <h1 className="hs__heading" aria-label={slide.heading.join(" ")}>
             {slide.heading.map((line, i) => (
-              <span key={i} className="europe-hs__heading-line" style={{ "--line-delay": `${i * 80}ms` }}>
+              <span key={i} className="hs__heading-line" style={{ "--line-delay": `${i * 90}ms` }}>
                 {line}
               </span>
             ))}
           </h1>
-
-          <p className="europe-hs__meta">{slide.meta}</p>
-          <p className="europe-hs__desc">{slide.description}</p>
-
-          <div className="europe-hs__nav">
-            <div className="europe-hs__dots">
+          <p className="hs__desc">{slide.description}</p>
+          <div className="hs__nav">
+            <div className="hs__dots">
               {slides.map((_, i) => (
                 <button
                   key={i}
-                  className={`europe-hs__dot ${i === current ? "europe-hs__dot--active" : ""}`}
-                  onClick={() => goTo(i)}
-                  aria-label={`Slide ${i + 1}`}
+                  className={`hs__dot${i === current ? " hs__dot--active" : ""}`}
+                  onClick={() => i !== current && advance(i)}
+                  aria-label={`Go to slide ${i + 1}`}
                 >
-                  {i === current && <span className="europe-hs__dot-fill" style={{ width: `${progress}%` }} />}
+                  {i === current && <span className="hs__dot-fill" style={{ width: `${progress}%` }} />}
                 </button>
               ))}
             </div>
-
-            <span className="europe-hs__slide-num">
+            <span className="hs__slide-num">
               {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
             </span>
           </div>
         </div>
 
-        <div className="europe-hs__card-area">
-          <div className="europe-hs__glow" aria-hidden="true" />
-
-          <div className={`europe-hs__entrance europe-hs__entrance--${slide.anim}`} key={`entrance-${animKey}`}>
-            <div className="europe-hs__float">
-              <div className="europe-hs__card">
-                <div className="europe-hs__card-img">
-                  <img src={slide.src} alt={slide.eyebrow} loading="eager" draggable="false" />
+        <div className="hs__card-area">
+          <div className="hs__glow" aria-hidden="true" />
+          <div className={`hs__entrance hs__entrance--${slide.anim}`} key={`entrance-${animKey}`}>
+            <div className="hs__float">
+              <div className="hs__card">
+                <div className="hs__card-img">
+                  <img src={slide.src} alt="" loading="eager" draggable="false" />
                 </div>
-                <div className="europe-hs__sheen" aria-hidden="true" />
-                <div className="europe-hs__badge">
-                  <span>{slide.eyebrow}</span>
-                </div>
+                <div className="hs__sheen" aria-hidden="true" />
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
@@ -681,11 +682,13 @@ export default function Gallery() {
   return (
     <div className="europe-page">
       <Navbar />
-      <GalleryHero />
-      <HeroSection />
-      <RegularGallery />
-      <VideoSection />
-      <GalleryCarousel />
+            <TempGallery />     {/* ← temp until real data arrives */}
+
+      {/* <GalleryHero /> */}
+      {/* <HeroSection /> */}
+      {/* <RegularGallery /> */}
+      {/* <VideoSection /> */}
+      {/* <GalleryCarousel /> */}
       <Footer theme="europe" />
     </div>
   );

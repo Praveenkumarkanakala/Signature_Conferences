@@ -1,15 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { getConferenceByRegionAndId } from "../globaldata/eventsglobaldata.js";
+import { getConferenceByRegionAndSlug } from "../../globaldata/eventsglobaldata.jsx";
 import { Navbar } from "../Landingpage/eurohome.jsx";
 import "./individual_eventpage.css";
 import Footer from "../../../Components/Footer/footer";
+import SEO from "../../../Components/SEO.jsx";
 
 const REGION = "europe";
 
 export default function EventDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
-  const conf = getConferenceByRegionAndId(REGION, id);
+  const conf = getConferenceByRegionAndSlug(REGION, slug);
 
   if (!conf) {
     return (
@@ -26,20 +27,13 @@ export default function EventDetail() {
     );
   }
 
-  const categoryLabels = {
-    "women-leadership": "Women Leadership",
-    wellness: "Wellness",
-    "ai-stem": "AI & STEM",
-    business: "Business",
-  };
-
-  // Split description by double newline into separate paragraphs
   const paragraphs = conf.description
     ? conf.description.split("\n\n").filter(Boolean)
     : [];
 
   return (
     <div className="europe-page">
+      <SEO title={`${conf.title} | Europe`} description={conf.description?.substring(0, 160)} image={conf.image} />
       <Navbar />
 
       {/* ── HERO ── */}
@@ -53,12 +47,8 @@ export default function EventDetail() {
             ← All Conferences
           </button>
 
-          {/* Title left, CTA card right — both sit in the hero */}
           <div className="europe-event-hero__top-row">
             <div className="europe-event-hero__title-block">
-              <span className="europe-event-hero__cat">
-                {categoryLabels[conf.category]}
-              </span>
               <h1 className="europe-event-hero__title">{conf.title}</h1>
               <div className="europe-event-hero__meta">
                 <div className="europe-event-hero__meta-item">
@@ -69,13 +59,6 @@ export default function EventDetail() {
                 <div className="europe-event-hero__meta-item">
                   <span className="europe-event-hero__meta-label">Location</span>
                   <span className="europe-event-hero__meta-value">{conf.location}</span>
-                </div>
-                <div className="europe-event-hero__meta-div" />
-                <div className="europe-event-hero__meta-item">
-                  <span className="europe-event-hero__meta-label">Category</span>
-                  <span className="europe-event-hero__meta-value">
-                    {categoryLabels[conf.category]}
-                  </span>
                 </div>
               </div>
             </div>
@@ -92,16 +75,10 @@ export default function EventDetail() {
                   <span className="europe-event-cta-card__row-label">📍 Venue</span>
                   <span className="europe-event-cta-card__row-val">{conf.location}</span>
                 </div>
-                <div className="europe-event-cta-card__row">
-                  <span className="europe-event-cta-card__row-label">🏷️ Category</span>
-                  <span className="europe-event-cta-card__row-val">
-                    {categoryLabels[conf.category]}
-                  </span>
-                </div>
               </div>
               <button
                 className="europe-event-cta-card__btn"
-                onClick={() => navigate("/europe-register")}
+                onClick={() => navigate("/europe-register", { state: { conferenceId: String(conf.id) } })}
               >
                 Register Now
               </button>
@@ -116,10 +93,9 @@ export default function EventDetail() {
         </div>
       </section>
 
-      {/* ── BODY — centered below hero ── */}
+      {/* ── BODY ── */}
       <div className="europe-event-body">
         <div className="europe-event-body__inner">
-          {/* About */}
           <section className="europe-event-section">
             <h2 className="europe-event-section__heading">About This Conference</h2>
             <div className="europe-event-section__paragraphs">
@@ -137,7 +113,6 @@ export default function EventDetail() {
             )}
           </section>
 
-          {/* Themes */}
           {conf.themes && conf.themes.length > 0 && (
             <section className="europe-event-section">
               <h2 className="europe-event-section__heading">Conference Themes</h2>

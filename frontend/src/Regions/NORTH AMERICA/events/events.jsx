@@ -1,13 +1,31 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Navbar } from "../NAHome/Nahome";
-import { categoryFilters, getConferencesByRegion } from "../globaldata/eventsglobaldata.js";
+import { NaNavbar } from "../NAHome/Nahome";
+import {
+  categoryFilters,
+  getConferencesByRegion,
+} from "../../globaldata/eventsglobaldata.jsx";
+// import { supabase } from "../../supabaseClient.jsx"; // adjust path if needed
+import { supabase}   from "../../../lib/supabase.jsx";
 import "./events.css";
 import Footer from "../../../Components/Footer/footer";
+import SEO from "../../../Components/SEO.jsx";
 
 const REGION = "north-america";
-const conferences = getConferencesByRegion(REGION);
-const cities = [...new Set(conferences.map((conference) => conference.city))];
+
+// ── Local data stays as the initial/fallback state ──────────────
+const localConferences = getConferencesByRegion(REGION);
+
+// ── Normalize Supabase row → shape the component already expects ─
+function normalizeRow(row) {
+  return {
+    ...row,
+    image: row.image_path,
+    date: row.date_text,
+    fullDescription: row.full_description,
+    slug: row.slug || row.id,
+  };
+}
 
 const LOCATION_TO_CITY = {
   toronto: "Toronto",
@@ -16,7 +34,9 @@ const LOCATION_TO_CITY = {
 };
 
 /* ─── HERO ──────────────────────────────── */
-function EventsHero() {
+function EventsHero({ conferences }) {
+  const cities = [...new Set(conferences.map((c) => c.city))];
+
   return (
     <section className="na-ev-hero">
       <div className="na-ev-hero__glow" />
@@ -97,13 +117,13 @@ function ConferenceCard({ conf }) {
         <div className="na-ev-card__actions">
           <button
             className="na-ev-card__btn na-ev-card__btn--outline"
-            onClick={() => navigate(`/na-events/${conf.id}`)}
+            onClick={() => navigate(`/na-events/${conf.slug}`)}
           >
             Learn More
           </button>
           <button
             className="na-ev-card__btn na-ev-card__btn--primary"
-            onClick={() => navigate("/na-register")}
+            onClick={() => navigate("/na-register", { state: { conferenceId: String(conf.id) } })}
           >
             Register
           </button>
@@ -114,7 +134,7 @@ function ConferenceCard({ conf }) {
 }
 
 /* ─── GRID ───────────────────────────────── */
-function ConferencesGrid({ filter, cityFilter }) {
+function ConferencesGrid({ conferences, filter, cityFilter }) {
   let filtered =
     filter === "all"
       ? conferences
@@ -136,10 +156,10 @@ function ConferencesGrid({ filter, cityFilter }) {
             Showing events in <strong>{cityFilter}</strong>
           </p>
         )}
-        <p className="na-ev-grid-section__count">
+        {/* <p className="na-ev-grid-section__count">
           Showing <strong>{filtered.length}</strong> conference
           {filtered.length !== 1 ? "s" : ""}
-        </p>
+        </p> */}
         <div className="na-ev-grid">
           {filtered.map((conf) => (
             <ConferenceCard key={conf.id} conf={conf} />
@@ -154,7 +174,32 @@ function ConferencesGrid({ filter, cityFilter }) {
 export default function NAevents() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [cityFilter, setCityFilter] = useState(null);
+  const [conferences, setConferences] = useState(localConferences);
+  const [source, setSource] = useState("local");
   const routerLocation = useLocation();
+
+  useEffect(() => {
+    async function fetchFromSupabase() {
+      const { data, error } = await supabase
+        .from("conferences")
+        .select("*")
+        .eq("region", REGION)
+        .eq("is_published", true)
+        .order("display_order", { ascending: true });
+
+      if (error) {
+        console.error("Supabase fetch error:", error.message);
+        return; // keep showing local data
+      }
+
+      if (data && data.length > 0) {
+        setConferences(data.map(normalizeRow));
+        setSource("supabase");
+      }
+    }
+
+    fetchFromSupabase();
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(routerLocation.search);
@@ -168,8 +213,12 @@ export default function NAevents() {
 
   return (
     <div className="na-page">
-      <Navbar />
-      <EventsHero />
+      <SEO title="North America Conferences & Events" description="Explore upcoming Signature Global Conferences in North America." />
+      <NaNavbar />
+
+      
+
+      <EventsHero conferences={conferences} />
       <FilterBar
         active={activeFilter}
         onChange={(f) => {
@@ -177,7 +226,11 @@ export default function NAevents() {
           setCityFilter(null);
         }}
       />
-      <ConferencesGrid filter={activeFilter} cityFilter={cityFilter} />
+      <ConferencesGrid
+        conferences={conferences}
+        filter={activeFilter}
+        cityFilter={cityFilter}
+      />
       <Footer theme="northamerica" />
     </div>
   );

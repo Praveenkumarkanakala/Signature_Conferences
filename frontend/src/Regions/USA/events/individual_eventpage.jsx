@@ -1,21 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { getConferenceByRegionAndId } from "../globaldata/eventsglobaldata.js";
+import { getConferenceByRegionAndSlug } from "../../globaldata/eventsglobaldata.jsx";
 import { Navbar } from "../Landingpage/homepage.jsx";
 import "./individual_eventpage.css";
 import Footer from "../../../Components/Footer/footer";
+import SEO from "../../../Components/SEO.jsx";
 
-const REGION = "asia";
-const CATEGORY_LABELS = {
-  "women-leadership": "Women Leadership",
-  wellness: "Wellness",
-  "ai-stem": "AI & STEM",
-  business: "Business",
-};
+const REGION = "usa";
 
 export default function EventDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
-  const conf = getConferenceByRegionAndId(REGION, id);
+  const conf = getConferenceByRegionAndSlug(REGION, slug);
 
   if (!conf) {
     return (
@@ -25,7 +20,7 @@ export default function EventDetail() {
           <h2>Conference not found.</h2>
           <button
             className="usa-eid-back-btn"
-            onClick={() => navigate("/events")}
+            onClick={() => navigate("/usa-events")}
           >
             ← Back to Events
           </button>
@@ -38,7 +33,6 @@ export default function EventDetail() {
   const paragraphs = conf.description
     ? conf.description.split("\n\n").filter(Boolean)
     : [];
-  const category = CATEGORY_LABELS[conf.category];
 
   const MetaItem = ({ label, value }) => (
     <>
@@ -61,6 +55,7 @@ export default function EventDetail() {
 
   return (
     <div className="usa-page">
+      <SEO title={`${conf.title} | USA`} description={conf.description?.substring(0, 160)} image={conf.image} />
       <Navbar />
 
       <section className="usa-eid-hero">
@@ -76,22 +71,17 @@ export default function EventDetail() {
         <div className="usa-eid-hero__content">
           <button
             className="usa-eid-back-btn"
-            onClick={() => navigate("/events")}
+            onClick={() => navigate("/usa-events")}
           >
             ← All Conferences
           </button>
 
           <div className="usa-eid-hero__top-row">
             <div className="usa-eid-hero__title-block">
-              <span className="usa-eid-hero__cat">{category}</span>
               <h1 className="usa-eid-hero__title">{conf.title}</h1>
               <div className="usa-eid-hero__meta">
                 <MetaItem label="Date" value={conf.date} />
                 <MetaItem label="Location" value={conf.location} />
-                <div className="usa-eid-hero__meta-item">
-                  <span className="usa-eid-hero__meta-label">Category</span>
-                  <span className="usa-eid-hero__meta-value">{category}</span>
-                </div>
               </div>
             </div>
 
@@ -101,20 +91,14 @@ export default function EventDetail() {
               <div className="usa-eid-cta-card__details">
                 <CtaRow icon="📅" label="Date" value={conf.date} />
                 <CtaRow icon="📍" label="Venue" value={conf.location} />
-                <CtaRow icon="🏷️" label="Category" value={category} />
               </div>
               <button
                 className="usa-eid-cta-card__btn"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/usa-register", { state: { conferenceId: String(conf.id) } })}
               >
                 Register Now
               </button>
-              <button
-                className="usa-eid-cta-card__btn usa-eid-cta-card__btn--outline"
-                onClick={() => navigate("/events")}
-              >
-                ← Browse All Events
-              </button>
+              <button  className="usa-eid-cta-card__btn usa-eid-cta-card__btn--outline"  onClick={() => navigate("/usa-events")}  >   ← Browse All Events  </button>
             </div>
           </div>
         </div>

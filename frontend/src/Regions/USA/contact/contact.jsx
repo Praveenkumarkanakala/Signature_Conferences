@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Navbar } from "../Landingpage/homepage.jsx";
 import { allCountries } from "country-telephone-data";
-import { submitToSheets } from "../utils/formSubmit.js";
+import { supabase } from "../../../lib/supabase.jsx";
 import Footer from "../../../Components/Footer/footer";
 import "./contact.css";
 import "../Landingpage/homepage.css";
@@ -73,7 +73,7 @@ const INFO_CARDS = [
   },
   {
     title: "Media Inquiries",
-    body: "For media-related questions or press inquiries, please contact us at media@signatureglobal.com.",
+    body: "For media-related questions or press inquiries, please contact us at usa@signaturetalks.org.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
@@ -223,8 +223,42 @@ export default function Contact() {
     }
     setErrors({});
     setSubmitting(true);
+
     try {
-      await submitToSheets({ formType: "contact", ...form });
+      // 1. Save to Supabase
+      const { error: dbError } = await supabase
+        .from("contact_submissions")
+        .insert({
+          first_name:   form.firstName,
+          last_name:    form.lastName,
+          email:        form.email,
+          country_code: form.countryCode,
+          phone:        form.phone || null,
+          message:      form.message,
+        });
+
+      if (dbError) throw new Error(dbError.message);
+
+      // 2. Trigger admin notification email (fire and forget)
+      fetch(
+        "https://tohlagjzvjoqrutolcwf.supabase.co/functions/v1/contact-notify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvaGxhZ2p6dmpvcXJ1dG9sY3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzM3MTUsImV4cCI6MjA5MzcwOTcxNX0.Xi1QPhzVjYYFfXNS8Z7mBdQHnEb42nsYXneTbo1lKzY",
+          },
+          body: JSON.stringify({
+            first_name:   form.firstName,
+            last_name:    form.lastName,
+            email:        form.email,
+            country_code: form.countryCode,
+            phone:        form.phone || "",
+            message:      form.message,
+          }),
+        }
+      ).catch((err) => console.error("Email trigger error:", err));
+
       setSubmitted(true);
     } catch (err) {
       console.error("Submission failed:", err);
@@ -271,18 +305,18 @@ export default function Contact() {
             </p>
 
             <div className="usa-ct-contact-links">
-              <a href="mailto:info@signatureglobal.com" className="usa-ct-link">
+              <a href="mailto:usa@signaturetalks.org" className="usa-ct-link">
                 <svg viewBox="0 0 20 20" fill="none" className="usa-ct-link__icon">
                   <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
                   <path d="M2 7l8 5 8-5" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
-                info@signatureglobal.com
+                usa@signaturetalks.org
               </a>
               <a href="tel:+1234567890" className="usa-ct-link">
                 <svg viewBox="0 0 24 24" fill="none" className="usa-ct-link__icon">
                   <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.21 1.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.06 6.06l1.27-.53a2 2 0 012.11.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                +1 234 567 890
+                +1-202-571-5721
               </a>
               <a href="#" className="usa-ct-link usa-ct-link--underline">
                 <svg viewBox="0 0 24 24" fill="none" className="usa-ct-link__icon">

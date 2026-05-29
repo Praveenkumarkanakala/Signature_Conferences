@@ -1,16 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../Landingpage/homepage.jsx";
-import { categoryFilters, getConferencesByRegion } from "../globaldata/eventsglobaldata.js";
+import {
+  categoryFilters,
+  getConferencesByRegion,
+} from "../../globaldata/eventsglobaldata.jsx";
+import { supabase } from "../../../lib/supabase.jsx"; // adjust path if needed
 import "./events.css";
 import Footer from "../../../Components/Footer/footer";
+import SEO from "../../../Components/SEO.jsx";
 
-const REGION = "asia";
-const conferences = getConferencesByRegion(REGION);
-const cities = [...new Set(conferences.map((conference) => conference.city))];
+const REGION = "usa";
+
+// ── Local data stays as the initial/fallback state ──────────────
+
+// ── Normalize Supabase row → shape the component already expects ─
+function normalizeRow(row) {
+  return {
+    ...row,
+    image: row.image_path,         // component uses conf.image
+    date: row.date_text,           // component uses conf.date
+    fullDescription: row.full_description,
+    slug: row.slug || row.id,
+  };
+}
 
 /* ─── HERO ──────────────────────────────── */
-function EventsHero() {
+function EventsHero({ conferences }) {
+  const cities = [...new Set(conferences.map((c) => c.city))];
+
   return (
     <section className="ev-hero">
       <div className="ev-hero__glow" />
@@ -35,7 +53,7 @@ function EventsHero() {
           </div>
           <div className="ev-hero__stat-div" />
           <div className="ev-hero__stat">
-            <span>2026</span>Season
+            <span>2027</span>Season
           </div>
         </div>
       </div>
@@ -66,18 +84,10 @@ function FilterBar({ active, onChange }) {
 function ConferenceCard({ conf }) {
   const navigate = useNavigate();
 
-  const categoryLabels = {
-    "women-leadership": "Women Leadership",
-    wellness: "Wellness",
-    "ai-stem": "AI & STEM",
-    business: "Business",
-  };
-
   return (
     <div className="ev-card">
       <div className="ev-card__img">
         <img src={conf.image} alt={conf.title} />
-        <span className="ev-card__cat">{categoryLabels[conf.category]}</span>
       </div>
       <div className="ev-card__body">
         <h3 className="ev-card__title">{conf.title}</h3>
@@ -94,13 +104,13 @@ function ConferenceCard({ conf }) {
         <div className="ev-card__actions">
           <button
             className="ev-card__btn ev-card__btn--outline"
-            onClick={() => navigate(`/usa-events/${conf.id}`)}
+            onClick={() => navigate(`/usa-events/${conf.slug}`)}
           >
             Learn More
           </button>
           <button
             className="ev-card__btn ev-card__btn--primary"
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/usa-register", { state: { conferenceId: String(conf.id) } })}
           >
             Register
           </button>
@@ -111,7 +121,7 @@ function ConferenceCard({ conf }) {
 }
 
 /* ─── GRID ───────────────────────────────── */
-function ConferencesGrid({ filter }) {
+function ConferencesGrid({ conferences, filter }) {
   const filtered =
     filter === "all"
       ? conferences
@@ -137,14 +147,42 @@ function ConferencesGrid({ filter }) {
 /* ─── ROOT ───────────────────────────────── */
 export default function Events() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [conferences, setConferences] = useState([]);
+  const [source, setSource] = useState("supabase"); // "local" | "supabase"
+
+  useEffect(() => {
+    async function fetchFromSupabase() {
+      const { data, error } = await supabase
+        .from("conferences")
+        .select("*")
+        .eq("region", REGION)
+        .eq("is_published", true)
+        .order("display_order", { ascending: true });
+
+      if (error) {
+        console.error("Supabase fetch error:", error.message);
+        return; // keep showing local data
+      }
+
+      if (data && data.length > 0) {
+        setConferences(data.map(normalizeRow));
+        setSource("supabase");
+      }
+    }
+
+    fetchFromSupabase();
+  }, []);
 
   return (
-    // ✅ Wrap in usa-page so Navbar's CSS variables from homepage.css resolve correctly
     <div className="usa-page">
+      <SEO title="USA Conferences & Events" description="Explore upcoming Signature Global Conferences in the USA." />
       <Navbar />
-      <EventsHero />
+
+      
+
+      <EventsHero conferences={conferences} />
       <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <ConferencesGrid filter={activeFilter} />
+      <ConferencesGrid conferences={conferences} filter={activeFilter} />
       <Footer theme="usa" />
     </div>
   );

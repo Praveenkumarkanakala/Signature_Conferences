@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Navbar } from "../Landingpage/eurohome.jsx";
 import { allCountries } from "country-telephone-data";
-import { submitToSheets } from "../utils/formSubmit.js";
 import Footer from "../../../Components/Footer/footer";
+import { supabase } from "../../../lib/supabase.jsx";  // ← added
+
 
 import "./contact.css";
 import "../Landingpage/eurohome.css";
@@ -39,7 +40,7 @@ const INFO_CARDS = [
   },
   {
     title: "Media Inquiries",
-    body: "For media-related questions or press inquiries, please contact us at media@signatureglobal.com.",
+    body: "For media-related questions or press inquiries, please contact us at europe@signaturetalks.org.",
   },
 ];
 
@@ -184,16 +185,42 @@ export default function Contact() {
     }
     setErrors({});
     setSubmitting(true);
+
     try {
-      await submitToSheets({
-        formType: "contact",
-        firstName: form.firstName,
-        lastName: form.lastName,
-        email: form.email,
-        countryCode: form.countryCode,
-        phone: form.phone,
-        message: form.message,
-      });
+      // 1. Save to Supabase
+      const { error: dbError } = await supabase
+        .from("contact_submissions")
+        .insert({
+          first_name:   form.firstName,
+          last_name:    form.lastName,
+          email:        form.email,
+          country_code: form.countryCode,
+          phone:        form.phone || null,
+          message:      form.message,
+        });
+
+      if (dbError) throw new Error(dbError.message);
+
+      // 2. Trigger admin notification email (fire and forget)
+      fetch(
+        "https://tohlagjzvjoqrutolcwf.supabase.co/functions/v1/contact-notify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvaGxhZ2p6dmpvcXJ1dG9sY3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzM3MTUsImV4cCI6MjA5MzcwOTcxNX0.Xi1QPhzVjYYFfXNS8Z7mBdQHnEb42nsYXneTbo1lKzY",
+          },
+          body: JSON.stringify({
+            first_name:   form.firstName,
+            last_name:    form.lastName,
+            email:        form.email,
+            country_code: form.countryCode,
+            phone:        form.phone || "",
+            message:      form.message,
+          }),
+        }
+      ).catch((err) => console.error("Email trigger error:", err));
+
       setSubmitted(true);
     } catch (err) {
       console.error("Submission failed:", err);
@@ -219,11 +246,11 @@ export default function Contact() {
             </p>
 
             <div className="europe-contact-links">
-              <a href="mailto:info@signatureglobal.com" className="europe-contact-link">
-                info@signatureglobal.com
+              <a href="mailto:europe@signaturetalks.org" className="europe-contact-link">
+                europe@signaturetalks.org
               </a>
               <a href="tel:+1234567890" className="europe-contact-link">
-                +1 234 567 890
+                +1-202-571-5721
               </a>
               <a href="#" className="europe-contact-link europe-contact-link--underline">
                 Customer Support

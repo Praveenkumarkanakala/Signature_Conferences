@@ -10,16 +10,13 @@
   --color-text-muted: rgba(59, 33, 18, 0.55);
   --color-card-bg: #fffaf4;
   --color-card-tag-bg: rgba(212, 165, 90, 0.15);
-  
   --font-heading: "Bebas Neue", sans-serif;
   --font-body: "Roboto", sans-serif;
-  
   --nav-height: 68px;
   --transition: 0.25s ease;
   --border-radius: 6px;
 }
 
-/* ─── GLOBAL RESET & BASE ───────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
@@ -31,8 +28,20 @@ html { scroll-behavior: smooth; }
   width: 100%;
 }
 
+/* ─── SCROLL REVEAL ─────────────────────── */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ─── SHARED LAYOUT ─────────────────────── */
-.europe-hero, .europe-stats, .europe-mission, .europe-values, .europe-story, .europe-cta {
+.europe-hero, .europe-stats, .europe-mission,
+.europe-values, .europe-story, .europe-cta {
   padding: 100px 60px;
   position: relative;
   overflow: hidden;
@@ -57,7 +66,7 @@ html { scroll-behavior: smooth; }
 .europe-mission, .europe-values, .europe-cta { background-color: var(--color-bg); }
 .europe-story { background-color: var(--color-card-bg); }
 
-.europe-hero__inner, .europe-stats__inner, .europe-mission__inner, 
+.europe-hero__inner, .europe-stats__inner, .europe-mission__inner,
 .europe-values__inner, .europe-story__inner, .europe-cta__inner {
   max-width: 1200px;
   margin: 0 auto;
@@ -65,7 +74,7 @@ html { scroll-behavior: smooth; }
   position: relative;
   z-index: 1;
 }
-.europe-cta__inner { max-width: 700px; }
+.europe-cta__inner { max-width: 700px; text-align: center; }
 
 /* ─── TYPOGRAPHY ────────────────────────── */
 .europe-section__eyebrow, .europe-hero__eyebrow {
@@ -86,19 +95,22 @@ html { scroll-behavior: smooth; }
   width: 36px;
   height: 2px;
   background: var(--color-accent);
+  flex-shrink: 0;
 }
 
-.europe-section__eyebrow--center { justify-content: center; }
+.europe-section__eyebrow--center {
+  justify-content: center;
+}
 .europe-section__eyebrow--center::before { display: none; }
 .europe-hero__eyebrow { margin-bottom: 24px; }
 
 .europe-section__title {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2rem, 3.5vw, 3rem);
   font-weight: 900;
   color: var(--color-dark);
   line-height: 1.15;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   letter-spacing: 0.02em;
 }
 
@@ -109,84 +121,13 @@ html { scroll-behavior: smooth; }
   font-size: clamp(2.8rem, 5vw, 4.8rem);
   font-weight: 900;
   color: var(--color-dark);
-  line-height: 1.05;
-  margin-bottom: 28px;
+  line-height: 1.08;
+  margin-bottom: 24px;
 }
 
 .europe-hero__title em, .europe-cta__title em {
   font-style: italic;
   color: var(--color-accent);
-  -webkit-text-fill-color: unset;
-}
-
-/* ─── CARDS & COMPONENTS ────────────────── */
-.europe-hero__manifesto, .europe-quote-card, .europe-pillar, .europe-value-card {
-  background: var(--color-card-bg);
-  border: 1px solid rgba(59, 33, 18, 0.08);
-  border-radius: 24px;
-  padding: 36px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: default;
-}
-
-.europe-hero__manifesto, .europe-quote-card {
-  box-shadow: 0 8px 40px rgba(59, 33, 18, 0.08);
-  padding: 40px;
-}
-
-.europe-hero__manifesto::before, .europe-quote-card::before {
-  content: "";
-  position: absolute;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-}
-
-.europe-hero__manifesto::before {
-  top: 0; left: 0; right: 0;
-  height: 3px;
-}
-
-.europe-quote-card::before {
-  top: 0; left: 0; bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--color-accent), var(--color-accent-dark));
-}
-
-.europe-pillar {
-  border-radius: 20px;
-  padding: 28px;
-}
-
-.europe-pillar:hover {
-  border-color: rgba(212, 165, 90, 0.3);
-  transform: translateY(-4px);
-}
-
-.europe-pillar::after {
-  content: "";
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(212, 165, 90, 0.4), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.europe-pillar:hover::after { opacity: 1; }
-
-.europe-value-card {
-  border-radius: 20px;
-  padding: 36px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.europe-value-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(59, 33, 18, 0.1);
-  border-color: rgba(212, 165, 90, 0.22);
 }
 
 /* ─── HERO DECORATIONS ──────────────────── */
@@ -194,8 +135,9 @@ html { scroll-behavior: smooth; }
   position: absolute;
   inset: 0;
   opacity: 0.03;
-  background-image: repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(59, 33, 18, 0.5) 60px),
-                    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(59, 33, 18, 0.5) 60px);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(59, 33, 18, 0.5) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(59, 33, 18, 0.5) 60px);
   pointer-events: none;
 }
 
@@ -207,19 +149,15 @@ html { scroll-behavior: smooth; }
 }
 
 .europe-hero__orb {
-  width: 600px;
-  height: 600px;
+  width: 600px; height: 600px;
   background: radial-gradient(circle, rgba(212, 165, 90, 0.08) 0%, transparent 70%);
-  top: -100px;
-  right: 5%;
+  top: -100px; right: 5%;
 }
 
 .europe-hero__orb2 {
-  width: 300px;
-  height: 300px;
+  width: 300px; height: 300px;
   background: radial-gradient(circle, rgba(184, 132, 90, 0.07) 0%, transparent 70%);
-  bottom: 100px;
-  right: 25%;
+  bottom: 100px; right: 25%;
   animation-delay: 3s;
   animation-direction: reverse;
 }
@@ -233,30 +171,49 @@ html { scroll-behavior: smooth; }
 .europe-hero__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: 60px;
   align-items: center;
   z-index: 2;
 }
 
 .europe-hero__sub {
-  font-family: var(--font-body);
-  font-size: 1.05rem;
-  line-height: 1.8;
+  font-size: 1rem;
+  line-height: 1.85;
   color: var(--color-text-muted);
-  margin-bottom: 40px;
+  margin-bottom: 36px;
+  max-width: 520px;
 }
 
 .europe-hero__actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.europe-hero__manifesto {
+  background: var(--color-card-bg);
+  border: 1px solid rgba(59, 33, 18, 0.08);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(59, 33, 18, 0.08);
+}
+
+.europe-hero__manifesto::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
 }
 
 .europe-manifesto__quote {
   font-family: var(--font-heading);
-  font-size: 1.55rem;
+  font-size: 1.45rem;
   font-style: italic;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--color-dark);
   margin-bottom: 28px;
   letter-spacing: 0.02em;
@@ -274,17 +231,15 @@ html { scroll-behavior: smooth; }
   display: flex;
   align-items: center;
   gap: 14px;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--color-text-muted);
 }
 
 .europe-manifesto__dot {
-  width: 6px;
-  height: 6px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--color-accent);
   flex-shrink: 0;
@@ -295,17 +250,17 @@ html { scroll-behavior: smooth; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 40px;
+  text-align: center;
 }
 
-.europe-stat { text-align: center; position: relative; }
+.europe-stat { position: relative; }
 
 .europe-stat + .europe-stat::before {
   content: "";
   position: absolute;
   left: 0; top: 50%;
   transform: translateY(-50%);
-  width: 1px;
-  height: 50px;
+  width: 1px; height: 50px;
   background: rgba(59, 33, 18, 0.1);
 }
 
@@ -315,11 +270,10 @@ html { scroll-behavior: smooth; }
   font-weight: 900;
   color: var(--color-accent);
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .europe-stat__label {
-  font-family: var(--font-body);
   font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 2.5px;
@@ -332,37 +286,103 @@ html { scroll-behavior: smooth; }
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px; height: 800px;
+  width: 900px; height: 900px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(212, 165, 90, 0.05) 0%, transparent 70%);
   pointer-events: none;
 }
 
-.europe-mission__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
+/* centered headline block */
+.europe-mission__header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.europe-mission__text {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.9;
+.europe-mission__header .europe-section__title {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+}
+
+/* full-width mission text block */
+.europe-mission__text-block {
+  background: var(--color-card-bg);
+  border: 1px solid rgba(59, 33, 18, 0.07);
+  border-radius: 20px;
+  padding: 36px 40px;
+  margin-bottom: 40px;
+  column-count: 2;
+  column-gap: 48px;
+  column-rule: 1px solid rgba(59, 33, 18, 0.08);
+}
+
+.europe-mission__text-block p {
+  font-size: 0.88rem;
+  line-height: 1.95;
   color: var(--color-text-muted);
+  break-inside: avoid;
+  margin-bottom: 16px;
 }
 
-.europe-mission__text p + p { margin-top: 20px; }
+.europe-mission__text-block p:last-child { margin-bottom: 0; }
 
+/* ─── PILLARS ───────────────────────────── */
 .europe-pillars {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.europe-pillar {
+  background: var(--color-card-bg);
+  border: 1px solid rgba(59, 33, 18, 0.08);
+  border-radius: 20px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  cursor: default;
+}
+
+.europe-pillar:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(59, 33, 18, 0.1);
+  border-color: rgba(212, 165, 90, 0.35);
+}
+
+.europe-pillar::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212, 165, 90, 0.55), transparent);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.europe-pillar:hover::after { opacity: 1; }
+
+.europe-pillar__num {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: rgba(212, 165, 90, 0.45);
+  margin-bottom: 14px;
+}
+
+.europe-pillar__icon-wrap {
+  width: 40px; height: 40px;
+  background: rgba(212, 165, 90, 0.12);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .europe-pillar__icon {
-  font-size: 1.4rem;
-  margin-bottom: 14px;
+  font-size: 16px;
   display: block;
 }
 
@@ -371,29 +391,51 @@ html { scroll-behavior: smooth; }
   font-size: 1rem;
   letter-spacing: 0.04em;
   color: var(--color-dark);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  line-height: 1.2;
 }
 
 .europe-pillar__desc {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  line-height: 1.7;
+  font-size: 0.74rem;
+  line-height: 1.78;
   color: var(--color-text-muted);
 }
 
 /* ─── VALUES ────────────────────────────── */
-.europe-values__header { text-align: center; margin-bottom: 60px; }
+.europe-values__header {
+  text-align: center;
+  margin-bottom: 56px;
+}
 
 .europe-values__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  align-items: start;
+}
+
+.europe-value-card {
+  background: var(--color-card-bg);
+  border: 1px solid rgba(59, 33, 18, 0.08);
+  border-radius: 20px;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.europe-value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(59, 33, 18, 0.1);
+  border-color: rgba(212, 165, 90, 0.22);
 }
 
 .europe-value-card__num {
   font-family: var(--font-heading);
   font-size: 0.75rem;
-  font-weight: 900;
   color: rgba(212, 165, 90, 0.4);
   letter-spacing: 2px;
 }
@@ -407,136 +449,14 @@ html { scroll-behavior: smooth; }
 }
 
 .europe-value-card__rule {
-  width: 36px;
-  height: 2px;
+  width: 36px; height: 2px;
   background: linear-gradient(90deg, var(--color-accent), transparent);
 }
 
 .europe-value-card__desc {
-  font-family: var(--font-body);
   font-size: 0.8rem;
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--color-text-muted);
-}
-
-/* ─── STORY / TIMELINE ──────────────────── */
-.europe-story__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: start;
-}
-
-.europe-timeline { display: flex; flex-direction: column; }
-
-.europe-timeline__item {
-  display: flex;
-  gap: 24px;
-  padding-bottom: 36px;
-  position: relative;
-}
-
-.europe-timeline__item:last-child { padding-bottom: 0; }
-
-.europe-timeline__item:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 15px; top: 36px; bottom: 0;
-  width: 1px;
-  background: linear-gradient(180deg, rgba(212, 165, 90, 0.3), rgba(212, 165, 90, 0.05));
-}
-
-.europe-timeline__dot {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-body);
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: var(--color-dark);
-  box-shadow: 0 4px 12px rgba(212, 165, 90, 0.35);
-}
-
-.europe-timeline__year {
-  font-family: var(--font-body);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  margin-bottom: 6px;
-}
-
-.europe-timeline__title {
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  letter-spacing: 0.03em;
-  color: var(--color-dark);
-  margin-bottom: 8px;
-}
-
-.europe-timeline__desc {
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  line-height: 1.7;
-  color: var(--color-text-muted);
-}
-
-.europe-story__quote { position: sticky; top: 120px; }
-
-.europe-quote__mark {
-  font-family: var(--font-heading);
-  font-size: 5rem;
-  line-height: 0.8;
-  color: rgba(212, 165, 90, 0.18);
-  font-weight: 900;
-  margin-bottom: 20px;
-  display: block;
-}
-
-.europe-quote__text {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  font-style: italic;
-  line-height: 1.5;
-  color: var(--color-dark);
-  margin-bottom: 28px;
-  letter-spacing: 0.02em;
-}
-
-.europe-quote__author { display: flex; align-items: center; gap: 14px; }
-
-.europe-quote__avatar {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 900;
-  color: var(--color-dark);
-  flex-shrink: 0;
-}
-
-.europe-quote__name {
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--color-dark);
-  letter-spacing: 0.5px;
-}
-
-.europe-quote__role {
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
-  margin-top: 3px;
 }
 
 /* ─── CTA ───────────────────────────────── */
@@ -561,11 +481,13 @@ html { scroll-behavior: smooth; }
 }
 
 .europe-cta__sub {
-  font-family: var(--font-body);
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--color-text-muted);
   margin-bottom: 40px;
-  line-height: 1.7;
+  line-height: 1.8;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .europe-cta__btns {
@@ -573,6 +495,7 @@ html { scroll-behavior: smooth; }
   align-items: center;
   justify-content: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 /* ─── BUTTONS ───────────────────────────── */
@@ -586,7 +509,8 @@ html { scroll-behavior: smooth; }
   padding: 13px 28px;
   cursor: pointer;
   border: none;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  will-change: transform;
 }
 
 .europe-btn--primary {
@@ -615,46 +539,40 @@ html { scroll-behavior: smooth; }
 
 /* ─── RESPONSIVE ────────────────────────── */
 @media (max-width: 1100px) {
-  .europe-hero, .europe-mission, .europe-values, .europe-story, .europe-cta {
-    padding: 70px 30px;
-  }
+  .europe-hero, .europe-mission, .europe-values, .europe-cta { padding: 70px 40px; }
   .europe-hero { padding-top: 120px; }
-  
-  .europe-hero__inner, .europe-mission__grid, .europe-story__inner {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-  
-  .europe-stats { padding: 50px 30px; }
+  .europe-hero__inner { grid-template-columns: 1fr; gap: 48px; }
+  .europe-hero__sub { max-width: 100%; }
+  .europe-stats { padding: 50px 40px; }
   .europe-stats__inner { grid-template-columns: repeat(2, 1fr); }
   .europe-values__grid { grid-template-columns: repeat(2, 1fr); }
-  .europe-story__quote { position: static; }
+  .europe-pillars { grid-template-columns: repeat(2, 1fr); }
+  .europe-mission__text-block { column-count: 1; }
 }
 
 @media (max-width: 768px) {
-  .europe-hero, .europe-stats, .europe-mission, .europe-values, .europe-story, .europe-cta {
-    padding: 60px 20px;
-  }
+  .europe-hero, .europe-stats, .europe-mission,
+  .europe-values, .europe-cta { padding: 60px 24px; }
   .europe-hero { padding-top: 110px; }
   .europe-hero__title { font-size: clamp(2.2rem, 10vw, 3.2rem); }
-  
-  .europe-stats__inner {
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-  
+  .europe-stats__inner { grid-template-columns: 1fr 1fr; gap: 24px; }
   .europe-stat + .europe-stat::before { display: none; }
-  
-  .europe-pillars, .europe-values__grid {
-    grid-template-columns: 1fr;
-  }
-  
+  .europe-pillars { grid-template-columns: 1fr; }
+  .europe-values__grid { grid-template-columns: 1fr; }
   .europe-cta__btns { flex-direction: column; }
-  
   .europe-btn { width: 100%; max-width: 280px; text-align: center; }
+  .europe-mission__text-block { padding: 24px 20px; }
 }
 
 @media (max-width: 480px) {
   .europe-stats__inner { grid-template-columns: 1fr; }
   .europe-stat__num { font-size: 2.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  [data-animate] { opacity: 1; transform: none; transition: none; }
 }

@@ -50,6 +50,7 @@ const missionText = [
 
 /* ─── SECTIONS ───────────────────────────── */
 function AboutHero() {
+  const navigate = useNavigate();
   return (
     <section className="as-ab-hero">
       <div className="as-ab-hero__lines" />
@@ -66,8 +67,8 @@ function AboutHero() {
             and creating meaningful global impact — one stage, one story, one life at a time.
           </p>
           <div className="as-ab-hero__actions">
-            <button className="as-ab-btn as-ab-btn--primary">Explore Conferences</button>
-            <button className="as-ab-btn as-ab-btn--ghost">Our Story ↓</button>
+<button className="as-ab-btn as-ab-btn--primary" onClick={() => navigate("/asiaevents")}> Explore Conferences</button>   
+ <button className="as-ab-btn as-ab-btn--ghost">Our Story ↓</button>
           </div>
         </div>
         <div className="as-ab-hero__manifesto">
@@ -202,7 +203,7 @@ function AboutCTA() {
           stepped into their purpose at Signature Global Conferences.
         </p>
         <div className="as-ab-cta__btns">
-          <button className="as-ab-btn as-ab-btn--primary" onClick={() => navigate("/conferences")}>View Conferences</button>
+          <button className="as-ab-btn as-ab-btn--primary" onClick={() => navigate("/asiaevents")}>View Conferences</button>
           <button className="as-ab-btn as-ab-btn--ghost"   onClick={() => navigate("/asiaregsiter")}>Speak at an Event</button>
         </div>
       </div>

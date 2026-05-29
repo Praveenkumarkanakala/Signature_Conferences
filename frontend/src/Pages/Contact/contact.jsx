@@ -1,11 +1,33 @@
 import { useState, useEffect, useRef } from "react";
 import "./contact.css";
+import { allCountries } from "country-telephone-data";
+import { supabase } from "../../lib/supabase.jsx";
 import {
   FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock,
   FaFacebookF, FaTwitter, FaLinkedinIn, FaYoutube, FaWhatsapp
 } from "react-icons/fa";
 
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbwHHHV5aDHgbyYGBe1Hq2dSUm3E40jaUGaJoDxc9Kg-YgqK24PA5bNIVXGiCZehffda/exec";
+/* ── Country data ── */
+const COUNTRY_LIST = (() => {
+  const seen = new Set();
+  const mapped = allCountries.map((c) => ({
+    name: c.name,
+    code: `+${c.dialCode}`,
+    dialCode: c.dialCode,
+    iso: c.iso2,
+  }));
+  const india = mapped.find((c) => c.iso === "in");
+  const rest = mapped.filter((c) => {
+    const key = `${c.name}-${c.dialCode}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return c.iso !== "in";
+  });
+  return india ? [india, ...rest] : rest;
+})();
+const DEFAULT_COUNTRY = COUNTRY_LIST[0];
+
+const MAX_MSG = 120;
 
 const OFFICES = [
   {
@@ -23,17 +45,17 @@ const OFFICES = [
 ];
 
 const CONTACT_ITEMS = [
-  { icon: <FaPhone />,    label: "Phone",        value: "+1-202-571-5721",          color: "orange" },
-  { icon: <FaClock />,    label: "Working Hours", value: "Everyday 09 am – 07 pm",    color: "purple" },
-  { icon: <FaEnvelope />, label: "Email",         value: "global@signaturetalks.org", color: "teal"   },
+  { icon: <FaPhone />,    label: "Phone",         value: "+1-202-571-5721",           color: "orange" },
+  { icon: <FaClock />,    label: "Working Hours",  value: "Everyday 09 am – 07 pm",    color: "purple" },
+  { icon: <FaEnvelope />, label: "Email",          value: "global@signaturetalks.org", color: "teal"   },
 ];
 
 const SOCIALS = [
-  { icon: <FaFacebookF />, href: "#", cls: "fb", label: "Facebook"  },
-  { icon: <FaTwitter />,   href: "#", cls: "tw", label: "Twitter"   },
-  { icon: <FaLinkedinIn />,href: "#", cls: "li", label: "LinkedIn"  },
-  { icon: <FaYoutube />,   href: "#", cls: "yt", label: "YouTube"   },
-  { icon: <FaWhatsapp />,  href: "#", cls: "wa", label: "WhatsApp"  },
+  { icon: <FaFacebookF />,  href: "#", cls: "fb", label: "Facebook"  },
+  { icon: <FaTwitter />,    href: "#", cls: "tw", label: "Twitter"   },
+  { icon: <FaLinkedinIn />, href: "#", cls: "li", label: "LinkedIn"  },
+  { icon: <FaYoutube />,    href: "#", cls: "yt", label: "YouTube"   },
+  { icon: <FaWhatsapp />,   href: "#", cls: "wa", label: "WhatsApp"  },
 ];
 
 function useReveal() {
@@ -51,33 +73,186 @@ function useReveal() {
   return [ref, on];
 }
 
+/* ─── Country Dropdown ─── */
+function CountryDropdown({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const wrapRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const selected = COUNTRY_LIST.find((c) => c.code === value) || DEFAULT_COUNTRY;
+  const filtered = query.trim()
+    ? COUNTRY_LIST.filter(
+        (c) =>
+          c.name.toLowerCase().includes(query.toLowerCase()) ||
+          c.code.includes(query)
+      )
+    : COUNTRY_LIST;
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) {
+        setOpen(false);
+        setQuery("");
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const handleSelect = (country) => {
+    onChange(country.code);
+    setOpen(false);
+    setQuery("");
+  };
+
+  return (
+    <div className="cp-country-dropdown" ref={wrapRef}>
+      <div
+        className={`cp-country-trigger${open ? " cp-country-trigger--open" : ""}`}
+        onClick={() => {
+          setOpen((o) => !o);
+          if (!open) setTimeout(() => inputRef.current?.focus(), 50);
+        }}
+      >
+        {open ? (
+          <input
+            ref={inputRef}
+            className="cp-country-search-input"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => setOpen(true)}
+            placeholder="Search country…"
+            autoComplete="off"
+            onClick={(e) => e.stopPropagation()}
+          />
+        ) : (
+          <span className="cp-country-selected">
+            <span className="cp-country-code">{selected.code}</span>
+            <span className="cp-country-name">{selected.name}</span>
+          </span>
+        )}
+        <svg
+          className={`cp-country-chevron${open ? " cp-country-chevron--up" : ""}`}
+          viewBox="0 0 10 6" fill="none"
+        >
+          <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      </div>
+      {open && (
+        <div className="cp-country-list">
+          {filtered.length === 0 ? (
+            <div className="cp-country-empty">No countries found</div>
+          ) : (
+            filtered.map((country) => (
+              <div
+                key={`${country.iso}-${country.dialCode}`}
+                className={`cp-country-option${country.code === value ? " cp-country-option--active" : ""}`}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  handleSelect(country);
+                }}
+              >
+                <span className="cp-country-option__code">{country.code}</span>
+                <span className="cp-country-option__name">{country.name}</span>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Main Contact Page ─── */
 export default function ContactPage() {
-  const [form, setForm]       = useState({ fullName: "", email: "", subject: "", message: "" });
-  const [privacy, setPrivacy] = useState(false);
-  const [status, setStatus]   = useState("idle");
-  const [focused, setFocused] = useState(null);
+  const [form, setForm] = useState({
+    firstName:   "",
+    lastName:    "",
+    email:       "",
+    countryCode: DEFAULT_COUNTRY.code,
+    phone:       "",
+    message:     "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [mainRef, mainOn] = useReveal();
   const [mapRef,  mapOn]  = useReveal();
 
-  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const set = (key) => (e) =>
+    setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!privacy || !form.fullName || !form.email || !form.message) return;
-    setStatus("loading");
+  const validate = () => {
+    const errs = {};
+    if (!form.firstName.trim()) errs.firstName = "Required";
+    if (!form.lastName.trim())  errs.lastName  = "Required";
+    if (!form.email.trim())     errs.email     = "Required";
+    else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = "Invalid email";
+    if (!form.message.trim())   errs.message   = "Required";
+    return errs;
+  };
+
+  const handleSubmit = async () => {
+    const errs = validate();
+    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    setErrors({});
+    setSubmitting(true);
+
     try {
-      await fetch(SHEET_URL, {
-        method: "POST",
-        body: JSON.stringify({ ...form, timestamp: new Date().toISOString() }),
-      });
-      setStatus("sent");
-      setForm({ fullName: "", email: "", subject: "", message: "" });
-      setPrivacy(false);
-    } catch {
-      setStatus("error");
+      // 1. Save to Supabase
+      const { error: dbError } = await supabase
+        .from("contact_submissions")
+        .insert({
+          first_name:   form.firstName,
+          last_name:    form.lastName,
+          email:        form.email,
+          country_code: form.countryCode,
+          phone:        form.phone || null,
+          message:      form.message,
+        });
+
+      if (dbError) throw new Error(dbError.message);
+
+      // 2. Trigger admin notification email (fire and forget)
+      fetch(
+        "https://tohlagjzvjoqrutolcwf.supabase.co/functions/v1/contact-notify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvaGxhZ2p6dmpvcXJ1dG9sY3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzM3MTUsImV4cCI6MjA5MzcwOTcxNX0.Xi1QPhzVjYYFfXNS8Z7mBdQHnEb42nsYXneTbo1lKzY",
+          },
+          body: JSON.stringify({
+            first_name:   form.firstName,
+            last_name:    form.lastName,
+            email:        form.email,
+            country_code: form.countryCode,
+            phone:        form.phone || "",
+            message:      form.message,
+          }),
+        }
+      ).catch((err) => console.error("Email trigger error:", err));
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Submission failed:", err);
+    } finally {
+      setSubmitting(false);
     }
-    setTimeout(() => setStatus("idle"), 3500);
+  };
+
+  const resetForm = () => {
+    setSubmitted(false);
+    setForm({
+      firstName:   "",
+      lastName:    "",
+      email:       "",
+      countryCode: DEFAULT_COUNTRY.code,
+      phone:       "",
+      message:     "",
+    });
   };
 
   const openMap = (q) =>
@@ -86,7 +261,7 @@ export default function ContactPage() {
   return (
     <div className="cp">
 
-      {/* ── COMPACT PAGE HEADER ── */}
+      {/* ── PAGE HEADER ── */}
       <div className="cp-header">
         <div className="cp-header-glow" />
         <span className="cp-eyebrow"><span className="cp-eyebrow-bar" />Get In Touch</span>
@@ -110,80 +285,130 @@ export default function ContactPage() {
               <p className="cp-card-desc">Fill in the form and our team will respond within 24 hours.</p>
               <div className="cp-form-divider" />
 
-              <form onSubmit={handleSubmit} noValidate>
-
-                {/* Name + Email row */}
-                <div className="cp-row">
-                  <div className={`cp-field${focused === "fullName" ? " active" : ""}`}>
-                    <label className="cp-field-label">Full Name</label>
-                    <input
-                      name="fullName" type="text" value={form.fullName}
-                      placeholder="John Doe" onChange={set("fullName")}
-                      onFocus={() => setFocused("fullName")} onBlur={() => setFocused(null)}
-                      required autoComplete="name"
-                    />
+              {submitted ? (
+                <div className="cp-success">
+                  <div className="cp-success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
                   </div>
-                  <div className={`cp-field${focused === "email" ? " active" : ""}`}>
-                    <label className="cp-field-label">Email Address</label>
-                    <input
-                      name="email" type="email" value={form.email}
-                      placeholder="hello@example.com" onChange={set("email")}
-                      onFocus={() => setFocused("email")} onBlur={() => setFocused(null)}
-                      required autoComplete="email"
-                    />
-                  </div>
-                </div>
-
-                {/* Subject */}
-                <div className={`cp-field${focused === "subject" ? " active" : ""}`}>
-                  <label className="cp-field-label">
-                    Subject <span className="cp-field-opt">(optional)</span>
-                  </label>
-                  <input
-                    name="subject" value={form.subject}
-                    placeholder="What's this about?"
-                    onChange={set("subject")}
-                    onFocus={() => setFocused("subject")} onBlur={() => setFocused(null)}
-                  />
-                </div>
-
-                {/* Message */}
-                <div className={`cp-field${focused === "message" ? " active" : ""}`}>
-                  <label className="cp-field-label">Message</label>
-                  <textarea
-                    name="message" value={form.message}
-                    placeholder="Tell us how we can help you…"
-                    rows={5} onChange={set("message")}
-                    onFocus={() => setFocused("message")} onBlur={() => setFocused(null)}
-                    required
-                  />
-                  <p className="cp-field-hint">
-                    {form.message.length > 0 ? `${form.message.length} characters` : "Minimum 20 characters"}
+                  <h3 className="cp-success-title">Message Sent!</h3>
+                  <p className="cp-success-sub">
+                    Thank you for reaching out. Our team will be in touch shortly.
                   </p>
-                </div>
-
-                <div className="cp-form-foot">
-                  <label className="cp-check">
-                    <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} />
-                    <span className="cp-check-box" />
-                    <span className="cp-check-text">I agree to the <a href="/policy">privacy policy</a></span>
-                  </label>
-                  <button
-                    type="submit"
-                    className={`cp-submit${status === "sent" ? " sent" : status === "error" ? " err" : ""}`}
-                    disabled={status === "loading" || !privacy}
-                  >
-                    <span>
-                      {status === "loading" ? "Sending…"
-                        : status === "sent"  ? "Message Sent ✓"
-                        : status === "error" ? "Failed — Retry"
-                        : "Send Message"}
-                    </span>
+                  <button className="cp-submit" onClick={resetForm}>
+                    <span>Send Another Message</span>
                     <span className="cp-submit-arrow">→</span>
                     <span className="cp-submit-shimmer" />
                   </button>
                 </div>
-              </form>
+              ) : (
+                <div className="cp-form">
+
+                  {/* First + Last name */}
+                  <div className="cp-row">
+                    <div className="cp-field">
+                      <label className="cp-field-label">First Name</label>
+                      <input
+                        value={form.firstName}
+                        onChange={set("firstName")}
+                        className={`cp-input${errors.firstName ? " cp-input--error" : ""}`}
+                        placeholder="John"
+                      />
+                      {errors.firstName && <span className="cp-error">{errors.firstName}</span>}
+                    </div>
+                    <div className="cp-field">
+                      <label className="cp-field-label">Last Name</label>
+                      <input
+                        value={form.lastName}
+                        onChange={set("lastName")}
+                        className={`cp-input${errors.lastName ? " cp-input--error" : ""}`}
+                        placeholder="Doe"
+                      />
+                      {errors.lastName && <span className="cp-error">{errors.lastName}</span>}
+                    </div>
+                  </div>
+
+                  {/* Email */}
+                  {/* Email */}
+<div className="cp-field">
+  <label className="cp-field-label">Email Address</label>
+  <input
+    value={form.email}
+    onChange={set("email")}
+    type="email"
+    className={`cp-input${errors.email ? " cp-input--error" : ""}`}
+    placeholder="john@example.com"
+  />
+  {errors.email && <span className="cp-error">{errors.email}</span>}
+</div>
+
+                  {/* Phone */}
+                  <div className="cp-field">
+                    <label className="cp-field-label">
+                      Phone Number <span className="cp-field-opt">(optional)</span>
+                    </label>
+                    <div className="cp-phone-wrap">
+                      <CountryDropdown
+                        value={form.countryCode}
+                        onChange={(code) => setForm((prev) => ({ ...prev, countryCode: code }))}
+                      />
+                      <input
+                        value={form.phone}
+                        onChange={set("phone")}
+                        className="cp-input cp-input--phone"
+                        placeholder="Phone number"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div className="cp-field">
+                    <label className="cp-field-label">Message</label>
+                    <div className="cp-textarea-wrap">
+                      <textarea
+                        value={form.message}
+                        onChange={(e) => {
+                          if (e.target.value.length <= MAX_MSG) set("message")(e);
+                        }}
+                        className={`cp-textarea${errors.message ? " cp-input--error" : ""}`}
+                        placeholder="How can we help you?"
+                        rows={5}
+                      />
+                      <span className={`cp-char-count${form.message.length >= MAX_MSG ? " cp-char-count--max" : ""}`}>
+                        {form.message.length}/{MAX_MSG}
+                      </span>
+                    </div>
+                    {errors.message && <span className="cp-error">{errors.message}</span>}
+                  </div>
+
+                  <button
+                    className="cp-submit"
+                    onClick={handleSubmit}
+                    disabled={submitting}
+                  >
+                    {submitting ? (
+                      <>
+                        <span className="cp-spinner" />
+                        Sending…
+                      </>
+                    ) : (
+                      <>
+                        <span>Send Message</span>
+                        <span className="cp-submit-arrow">→</span>
+                        <span className="cp-submit-shimmer" />
+                      </>
+                    )}
+                  </button>
+
+                  <p className="cp-terms">
+                    By contacting us, you agree to our{" "}
+                    <a href="/terms&conditions" className="cp-terms__link">Terms of service</a>{" "}
+                    and{" "}
+                    <a href="/policy" className="cp-terms__link">Privacy Policy</a>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -237,6 +462,27 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ── SCHEDULE A CALL ── */}
+      <section className={`cp-cal-section${mainOn ? " on" : ""}`}>
+        <div className="cp-cal-header">
+          <span className="cp-eyebrow"><span className="cp-eyebrow-bar" />Book a Meeting</span>
+          <h2 className="cp-cal-title">Prefer to Talk <em>Live?</em></h2>
+          <p className="cp-cal-desc">
+            Pick a time that works for you — we're available for 15-minute discovery calls
+            to discuss speaking opportunities, partnerships, or conference participation.
+          </p>
+        </div>
+        <iframe
+          src="https://calendly.com/d/cys7-bv4-fhq?hide_gdpr_banner=1&primary_color=f59e0b&background_color=07091e&text_color=ffffff"
+          width="100%"
+          height="750"
+          frameBorder="0"
+          title="Book a call"
+          loading="eager"
+          style={{ display: "block", border: "none", background: "#07091e" }}
+        />
       </section>
 
       {/* ── EMBEDDED MAP ── */}

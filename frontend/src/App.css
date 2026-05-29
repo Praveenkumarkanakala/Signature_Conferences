@@ -15,6 +15,7 @@
 html {
   scroll-behavior: smooth;
   overscroll-behavior-y: none;
+  overflow-y: overlay;
 }
 
 body {
@@ -24,6 +25,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overscroll-behavior-y: none;
+  background-color: #0d1728;
 }
 
 /* ─── IMAGES ─────────────────────────────── */
@@ -52,4 +54,40 @@ button {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* ─── CUSTOM AUTO-HIDING SCROLLBAR ───────── */
+/* Webkit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent !important;
+  border-radius: 10px !important;
+}
+
+/* Show scrollbar thumb on page hover */
+html:hover ::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb-color, rgba(150, 150, 150, 0.2)) !important;
+}
+
+/* Highlight thumb when hovering directly over it */
+html:hover ::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover-color, rgba(150, 150, 150, 0.45)) !important;
+}
+
+/* Firefox Support */
+html {
+  scrollbar-width: thin !important;
+  scrollbar-color: transparent transparent !important;
+}
+
+html:hover {
+  scrollbar-color: var(--scrollbar-thumb-color, rgba(150, 150, 150, 0.2)) transparent !important;
 }
