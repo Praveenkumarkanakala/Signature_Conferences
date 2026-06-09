@@ -10,10 +10,7 @@
   --nav-height: 80px;
   --font-body: "Roboto", sans-serif;
   --font-heading: "Space Grotesk", sans-serif;
-  --transition: 0.25s ease;
 }
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 

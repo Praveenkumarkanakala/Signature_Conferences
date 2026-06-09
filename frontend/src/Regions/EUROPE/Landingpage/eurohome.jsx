@@ -278,9 +278,9 @@ function HeroSection() {
       {/* ── LEFT: Text block ── */}
       <div className="europe-hero-v2__left">
         <p className="europe-hero-v2__script">Europe</p>
-
+        
         <h1 className="europe-hero-v2__headline">
-          SIGNATURE<br />GLOBAL<br />CONFERENCES
+          SIGNATURE <br/>GLOBAL<br />CONFERENCES
         </h1>
 
         <p className="europe-hero-v2__tagline">

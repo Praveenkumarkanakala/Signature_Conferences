@@ -8,10 +8,7 @@
   --transition: 0.25s ease;
   --na-cream: #f0ebe0; --na-green: #1e3a2f; --na-green-mid: #2a5240;
   --na-gold: #b8952a; --na-white: #ffffff; --na-text-mid: #4a5e55;
-  --na-text-light: #7a9085;
 }
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 .na-page, .na-page-wrapper { font-family: var(--font-body); background: var(--bg-dark); overflow-x: hidden; width: 100%; color: var(--white); }

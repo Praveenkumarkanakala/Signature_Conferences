@@ -615,8 +615,6 @@
      .patriot-icon      — SVG icon
    ═══════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Outfit:wght@400;500;600&display=swap');
-
 /* ── Local accent tokens ────────────────────────────────────── */
 :root {
   --eagle-red:    #B22234;

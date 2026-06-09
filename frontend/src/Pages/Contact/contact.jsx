@@ -464,8 +464,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── SCHEDULE A CALL ── */}
-      <section className={`cp-cal-section${mainOn ? " on" : ""}`}>
+      {/* <section className={`cp-cal-section${mainOn ? " on" : ""}`}>
         <div className="cp-cal-header">
           <span className="cp-eyebrow"><span className="cp-eyebrow-bar" />Book a Meeting</span>
           <h2 className="cp-cal-title">Prefer to Talk <em>Live?</em></h2>
@@ -483,7 +482,7 @@ export default function ContactPage() {
           loading="eager"
           style={{ display: "block", border: "none", background: "#07091e" }}
         />
-      </section>
+      </section> */}
 
       {/* ── EMBEDDED MAP ── */}
       <section className={`cp-map-section${mapOn ? " on" : ""}`} ref={mapRef}>
