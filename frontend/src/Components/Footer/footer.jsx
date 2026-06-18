@@ -297,9 +297,9 @@ export default function Footer({ theme = "default" }) {
       <div className="footer-bottom" ref={botRef}>
         <div className={`footer-bottom-inner ${botVisible ? "bot--on" : ""}`}>
           <div className="footer-legal">
-            <span className="footer-legal-text">Terms & Conditions</span>
+            <Link to="/terms&conditions" className="footer-legal-text">Terms & Conditions</Link>
             <span className="footer-legal-sep" />
-            <span className="footer-legal-text">Privacy Policy</span>
+            <Link to="/policy" className="footer-legal-text">Privacy Policy</Link>
           </div>
           <img src={logo} alt="SGC" className="footer-bottom-logo" />
           <div className="footer-copy">

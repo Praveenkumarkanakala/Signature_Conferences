@@ -14,8 +14,6 @@
 /* ─── HTML & BODY ────────────────────────── */
 html {
   scroll-behavior: smooth;
-  overscroll-behavior-y: none;
-  overflow-y: overlay;
 }
 
 body {
@@ -24,8 +22,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overscroll-behavior-y: none;
   background-color: #0d1728;
+  overflow-x: hidden;
 }
 
 /* ─── IMAGES ─────────────────────────────── */
@@ -51,9 +49,8 @@ button {
 
 /* ─── ROOT WRAPPER ───────────────────────── */
 #root {
+  /* Plain block — flex column was trapping scroll context for region pages */
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 /* ─── CUSTOM AUTO-HIDING SCROLLBAR ───────── */

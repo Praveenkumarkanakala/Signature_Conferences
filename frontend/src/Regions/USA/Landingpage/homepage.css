@@ -19,12 +19,10 @@
   font-family: var(--font-body), sans-serif;
   background: var(--color-bg);
   color: var(--color-dark);
-  overflow-x: hidden;
-  overflow-y: auto;
+  /* overflow-x: hidden; removed to avoid mobile scroll issues */
+  /* Do NOT set overflow-y here — let html/body handle page scroll */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* CRITICAL: Fixes the "stuck on hero" scroll lock issue */
   position: relative;
   min-height: 100vh;
 }
@@ -628,7 +626,7 @@
   --card-radius:   16px;
 }
 
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* NOTE: Global * reset removed — it was overriding layout/scroll behavior */
 
 /* ═══════════════════════════════════════════════════════════════
    OUTER SECTION

@@ -17,6 +17,10 @@
   overflow: hidden;
 }
 
+@media (max-width: 520px) {
+  .as-thg2-root { padding: 50px 20px; }
+}
+
 .as-thg2-split {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
@@ -234,6 +238,10 @@
   .as-thg2-row--2   { flex-direction: column; }
   .as-thg2-card--md,
   .as-thg2-card--sm { width: 100%; }
+  
+  /* Typography tweaks for tiny screens like 320px */
+  .as-thg2-headline__line { font-size: clamp(2rem, 9vw, 2.8rem); word-break: break-word; }
+  .as-thg2-body { font-size: 0.85rem; }
 }
 
 /* Color variants — matched to Asia dark red theme */
@@ -382,6 +390,10 @@
   background-color: var(--as-deep, #0e0001);
   padding: 72px 5% 80px;
   box-sizing: border-box;
+}
+
+@media (max-width: 520px) {
+  .as-ths-root { padding: 50px 20px; }
 }
 
 .as-ths-split {
@@ -575,7 +587,11 @@
 }
 
 @media (max-width: 520px) {
-  .as-ths-right { padding: 40px 28px; }
+  .as-ths-right { padding: 30px 16px; }
+  /* Typography tweaks for tiny screens like 320px */
+  .as-ths-left__line { font-size: clamp(2rem, 9vw, 2.8rem); word-break: break-word; }
+  .as-ths-left__body { font-size: 0.85rem; }
+  .as-ths-right__heading { font-size: clamp(1.4rem, 7vw, 1.7rem); }
 }
 
 /* Topographic lines — flame-tinted */
