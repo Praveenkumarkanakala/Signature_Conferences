@@ -31,10 +31,10 @@ const MAX_MSG = 120;
 
 const OFFICES = [
   {
-    label: "Head Office", city: "Dover, USA",
+    label: "Head Office", city: "New York, USA",
     title: "Signature United Global Conferences",
-    address: "8TH Green, Dover DE, United States 19901",
-    mapQuery: "8TH+Green+Dover+DE+United+States+19901",
+    address: "Parklane West, Menands, Albany, New York 12204, US",
+    mapQuery: "Parklane West, Menands, Albany, New York 12204, US ",
   },
   {
     label: "Regional Office", city: "Dubai, UAE",
@@ -504,10 +504,10 @@ export default function ContactPage() {
             <div className="cp-map-float-icon"><FaMapMarkerAlt /></div>
             <div className="cp-map-float-body">
               <p className="cp-map-float-name">Head Office</p>
-              <p className="cp-map-float-addr">8TH Green, Dover DE,<br />United States 19901</p>
+              <p className="cp-map-float-addr">Parklane West, Menands, Albany,<br />New York 12204, US</p>
             </div>
             <a
-              href="https://www.google.com/maps/search/?api=1&query=8TH+Green+Dover+DE+United+States+19901"
+              href="https://www.google.com/maps/search/?api=1&query=Parklane+West,+Menands,+Albany,+New+York+12204,+US"
               target="_blank" rel="noreferrer"
               className="cp-map-float-btn"
             >

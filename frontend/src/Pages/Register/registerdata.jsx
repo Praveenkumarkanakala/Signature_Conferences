@@ -179,66 +179,19 @@ export async function submitRegistration(
   extraNightPrice,
   fromRegion = "unknown",
 ) {
-  const conf        = allConferences.find((c) => String(c.id) === fields.conferenceId);
-  const pkg         = allPackages.find((p) => p.id === fields.packageId);
-  const total       = calculateTotal(
-    fields.packageId,
-    fields.companions,
-    fields.discount    || 0,
-    fields.extraNights || 0,
-    allPackages,
-    companionPrice,
-    extraNightPrice,
-  );
-  const regionLabel = REGIONS.find((r) => r.id === fields.regionId)?.label || "NO_DATA";
-  const isVirtual   = fields.speakerType === "virtual";
+  // Call the Supabase Edge Function to securely calculate total and create Stripe session
+  const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+    body: { fields, fromRegion },
+  });
 
-  const payload = {
-    first_name:       fields.firstName    || "NO_DATA",
-    last_name:        fields.lastName     || "NO_DATA",
-    email:            fields.email        || "NO_DATA",
-    phone:            `${fields.countryCode} ${fields.phone}`.trim() || "NO_DATA",
-    country:          fields.country      || "NO_DATA",
-    organization:     fields.organization || "NO_DATA",
-    job_title:        fields.jobTitle     || "NO_DATA",
-    region:           regionLabel,
-    conference_id:    fields.conferenceId || "NO_DATA",
-    conference_info:  conf
-      ? `${conf.title} · ${conf.location} · ${conf.date}`
-      : "NO_DATA",
-    speaker_type:     fields.speakerType  || "NO_DATA",
-    package_name:     pkg?.name           || "NO_DATA",
-    package_price:    pkg ? `$${pkg.price}` : "NO_DATA",
-    companions:       String(fields.companions   || 0),
-    companion_cost:   `$${isVirtual ? 0 : (fields.companions   || 0) * companionPrice}`,
-    extra_nights:     String(fields.extraNights  || 0),
-    extra_night_cost: `$${isVirtual ? 0 : (fields.extraNights  || 0) * extraNightPrice}`,
-    coupon_code:      fields.couponCode   || "NONE",
-    discount:         fields.discount > 0 ? `-$${fields.discount}` : "$0",
-    total_amount:     `$${total}`,
-    from_region:      fromRegion,
-  };
-
-  // Insert registration into Supabase
-  const { error } = await supabase.from("registrations").insert([payload]);
-
-  if (error) {
-    console.error("Registration insert error:", error.message);
-    throw error;
+  if (error || !data?.url) {
+    console.error("Failed to create checkout session:", error || data);
+    throw new Error("Failed to initialize secure checkout. Please try again.");
   }
 
-  // ✅ FIX: Fire email in background — don't await, so user isn't blocked
-  fetch(
-    "https://tohlagjzvjoqrutolcwf.supabase.co/functions/v1/send-registration-email",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvaGxhZ2p6dmpvcXJ1dG9sY3dmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzM3MTUsImV4cCI6MjA5MzcwOTcxNX0.Xi1QPhzVjYYFfXNS8Z7mBdQHnEb42nsYXneTbo1lKzY",
-      },
-      body: JSON.stringify({ registration_data: payload }),
-    }
-  ).catch(emailErr => console.error("Email trigger error:", emailErr));
-
-  return payload;
+  // Redirect the user to the Stripe Checkout page securely
+  window.location.href = data.url;
+  
+  // Return a promise that never resolves so the UI stays in loading state while redirecting
+  return new Promise(() => {});
 }

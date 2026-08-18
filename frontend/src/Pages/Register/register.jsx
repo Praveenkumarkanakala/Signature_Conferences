@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 // import { Navbar } from "../Landingpage/homepage.jsx";
 import { allCountries } from "country-telephone-data";
 // import Footer from "../../Components/Footer/footer.jsx";
-import "./register.css";
 import "../Home/homepage.css";
+import "./register.css";
 
 import {
   REGIONS,
@@ -50,7 +50,7 @@ function CountryDropdown({ value, onChange }) {
   }, []);
 
   const toggle = () => { setOpen((o) => !o); if (!open) setTimeout(() => inputRef.current?.focus(), 50); };
-  const pick   = (c) => { onChange(c.code); setOpen(false); setQuery(""); };
+  const pick = (c) => { onChange(c.code); setOpen(false); setQuery(""); };
 
   return (
     <div className="rh-cd" ref={wrapRef}>
@@ -58,12 +58,12 @@ function CountryDropdown({ value, onChange }) {
         role="button" tabIndex={0} onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && toggle()} aria-expanded={open}>
         {open
           ? <input ref={inputRef} className="rh-cd__search" value={query}
-              onChange={(e) => setQuery(e.target.value)} placeholder="Search…"
-              autoComplete="off" onClick={(e) => e.stopPropagation()} />
+            onChange={(e) => setQuery(e.target.value)} placeholder="Search…"
+            autoComplete="off" onClick={(e) => e.stopPropagation()} />
           : <span className="rh-cd__selected">
-              <span className="rh-cd__code">{selected.code}</span>
-              <span className="rh-cd__name">{selected.name}</span>
-            </span>
+            <span className="rh-cd__code">{selected.code}</span>
+            <span className="rh-cd__name">{selected.name}</span>
+          </span>
         }
         <svg className={`rh-cd__chevron${open ? " up" : ""}`} viewBox="0 0 10 6" fill="none" aria-hidden="true">
           <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -74,14 +74,14 @@ function CountryDropdown({ value, onChange }) {
           {filtered.length === 0
             ? <div className="rh-cd__empty">No results</div>
             : filtered.map((c) => (
-                <div key={`${c.iso}-${c.dialCode}`}
-                  className={`rh-cd__option${c.code === value ? " active" : ""}`}
-                  onMouseDown={(e) => { e.preventDefault(); pick(c); }}
-                  role="option" aria-selected={c.code === value}>
-                  <span className="rh-cd__option-code">{c.code}</span>
-                  <span className="rh-cd__option-name">{c.name}</span>
-                </div>
-              ))}
+              <div key={`${c.iso}-${c.dialCode}`}
+                className={`rh-cd__option${c.code === value ? " active" : ""}`}
+                onMouseDown={(e) => { e.preventDefault(); pick(c); }}
+                role="option" aria-selected={c.code === value}>
+                <span className="rh-cd__option-code">{c.code}</span>
+                <span className="rh-cd__option-name">{c.name}</span>
+              </div>
+            ))}
         </div>
       )}
     </div>
@@ -123,13 +123,12 @@ function Hero() {
   return (
     <section className="rh-hero">
       <div className="rh-hero__glow" aria-hidden="true" />
-      <div className="rh-hero__dots"  aria-hidden="true" />
+      <div className="rh-hero__dots" aria-hidden="true" />
       <div className="rh-hero__content">
         <span className="rh-hero__tag">Speaker Registration 2026 / 2027</span>
         <h1 className="rh-hero__title">Claim Your <em>Global Stage</em></h1>
 
         <p className="rh-hero__sub">Register now to secure your speaking slot at one of our world-class conferences. Limited seats available.</p>
-              <p className="rh-hero__sub">sponsered by NAVA KUMAR BHAI ltd Limited seats available.</p>
 
       </div>
     </section>
@@ -140,9 +139,9 @@ function Hero() {
 function PriceBar({ pkg, companions, extraNights = 0, isVirtual, total, discount, couponCode, label, companionPrice, extraNightPrice }) {
   const parts = [
     pkg ? `${pkg.name}  $${pkg.price.toLocaleString()}` : "Select a package to see pricing",
-    companions > 0 && !isVirtual  ? ` + ${companions} companion${companions > 1 ? "s" : ""}  $${companions * companionPrice}` : "",
+    companions > 0 && !isVirtual ? ` + ${companions} companion${companions > 1 ? "s" : ""}  $${companions * companionPrice}` : "",
     extraNights > 0 && !isVirtual ? ` + ${extraNights} extra night${extraNights > 1 ? "s" : ""}  $${extraNights * extraNightPrice}` : "",
-    discount > 0 && couponCode    ? `  ·  Coupon ${couponCode} −$${discount}` : "",
+    discount > 0 && couponCode ? `  ·  Coupon ${couponCode} −$${discount}` : "",
   ].join("");
 
   return (
@@ -164,7 +163,7 @@ function Step1({ fields, errors, set, setField, allConferences }) {
   );
 
   const handleRegionChange = (e) => {
-    setField("regionId",     e.target.value);
+    setField("regionId", e.target.value);
     setField("conferenceId", "");
   };
 
@@ -251,10 +250,10 @@ function Step1({ fields, errors, set, setField, allConferences }) {
 
 /* ── Step 2 — Speaker Type + Package + Extras ── */
 function Step2({ fields, errors, setField, allPackages, companionPrice, extraNightPrice }) {
-  const isVirtual   = fields.speakerType === "virtual";
-  const activePkgs  = allPackages.filter((p) => p.type === (isVirtual ? "virtual" : "physical"));
+  const isVirtual = fields.speakerType === "virtual";
+  const activePkgs = allPackages.filter((p) => p.type === (isVirtual ? "virtual" : "physical"));
   const selectedPkg = allPackages.find((p) => p.id === fields.packageId);
-  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
+  const total = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
 
   const switchType = (type) => { setField("speakerType", type); setField("packageId", ""); setField("extraNights", 0); };
 
@@ -265,7 +264,7 @@ function Step2({ fields, errors, setField, allPackages, companionPrice, extraNig
 
       <div className="rh-type-grid" role="radiogroup" aria-label="Participation type">
         {[{ type: "physical", icon: "🎤", label: "Physical Speaker", sub: "In-person at venue" },
-          { type: "virtual",  icon: "💻", label: "Virtual Speaker",  sub: "Present via Zoom / Airmeet" }
+        { type: "virtual", icon: "💻", label: "Virtual Speaker", sub: "Present via Zoom / Airmeet" }
         ].map(({ type, icon, label, sub }) => (
           <button key={type} type="button"
             className={`rh-type-btn${fields.speakerType === type ? ` active${type === "virtual" ? " virtual" : ""}` : ""}`}
@@ -308,7 +307,7 @@ function Step2({ fields, errors, setField, allPackages, companionPrice, extraNig
         <>
           <div className="rh-divider">Extras</div>
           {[{ icon: "👥", title: "Accompanying Person(s)", sub: `$${companionPrice} each`, key: "companions" },
-            { icon: "🌙", title: "Extra Night(s)",          sub: `$${extraNightPrice} each`, key: "extraNights" }
+          { icon: "🌙", title: "Extra Night(s)", sub: `$${extraNightPrice} each`, key: "extraNights" }
           ].map(({ icon, title, sub, key }) => (
             <div key={key} className="rh-extra">
               <div className="rh-extra__info">
@@ -337,10 +336,10 @@ function Step2({ fields, errors, setField, allPackages, companionPrice, extraNig
 
 /* ── Coupon Widget ── */
 function CouponWidget({ couponCode, discount, onApply, onRemove }) {
-  const [input,  setInput]  = useState(couponCode || "");
+  const [input, setInput] = useState(couponCode || "");
   const [status, setStatus] = useState(discount > 0 ? "applied" : "idle");
-  const [shake,  setShake]  = useState(false);
-  const [loading, setLoad]  = useState(false);
+  const [shake, setShake] = useState(false);
+  const [loading, setLoad] = useState(false);
 
   const handleApply = async () => {
     if (!input.trim()) return;
@@ -380,12 +379,12 @@ function CouponWidget({ couponCode, discount, onApply, onRemove }) {
 
 /* ── Step 3 — Review & Confirm ── */
 function Step3({ fields, allConferences, allPackages, companionPrice, extraNightPrice, onEdit, setField }) {
-  const conf        = allConferences.find((c) => String(c.id) === fields.conferenceId);
-  const pkg         = allPackages.find((p) => p.id === fields.packageId);
-  const isVirtual   = fields.speakerType === "virtual";
+  const conf = allConferences.find((c) => String(c.id) === fields.conferenceId);
+  const pkg = allPackages.find((p) => p.id === fields.packageId);
+  const isVirtual = fields.speakerType === "virtual";
   const regionLabel = REGIONS.find((r) => r.id === fields.regionId)?.label || "—";
-  const total       = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
-  const origTotal   = calculateTotal(fields.packageId, fields.companions, 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
+  const total = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
+  const origTotal = calculateTotal(fields.packageId, fields.companions, 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
 
   const Sec = ({ title, step, children }) => (
     <div className="rh-rev-sec">
@@ -409,19 +408,19 @@ function Step3({ fields, allConferences, allPackages, companionPrice, extraNight
       <Sec title="Personal Details" step={1}>
         <div className="rh-rev-grid">
           {[
-            ["Full Name",    `${fields.firstName} ${fields.lastName}`],
-            ["Email",        fields.email],
-            ["Phone",        `${fields.countryCode} ${fields.phone}`],
-            ["Country",      fields.country],
+            ["Full Name", `${fields.firstName} ${fields.lastName}`],
+            ["Email", fields.email],
+            ["Phone", `${fields.countryCode} ${fields.phone}`],
+            ["Country", fields.country],
             ...(fields.organization ? [["Organization", fields.organization]] : []),
-            ...(fields.jobTitle     ? [["Job Title",    fields.jobTitle]]     : []),
+            ...(fields.jobTitle ? [["Job Title", fields.jobTitle]] : []),
           ].map(([l, v]) => <Row key={l} label={l} value={v} />)}
         </div>
       </Sec>
 
       <Sec title="Conference" step={1}>
         <div className="rh-rev-grid">
-          <Row label="Region"     value={regionLabel} />
+          <Row label="Region" value={regionLabel} />
           <Row label="Conference" value={conf ? `${conf.title} · ${conf.location} · ${conf.date}` : "—"} full />
         </div>
       </Sec>
@@ -472,24 +471,24 @@ function Step3({ fields, allConferences, allPackages, companionPrice, extraNight
 
 /* ── Success Screen ── */
 function SuccessScreen({ fields, allConferences, allPackages, companionPrice, extraNightPrice, onReset }) {
-  const conf      = allConferences.find((c) => String(c.id) === fields.conferenceId);
-  const pkg       = allPackages.find((p) => p.id === fields.packageId);
+  const conf = allConferences.find((c) => String(c.id) === fields.conferenceId);
+  const pkg = allPackages.find((p) => p.id === fields.packageId);
   const isVirtual = fields.speakerType === "virtual";
-  const total     = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
+  const total = calculateTotal(fields.packageId, fields.companions, fields.discount || 0, fields.extraNights || 0, allPackages, companionPrice, extraNightPrice);
 
   const rows = [
-    ["Name",         `${fields.firstName} ${fields.lastName}`],
-    ["Email",        fields.email],
-    ["Phone",        `${fields.countryCode} ${fields.phone}`],
-    ["Region",       REGIONS.find((r) => r.id === fields.regionId)?.label || "—"],
-    ["Conference",   conf ? `${conf.title} · ${conf.location}` : "—"],
-    ["Date",         conf?.date || "—"],
-    ["Type",         fields.speakerType ? fields.speakerType.charAt(0).toUpperCase() + fields.speakerType.slice(1) : "—"],
-    ["Package",      pkg ? `${pkg.name} — $${pkg.price.toLocaleString()}` : "—"],
-    ["Companions",   isVirtual ? "N/A" : fields.companions > 0 ? `${fields.companions} person(s) (+$${fields.companions * companionPrice})` : "None"],
+    ["Name", `${fields.firstName} ${fields.lastName}`],
+    ["Email", fields.email],
+    ["Phone", `${fields.countryCode} ${fields.phone}`],
+    ["Region", REGIONS.find((r) => r.id === fields.regionId)?.label || "—"],
+    ["Conference", conf ? `${conf.title} · ${conf.location}` : "—"],
+    ["Date", conf?.date || "—"],
+    ["Type", fields.speakerType ? fields.speakerType.charAt(0).toUpperCase() + fields.speakerType.slice(1) : "—"],
+    ["Package", pkg ? `${pkg.name} — $${pkg.price.toLocaleString()}` : "—"],
+    ["Companions", isVirtual ? "N/A" : fields.companions > 0 ? `${fields.companions} person(s) (+$${fields.companions * companionPrice})` : "None"],
     ["Extra Nights", isVirtual ? "N/A" : (fields.extraNights || 0) > 0 ? `${fields.extraNights} night(s) (+$${fields.extraNights * extraNightPrice})` : "None"],
     ...(fields.discount > 0 ? [["Discount", `-$${fields.discount} (${fields.couponCode})`]] : []),
-    ["Total",        `$${total.toLocaleString()}`],
+    ["Total", `$${total.toLocaleString()}`],
   ];
 
   return (
@@ -558,26 +557,26 @@ function RegistrationForm({ onSuccess, onFail, allConferences, allPackages, comp
       if (selectedConf) {
         setFields((prev) => ({
           ...prev,
-          regionId:     selectedConf.region,
+          regionId: selectedConf.region,
           conferenceId: String(preselectedConferenceId),
         }));
       }
     }
   }, [preselectedConferenceId, allConferences]);
   const [errors, setErrors] = useState({});
-  const [step,   setStep]   = useState(1);
+  const [step, setStep] = useState(1);
   const [submitting, setSub] = useState(false);
 
-  const set      = (key) => (e) => setFields((p) => ({ ...p, [key]: e.target.value }));
+  const set = (key) => (e) => setFields((p) => ({ ...p, [key]: e.target.value }));
   const setField = (key, val) => setFields((p) => ({ ...p, [key]: val }));
-  const top      = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const top = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   const goNext = () => {
     const errs = step === 1 ? validateStep1(fields) : validateStep2(fields);
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({}); setStep((s) => s + 1); top();
   };
-  const goBack   = () => { setErrors({}); setStep((s) => s - 1); top(); };
+  const goBack = () => { setErrors({}); setStep((s) => s - 1); top(); };
   const goToStep = (n) => { setErrors({}); setStep(n); top(); };
 
   const handleSubmit = async () => {
@@ -609,8 +608,8 @@ function RegistrationForm({ onSuccess, onFail, allConferences, allPackages, comp
           {step < 3
             ? <button className="rh-submit-btn" onClick={goNext} type="button">Continue →</button>
             : <button className="rh-submit-btn" onClick={handleSubmit} disabled={submitting} type="button" aria-busy={submitting}>
-                {submitting ? <><span className="rh-spinner" aria-hidden="true" /> Submitting…</> : "Complete Registration →"}
-              </button>}
+              {submitting ? <><span className="rh-spinner" aria-hidden="true" /> Submitting…</> : "Complete Registration →"}
+            </button>}
         </div>
         <p className="rh-note">
           By registering you agree to our <a href="#" className="rh-note__link">Terms &amp; Conditions</a>. Your data will only be used for conference coordination.
@@ -624,13 +623,13 @@ function RegistrationForm({ onSuccess, onFail, allConferences, allPackages, comp
 export default function RegisterHome() {
   const location = useLocation();
   const preselectedConferenceId = location.state?.conferenceId || null;
-  const [status,  setStatus]           = useState("form");
-  const [submitted, setData]           = useState(null);
-  const [allConferences, setConfs]     = useState([]);
-  const [allPackages,    setPkgs]      = useState([]);
+  const [status, setStatus] = useState("form");
+  const [submitted, setData] = useState(null);
+  const [allConferences, setConfs] = useState([]);
+  const [allPackages, setPkgs] = useState([]);
   const [companionPrice, setCompPrice] = useState(199);
-  const [extraNightPrice, setNightP]   = useState(149);
-  const [loading, setLoading]          = useState(true);
+  const [extraNightPrice, setNightP] = useState(149);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([fetchAllConferences(), fetchAllPackages(), fetchCompanionPrice(), fetchExtraNightPrice()])
@@ -640,8 +639,8 @@ export default function RegisterHome() {
   }, []);
 
   const handleSuccess = (data) => { setData(data); setStatus("success"); window.scrollTo({ top: 0, behavior: "smooth" }); };
-  const handleFail    = ()     => { setStatus("fail"); window.scrollTo({ top: 0, behavior: "smooth" }); };
-  const handleReset   = ()     => { setData(null); setStatus("form"); };
+  const handleFail = () => { setStatus("fail"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const handleReset = () => { setData(null); setStatus("form"); };
 
   return (
     <div className="main-page rh-page">

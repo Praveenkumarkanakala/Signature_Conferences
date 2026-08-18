@@ -17,6 +17,7 @@ function normalizeRow(row) {
     date: row.date_text,
     fullDescription: row.full_description,
     slug: row.slug || row.id,
+    themes: Array.isArray(row.themes) ? row.themes : (typeof row.themes === 'string' ? row.themes.split(',').map(t => t.trim()) : [])
   };
 }
 

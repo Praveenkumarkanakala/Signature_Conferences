@@ -1,9 +1,11 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getConferenceByRegionAndSlug } from "../../globaldata/eventsglobaldata.jsx";
 import { NaNavbar } from "../NAHome/Nahome";
 import "./individual_eventpage.css";
 import Footer from "../../../Components/Footer/footer";
 import SEO from "../../../Components/SEO.jsx";
+import { supabase } from "../../../lib/supabase.jsx";
 
 const REGION = "north-america";
 const categoryLabels = { "women-leadership": "Women Leadership", wellness: "Wellness", "ai-stem": "AI & STEM", business: "Business" };
@@ -11,7 +13,56 @@ const categoryLabels = { "women-leadership": "Women Leadership", wellness: "Well
 export default function EventDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const conf = getConferenceByRegionAndSlug(REGION, slug);
+  const [conf, setConf] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadConference() {
+      const localConf = getConferenceByRegionAndSlug(REGION, slug);
+      if (localConf && localConf.id) {
+        setConf(localConf);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("conferences")
+          .select("*")
+          .eq("region", REGION)
+          .or(`slug.eq.${slug},id.eq.${slug}`)
+          .limit(1);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const row = data[0];
+          setConf({
+            ...row,
+            image: row.image_path,
+            date: row.date_text,
+            fullDescription: row.full_description,
+            slug: row.slug || row.id,
+            themes: Array.isArray(row.themes) ? row.themes : (typeof row.themes === 'string' ? row.themes.split(',').map(t => t.trim()) : [])
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching conference:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadConference();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="na-page" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#0d1728', color: '#fff' }}>
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
 
   if (!conf) return (
     <div className="na-page">

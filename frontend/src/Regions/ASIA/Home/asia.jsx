@@ -132,12 +132,38 @@ function StatItem({ stat, triggerKey }) {
 /* ─── NAVBAR ────────────────────────────────── */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const sectionLinks = { Home: "/asia", Events: "/asiaevents", Speakers: "/asiaspeakers", Gallery: "/asiagallery", About: "/aboutasgc", Contact: "/asiacontact" };
   const links = ["Home", "About", "Events", "Speakers", "Gallery", "Contact"];
   const normalizedPath = location.pathname.toLowerCase().replace(/\/+$/, "") || "/";
   const isAsiaHome = normalizedPath === "/asia";
+
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const closeMenu = () => setMenuOpen(false);
+
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 900 && menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [menuOpen]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [menuOpen]);
 
   useEffect(() => {
     document.documentElement.classList.add("as-route-active");
@@ -150,32 +176,51 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav className={`as-hp-navbar${!isAsiaHome ? " as-hp-navbar--solid" : ""}${scrolled ? " as-hp-navbar--scrolled" : ""}`}>
+    <>
+      {menuOpen && <div className="as-hp-navbar__overlay" onClick={closeMenu} />}
+      <nav className={`as-hp-navbar${!isAsiaHome ? " as-hp-navbar--solid" : ""}${scrolled ? " as-hp-navbar--scrolled" : ""}`}>
 
-      <div className="as-hp-navbar__logo" onClick={() => navigate("/")}>
-        <img
-          src={sgcLogo}
-          alt="SGC Logo"
-          className="as-hp-navbar__logo-img"
-        />
-        <div className="as-hp-navbar__logo-text">
-          <span className="as-hp-navbar__logo-region">ASIA</span>
-          <span className="as-hp-navbar__logo-name">Signature Global Conferences</span>
+        <div className="as-hp-navbar__logo" onClick={() => { navigate("/"); closeMenu(); }}>
+          <img
+            src={sgcLogo}
+            alt="SGC Logo"
+            className="as-hp-navbar__logo-img"
+          />
+          <div className="as-hp-navbar__logo-text">
+            <span className="as-hp-navbar__logo-region">ASIA</span>
+            <span className="as-hp-navbar__logo-name">Signature Global Conferences</span>
+          </div>
         </div>
-      </div>
 
-      <ul className="as-hp-navbar__links">
-        {links.map((l) => (
-          <li key={l}>
-            <Link to={sectionLinks[l]}>{l}</Link>
+        <ul className={`as-hp-navbar__links ${menuOpen ? "open" : ""}`}>
+          {links.map((l) => (
+            <li key={l}>
+              <Link to={sectionLinks[l]} onClick={closeMenu}>{l}</Link>
+            </li>
+          ))}
+          <li className="as-hp-navbar__cta-mobile">
+            <Link to="/asiaregsiter" onClick={closeMenu}>Register Now</Link>
           </li>
-        ))}
-      </ul>
+        </ul>
 
-      <button className="as-hp-navbar__cta" onClick={() => navigate("/asiaregsiter")}>
-        Register Now
-      </button>
-    </nav>
+        <div className="as-hp-navbar__actions">
+          <button className="as-hp-navbar__cta" onClick={() => { navigate("/asiaregsiter"); closeMenu(); }}>
+            Register Now
+          </button>
+          
+          <button
+            className={`as-hp-navbar__hamburger ${menuOpen ? "open" : ""}`}
+            onClick={toggleMenu}
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+      </nav>
+    </>
   );
 }
 

@@ -13,6 +13,8 @@ const Home = lazy(() => import("./Pages/Home/homepage"));
 const ContactPage = lazy(() => import("./Pages/Contact/contact"));
 const Aboutpage = lazy(() => import("./Pages/About/about"));
 const Register = lazy(() => import("./Pages/Register/register"));
+const RegisterSuccess = lazy(() => import("./Pages/Register/RegisterSuccess"));
+const RegisterCancel = lazy(() => import("./Pages/Register/RegisterCancel"));
 const PrivacyPolicy = lazy(() => import("./Pages/Policy/policy"));
 const Termsandconditions = lazy(() => import("./Pages/Termsandconditions/terms"));
 const FAQ = lazy(() => import("./Components/FAQ/faq"));
@@ -94,17 +96,11 @@ function LayoutWrapper({ children }) {
     }
   }, [location.pathname]);
   
-  const hideLayoutPaths = [
-    "/usa", "/usa-events", "/usa-speakers", "/usa-gallery", "/usa-about", "/usa-contact", "/usa-register", "/usa-events/:slug",
-     "/europe", "/europe-gallery", "/europe-about","/europe-register", "/europe-contact","/europe-speakers" , "/europe-events", "/europe-events/:slug",
-    "/asia", "/asiaregsiter", "/aboutasgc","/asiacontact", "/asiaevents","/asiaevents/:slug" ,"/asiagallery", "/asiaspeakers",
-    "/northamerica","/na-about", "/na-events", "/na-events/:slug", "/na-contact", "/na-gallery", "/na-register", "/na-speakers",  
-
-  ];
+  const regionalPrefixes = ['/usa', '/europe', '/asia', '/aboutasgc', '/northamerica', '/na-'];
   
-const shouldHideLayout = hideLayoutPaths.some(path => 
-  matchPath(path, location.pathname)
-);
+  const shouldHideLayout = regionalPrefixes.some(prefix => 
+    location.pathname.startsWith(prefix)
+  );
 
   return (
     <>
@@ -128,6 +124,8 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/about" element={<Aboutpage />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/register/success" element={<RegisterSuccess />} />
+            <Route path="/register/cancel" element={<RegisterCancel />} />
             <Route path="/policy" element={<PrivacyPolicy />} />
             <Route path="/terms&conditions" element={<Termsandconditions />} />
             <Route path="/faq" element={<FAQ />} />

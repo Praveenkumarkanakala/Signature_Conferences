@@ -1,4 +1,4 @@
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import nodemailer from "npm:nodemailer@^6.9.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin":  "*",
@@ -14,7 +14,7 @@ Deno.serve(async (req) => {
     let reg = registration_data;
 
     if (!reg && registration_id) {
-      const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+      const { createClient } = await import("npm:@supabase/supabase-js@2");
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL")!,
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
@@ -24,39 +24,38 @@ Deno.serve(async (req) => {
         .select("*")
         .eq("id", registration_id)
         .single();
-      if (error || !data) throw new Error("Registration not found");
+      if (error || !data) {
+        console.error("Failed to fetch registration for email:", error || "Not found");
+        throw new Error("Registration not found");
+      }
       reg = data;
     }
 
     if (!reg) throw new Error("No registration data provided");
 
-    const client = new SMTPClient({
-      connection: {
-        hostname: "smtp.hostinger.com",
-        port: 465,
-        tls: true,
-        auth: {
-          username: Deno.env.get("GMAIL_USER")!,
-          password: Deno.env.get("GMAIL_PASSWORD")!,
-        },
+    const transporter = nodemailer.createTransport({
+      host: "smtp.hostinger.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: Deno.env.get("GMAIL_USER")!,
+        pass: Deno.env.get("GMAIL_PASSWORD")!,
       },
     });
 
-    await client.send({
+    await transporter.sendMail({
       from:    Deno.env.get("GMAIL_USER")!,
       to:      reg.email,
       subject: "Registration Confirmed — Signature Global Conferences",
       html:    userEmailTemplate(reg),
     });
 
-    await client.send({
+    await transporter.sendMail({
       from:    Deno.env.get("GMAIL_USER")!,
       to:      Deno.env.get("ADMIN_EMAIL")!,
       subject: `New Registration — ${reg.first_name} ${reg.last_name}`,
       html:    adminEmailTemplate(reg),
     });
-
-    await client.close();
 
     return new Response(
       JSON.stringify({ success: true }),

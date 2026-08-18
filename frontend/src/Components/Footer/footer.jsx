@@ -115,7 +115,7 @@ const NAV_LINKS = [
 ];
 
 const ADDRESSES = [
-  { title: "Head Office", lines: ["Signature United Global Conferences", "8TH Green, Dover DE", "United States 19901"] },
+  { title: "Head Office", lines: ["Signature United Global Conferences", "Parklane West, Menands", "Albany, New York 12204, US"] },
   { title: "Regional",    lines: ["BITS Pilani, Dubai Campus", "Dubai International Academic City", "P.O. Box 345055, Dubai, UAE"] },
 ];
 

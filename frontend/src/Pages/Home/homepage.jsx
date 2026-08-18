@@ -575,6 +575,19 @@ export default function HomePage() {
     }
   }, [explorerQueryData]);
 
+  /* ── Load organising committee members from Supabase ── */
+  const { data: ocmData, isLoading: ocmLoading } = useQuery({
+    queryKey: ['organisingCommittee'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("organising_committee")
+        .select("*")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
   const handleRegionClick = (id) => { setActiveId(id); setActiveCity(null); };
 
   const activeRegion = explorerData.find(r => r.region_id === activeId);
@@ -606,7 +619,7 @@ export default function HomePage() {
     );
     root.querySelectorAll(".main-observe").forEach(el => obs.observe(el));
     return () => obs.disconnect();
-  }, []);
+  }, [explorerQueryData, ocmData]);
 
   const scrollToRegions = () => regionsSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   const goToAbout       = () => navigate("/about");
@@ -890,6 +903,45 @@ export default function HomePage() {
                   );
                 })}
               </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ══ ORGANISING COMMITTEE MEMBERS ══ */}
+      <section className="main-ocm-section">
+        <div className="main-container">
+          <div className="main-section-head main-observe">
+            <span className="main-eyebrow-row" style={{ justifyContent: "center" }}>
+              <span className="main-eline" /> Leadership <span className="main-eline" />
+            </span>
+            <h2 className="main-sec-title">Organising <span className="main-outline-gold">Committee</span> Members</h2>
+            <p className="main-sec-sub">Visionary leaders steering our conferences toward global impact.</p>
+          </div>
+
+          {ocmLoading ? (
+            <div style={{ textTransform: "uppercase", letterSpacing: "2px", color: "var(--mute)", textAlign: "center", padding: "2rem" }}>
+              Loading committee members...
+            </div>
+          ) : (
+            <div className="main-ocm-grid">
+              {(ocmData || []).map((member, idx) => (
+                <div 
+                  key={member.id || idx} 
+                  className="main-ocm-card main-observe" 
+                  style={{ "--i": idx }}
+                >
+                  <div className="main-ocm-img-container">
+                    <img src={member.image} alt={member.name} className="main-ocm-img-complete" loading="lazy" />
+                  </div>
+                  <div className="main-ocm-info">
+                    <h3 className="main-ocm-name">{member.name}</h3>
+                    <div className="main-ocm-designation-wrapper">
+                      <p className="main-ocm-designation">{member.designation}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
