@@ -82,10 +82,8 @@ function LayoutWrapper({ children }) {
       isLight = true;
     }
 
-    // Update body background color dynamically to blend viewport scrollbar track
     document.body.style.backgroundColor = bgColor;
 
-    // Set scrollbar adaptive colors on root html
     const root = document.documentElement;
     if (isLight) {
       root.style.setProperty("--scrollbar-thumb-color", "rgba(0, 0, 0, 0.15)");

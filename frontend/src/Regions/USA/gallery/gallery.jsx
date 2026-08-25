@@ -1,214 +1,97 @@
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { Navbar} from "../Landingpage/homepage.jsx";
-import { useNavigate } from "react-router-dom";
 import Footer from "../../../Components/Footer/footer";
-import { arcPhotos, bentoItems } from "./gallerydata.jsx";
+import { arcPhotos } from "./gallerydata.jsx";
 import "./gallery.css";
 import "../Landingpage/homepage.css";
-import { TempGallery } from "./TempGallery"; /* delete this later */
 
 
-const VISIBLE_SLOTS = 8;
-const ARC_SPAN_DEG = 160; 
-const SPEED_DEG_PER_S = 6;
-const FADE_DEG = 16;
+import usagallery from "../Images/usagallery.jpeg";
+import usagallery0 from "../Images/usagallery8.jpeg";
+import usagallery1 from "../Images/usagallery2.jpeg";
+import usagallery2 from "../Images/usagallery3.jpeg";
+import usagallery3 from "../Images/usagallery12.jpeg";
+import usagallery4 from "../Images/usagallery5.jpeg";
+import usagallery5 from "../Images/usagallery6.jpeg";
+import usagallery6 from "../Images/usagallery7.jpeg";
+import usagallery7 from "../Images/usagallery1.jpeg";
+import usagallery8 from "../Images/usagallery9.jpeg";
+import usagallery9 from "../Images/usagallery10.jpeg";
+// import usagallery10 from "../Images/usagallery11.jpeg";
 
-function GalleryArc() {
-  const stageRef = useRef(null);
-  const rafRef = useRef(null);
+import newimgusa from "../Images/galleryusa.jpeg";
+import newimgusa1 from "../Images/galleryusa1.jpeg";
+import newimgusa2 from "../Images/galleryusa2.jpeg";
+import newimgusa3 from "../Images/galleryusa3.jpeg";
+import newimgusa4 from "../Images/galleryusa4.jpeg";
+import newimgusa5 from "../Images/galleryusa5.jpeg";
 
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (!stage) return;
 
-    const vw = window.innerWidth;
-    const radius = Math.min(Math.max(vw * 0.54, 300), 540);
-    const cardW = Math.min(Math.max(vw * 0.1, 88), 130);
-    const cardH = cardW * 1.38;
 
-    const belowAmount = radius * 0.18;
-    const stageHeight = radius - belowAmount - cardH * 0.3;
-
-    const cx = vw / 2;
-    const cy = stageHeight + belowAmount;
-
-    stage.style.height = `${stageHeight}px`;
-
-    const arcMid = 90;
-    const arcStart = arcMid - ARC_SPAN_DEG / 2;
-    const arcEnd = arcMid + ARC_SPAN_DEG / 2;
-    const slotStep = ARC_SPAN_DEG / (VISIBLE_SLOTS - 1);
-
-    /* ── Build cards ── */
-    stage.innerHTML = "";
-    const cards = [];
-    const totalImages = arcPhotos.length;
-
-    for (let i = 0; i < VISIBLE_SLOTS; i++) {
-      const el = document.createElement("div");
-      el.className = "usa-gl-arc__card";
-      el.style.width = `${cardW}px`;
-      el.style.height = `${cardH}px`;
-
-      const img = document.createElement("img");
-      img.src = arcPhotos[i % totalImages].url;
-      img.alt = arcPhotos[i % totalImages].alt;
-      img.loading = "lazy";
-
-      const sheen = document.createElement("div");
-      sheen.className = "usa-gl-arc__card-sheen";
-
-      el.appendChild(img);
-      el.appendChild(sheen);
-      stage.appendChild(el);
-
-      cards.push({
-        el,
-        img,
-        angle: arcStart + i * slotStep,
-        imgIndex: i % totalImages,
-      });
-    }
-
-    let lastTime = null;
-    let offset = 0;
-
-    function frame(ts) {
-      if (lastTime === null) lastTime = ts;
-      const dt = (ts - lastTime) / 1000;
-      lastTime = ts;
-      offset += SPEED_DEG_PER_S * dt;
-
-      for (const card of cards) {
-        let angle = card.angle + offset;
-
-        if (angle > arcEnd + slotStep * 0.5) {
-          card.angle -= ARC_SPAN_DEG + slotStep;
-          angle = card.angle + offset;
-          card.imgIndex = (card.imgIndex + VISIBLE_SLOTS) % totalImages;
-          card.img.src = arcPhotos[card.imgIndex].url;
-          card.img.alt = arcPhotos[card.imgIndex].alt;
-        }
-
-        const rad = (angle * Math.PI) / 180;
-
-        const xPos = cx + radius * Math.cos(rad) - cardW / 2;
-        const yPos = cy - radius * Math.sin(rad) - cardH / 2;
-
-        const rotateDeg = -(90 - angle);
-
-        const edgeDist = Math.min(angle - arcStart, arcEnd - angle);
-        const opacity =
-          edgeDist < FADE_DEG ? Math.max(0, edgeDist / FADE_DEG) : 1;
-
-        const distFromMid = Math.abs(angle - arcMid);
-        const scale = 1 - (distFromMid / (ARC_SPAN_DEG / 2)) * 0.25;
-
-        card.el.style.transform = `translate(${xPos}px,${yPos}px) rotate(${rotateDeg}deg) scale(${scale})`;
-        card.el.style.opacity = opacity;
-        card.el.style.zIndex = Math.round(scale * 10);
-      }
-
-      rafRef.current = requestAnimationFrame(frame);
-    }
-
-    rafRef.current = requestAnimationFrame(frame);
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  return <div className="usa-gl-arc-stage" ref={stageRef} aria-hidden="true" />;
-}
+const HERO_STATS = [
+  { value: "6", label: "Editions" },
+  { value: "40+", label: "Countries" },
+  { value: "12k", label: "Delegates" },
+];
 
 /* ─── HERO ─────────────────────────────────────────────────────────── */
 function GalleryHero() {
+  const featured = arcPhotos.slice(0, 3);
+
   return (
     <section className="usa-gl-hero">
-      <GalleryArc />
-      <div className="usa-gl-hero__content">
-        <span className="usa-gl-hero__badge">Gallery 2026</span>
-        <h1 className="usa-gl-hero__title"> Moments That <br /> <span className="usa-gl-hero__title-em">Move The World</span> </h1>
-        <p className="usa-gl-hero__sub">
-          An intimate look at world-class conferences, inspiring panels, and the
-          connections that spark lasting change.
-        </p>
-        <button className="usa-gl-hero__cta">
-          <span>Explore Gallery</span>
-          <svg
-            className="usa-gl-hero__cta-arrow"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-      </div>
-    </section>
-  );
-}
-
-/* ─── BENTO SECTION ─────────────────────────────────────────────────── */
-function BentoGrid() {
-  return (
-    <section className="usa-gl-bento-section">
-      <div className="usa-gl-bento-section__inner">
-        <div className="usa-gl-bento-header">
-          <span className="usa-gl-bento-header__tag">Highlights</span>
-          <h2 className="usa-gl-bento-header__title">  Everything Your  <br /> Conference Needs </h2>
-          <p className="usa-gl-bento-header__sub">
-            From electrifying keynotes to intimate workshops — captured in every
-            frame.
+      <div className="usa-gl-hero__inner">
+        <div className="usa-gl-hero__content">
+          <span className="usa-gl-hero__badge">Gallery 2026</span>
+          <h1 className="usa-gl-hero__title">
+            Moments That <br />
+            <span className="usa-gl-hero__title-em">Move The World</span>
+          </h1>
+          <p className="usa-gl-hero__sub">
+            An intimate look at world-class conferences, inspiring panels, and the
+            connections that spark lasting change.
           </p>
+
+          <div className="usa-gl-hero__actions">
+            <button className="usa-gl-hero__cta">
+              <span>Explore Gallery</span>
+              <svg
+                className="usa-gl-hero__cta-arrow"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            <div className="usa-gl-hero__stats">
+              {HERO_STATS.map((stat) => (
+                <div className="usa-gl-hero__stat" key={stat.label}>
+                  <strong>{stat.value}</strong>
+                  <span>{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="usa-gl-bento">
-          {bentoItems.map((item) =>
-            item.type === "photo" ? (
-              <PhotoCard key={item.id} item={item} />
-            ) : (
-              <TextCard key={item.id} item={item} />
-            ),
-          )}
+
+        <div className="usa-gl-hero__collage" aria-hidden="true">
+          {featured.map((photo, i) => (
+            <div className={`usa-gl-hero__frame usa-gl-hero__frame--${i + 1}`} key={photo.url}>
+              <img src={photo.url} alt={photo.alt} loading={i === 0 ? "eager" : "lazy"} />
+            </div>
+          ))}
+          {/* <span className="usa-gl-hero__tag">Dubai · 2025</span> */}
         </div>
       </div>
     </section>
-  );
-}
-
-function PhotoCard({ item }) {
-  return (
-    <div
-      className={`usa-gl-bento__card usa-gl-bento__card--photo usa-gl-bento__card--${item.span}`}
-    >
-      <img src={item.url} alt={item.alt} loading="lazy" />
-      <div className="usa-gl-bento__photo-overlay">
-        <h3 className="usa-gl-bento__photo-title">{item.title}</h3>
-        <p className="usa-gl-bento__photo-sub">{item.subtitle}</p>
-      </div>
-    </div>
-  );
-}
-
-function TextCard({ item }) {
-  return (
-    <div
-      className={`usa-gl-bento__card usa-gl-bento__card--text usa-gl-bento__card--${item.span}`}
-      style={{ "--card-accent": item.accent }}
-    >
-      <div className="usa-gl-bento__text-body">
-        <div className="usa-gl-bento__text-dot" />
-        <h3 className="usa-gl-bento__text-title">{item.title}</h3>
-        <p className="usa-gl-bento__text-sub">{item.subtitle}</p>
-      </div>
-      <div className="usa-gl-bento__text-decor" />
-    </div>
   );
 }
 
@@ -218,57 +101,56 @@ function TextCard({ item }) {
 const slides = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1100&q=85",
+    src: newimgusa,
     eyebrow: "Keynote Session",
-    heading: ["World Leaders,", "One Stage"],
-    meta: "March 14–16, 2025  ·  Dubai World Trade Centre",
-    description: "Back-to-back keynotes from the world's most visionary thinkers — reshaping industries and inspiring the next generation of global leaders.",
+    heading: ["Voices That Shaped,", "Our Stage"],
+    // meta: "March 14–16, 2025  ·  Dubai World Trade Centre",
+    description: "Meet the remarkable leaders, visionaries, and changemakers who have shared their ideas, experiences, and perspectives with our global community.",
     anim: "zoom",
     accent: "#d4a55a",
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=1100&q=85",
+    src: newimgusa1,
     eyebrow: "Opening Address",
-    heading: ["A Vision", "for Tomorrow"],
-    meta: "March 14, 2025  ·  Main Hall  ·  09:00 AM",
-    description: "The conference opens with a powerful address setting the tone for three days of breakthrough conversations and transformative ideas.",
+    heading: ["Where Great Minds ", "Take the Stage"],
+    description: "A collection of inspiring voices from diverse industries and backgrounds, bringing fresh perspectives, meaningful conversations, and ideas that create impact.",
     anim: "slide-left",
     accent: "#b8845a",
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=1100&q=85",
+    src: newimgusa2,
     eyebrow: "Networking & Dining",
-    heading: ["Ideas Meet", "Over Dinner"],
+    heading: ["The Faces Behind", "the Inspiration"],
     meta: "Each Evening  ·  Sky Lounge, Level 12",
-    description: "Curated dining experiences designed to spark conversations between delegates from 60+ countries — where the real deals happen.",
+    description: "Celebrating the exceptional speakers who have contributed their knowledge, stories, and expertise to our conferences and inspired audiences across borders.",
     anim: "slide-right",
     accent: "#c0724a",
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1100&q=85",
+    src: newimgusa3,
     eyebrow: "The Venue",
-    heading: ["Architecture", "of Ambition"],
+    heading: ["Ideas That Echo", "Beyond the Stage"],
     meta: "Dubai World Trade Centre  ·  Hall 7",
-    description: "An iconic venue purpose-built for the world's most important conversations — 12,000 sq ft of immersive, state-of-the-art conference space.",
+    description: "Explore the voices of leaders, innovators, entrepreneurs, and changemakers who have sparked conversations and encouraged new ways of thinking.",
     anim: "slide-top",
     accent: "#d4a55a",
   },
   {
     id: 5,
-    src: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1100&q=85",
+    src: newimgusa4,
     eyebrow: "Panel Discussion",
-    heading: ["Three Minds.", "One Truth."],
+    heading: ["A Legacy of", "Inspiring Voices"],
     meta: "March 15, 2025  ·  Panel Room B  ·  14:00 PM",
-    description: "Industry pioneers clash and collaborate on stage — challenging assumptions and rewriting the rules of modern leadership and innovation.",
+    description: "From visionary leaders to influential changemakers, our past speakers have helped build a community driven by knowledge, connection, empowerment, and meaningful impact.",
     anim: "slide-bottom",
     accent: "#b8845a",
   },
   {
     id: 6,
-    src: "https://images.unsplash.com/photo-1560523160-754a9e25c68f?auto=format&fit=crop&w=1100&q=85",
+    src: newimgusa5,
     eyebrow: "Live Audience",
     heading: ["5,000 Minds.", "One Movement."],
     meta: "March 14–16, 2025  ·  All Sessions",
@@ -315,9 +197,6 @@ function HeroSection() {
     if (i === current) return;
     advance(i);
   };
-
-  // const scrollDown = () =>
-  //   window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
 
   const slide = slides[current];
 
@@ -396,265 +275,21 @@ function HeroSection() {
   );
 }
 
-/*==================================================gallery grid=========================*/
-
-const CARDS = [
-  {
-    id: 1,
-    type: "session",
-    title: "Future of Global Trade",
-    subtitle: "Keynote Session",
-    date: "Oct 14, 2025",
-    location: "Hall A — Main Stage",
-    tag: "Keynote",
-    color: "#1a2a4a",
-    accent: "#e8a020",
-    icon: "🌐",
-  },
-  {
-    id: 2,
-    type: "highlight",
-    title: "Singapore Summit",
-    subtitle: "Past Conference",
-    date: "March 2024",
-    location: "Marina Bay Sands, SG",
-    tag: "2024",
-    color: "#0f3d38",
-    accent: "#3ecfb2",
-    icon: "🏙️",
-  },
-  {
-    id: 3,
-    type: "speakers",
-    title: "All-Star Speaker Panel",
-    subtitle: "Meet Our Experts",
-    date: "Oct 15, 2025",
-    location: "20+ Industry Leaders",
-    tag: "Speakers",
-    color: "#2e1a4a",
-    accent: "#b07efc",
-    icon: "🎤",
-  },
-  {
-    id: 4,
-    type: "session",
-    title: "Sustainable Business Models",
-    subtitle: "Workshop Session",
-    date: "Oct 14, 2025",
-    location: "Hall B — Workshop Bay",
-    tag: "Workshop",
-    color: "#1a3a20",
-    accent: "#5dbe72",
-    icon: "♻️",
-  },
-  {
-    id: 5,
-    type: "highlight",
-    title: "Dubai Conclave",
-    subtitle: "Past Conference",
-    date: "November 2023",
-    location: "World Trade Centre, UAE",
-    tag: "2023",
-    color: "#3a2010",
-    accent: "#f0852a",
-    icon: "🏛️",
-  },
-  {
-    id: 6,
-    type: "session",
-    title: "AI in Enterprise Strategy",
-    subtitle: "Panel Discussion",
-    date: "Oct 15, 2025",
-    location: "Innovation Theatre",
-    tag: "Panel",
-    color: "#1a1a3a",
-    accent: "#5ab4f5",
-    icon: "🤖",
-  },
-  {
-    id: 7,
-    type: "highlight",
-    title: "London Forum 2022",
-    subtitle: "Past Conference",
-    date: "September 2022",
-    location: "ExCeL London, UK",
-    tag: "2022",
-    color: "#3a1a2a",
-    accent: "#f07aaa",
-    icon: "🎡",
-  },
-];
-
-const POSITIONS = [
-  { x: -420, z: -180, rotY: 38, scale: 0.72, opacity: 0.55, zIndex: 1 },
-  { x: -230, z: -80, rotY: 22, scale: 0.84, opacity: 0.75, zIndex: 2 },
-  { x: 0, z: 0, rotY: 0, scale: 1.0, opacity: 1.0, zIndex: 5 },
-  { x: 230, z: -80, rotY: -22, scale: 0.84, opacity: 0.75, zIndex: 2 },
-  { x: 420, z: -180, rotY: -38, scale: 0.72, opacity: 0.55, zIndex: 1 },
-];
-
-function GalleryCarousel() {
-  const navigate = useNavigate();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const intervalRef = useRef(null);
-  const total = CARDS.length;
-
-  const goTo = useCallback(
-    (index) => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-      setActiveIndex((index + total) % total);
-      setTimeout(() => setIsAnimating(false), 600);
-    },
-    [isAnimating, total],
-  );
-
-  const next = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
-  const prev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(next, 2500);
-    return () => clearInterval(intervalRef.current);
-  }, [next]);
-
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "ArrowRight") next();
-      if (e.key === "ArrowLeft") prev();
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [next, prev]);
-
-  const getVisibleCards = () => {
-    const result = [];
-    for (let i = -2; i <= 2; i++) {
-      const cardIndex = (activeIndex + i + total) % total;
-      result.push({ card: CARDS[cardIndex], posIndex: i + 2 });
-    }
-    return result;
-  };
-
-  return (
-    <section className="usa-sgc-gallery">
-      <div className="usa-sgc-gallery__hero">
-        <div className="usa-sgc-gallery__headline">
-          <span className="usa-sgc-gallery__eyebrow">Our Signature Events</span>
-          <h2 className="usa-sgc-gallery__title"> Where Leaders <br /> Shape the World </h2>
-          <p className="usa-sgc-gallery__subtitle">
-            USA Signature Global Conferences brings together the world's most
-            influential minds — across industries, borders, and disciplines —
-            for transformative conversations that matter.
-          </p>
-          <button className="usa-sgc-gallery__cta"  onClick={() => navigate("/usa-events")}>Explore All Conferences</button>
-        </div>
-
-        <div className="usa-sgc-gallery__stage-wrap">
-          <div className="usa-sgc-gallery__stage">
-            {getVisibleCards().map(({ card, posIndex }) => {
-              const pos = POSITIONS[posIndex];
-              return (
-                <div
-                  key={card.id}
-                  className="usa-sgc-card"
-                  style={{
-                    "--card-bg": card.color,
-                    "--card-accent": card.accent,
-                    transform: `
-                      translateX(${pos.x}px)
-                      translateZ(${pos.z}px)
-                      rotateY(${pos.rotY}deg)
-                      scale(${pos.scale})
-                    `,
-                    opacity: pos.opacity,
-                    zIndex: pos.zIndex,
-                  }}
-                  onClick={() =>
-                    posIndex !== 2 && goTo(activeIndex + (posIndex - 2))
-                  }
-                >
-                  <div className="usa-sgc-card__inner">
-                    <div className="usa-sgc-card__top">
-                      <span className="usa-sgc-card__tag">{card.tag}</span>
-                      <span className="usa-sgc-card__icon">{card.icon}</span>
-                    </div>
-                    <div className="usa-sgc-card__body">
-                      <p className="usa-sgc-card__type">{card.subtitle}</p>
-                      <h3 className="usa-sgc-card__name">{card.title}</h3>
-                    </div>
-                    <div className="usa-sgc-card__footer">
-                      <div className="usa-sgc-card__meta">
-                        <span className="usa-sgc-card__date">{card.date}</span>
-                        <span className="usa-sgc-card__location">
-                          {card.location}
-                        </span>
-                      </div>
-                      <div className="usa-sgc-card__line" />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="usa-sgc-gallery__nav">
-            <button
-              className="usa-sgc-nav-btn"
-              onClick={() => {
-                clearInterval(intervalRef.current);
-                prev();
-              }}
-              aria-label="Previous"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M10 3L5 8L10 13"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <button
-              className="usa-sgc-nav-btn usa-sgc-nav-btn--next"
-              onClick={() => {
-                clearInterval(intervalRef.current);
-                next();
-              }}
-              aria-label="Next"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M6 3L11 8L6 13"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ============================= REGULAR GALLERY ========================================== */
 
 const IMAGES = [
-  { id: 1, src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=80", alt: "Conference main stage with large audience", span: "wide", },
-  { id: 2,  src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&q=80",  alt: "Speaker presenting on stage", span: "tall",},
-  { id: 3, src: "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=600&q=80", alt: "Panel discussion on stage", span: "normal",},
-  { id: 4, src: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=600&q=80", alt: "Networking event crowd", span: "normal", },
-  { id: 5, src: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&q=80", alt: "Round table business meeting", span: "wide", },
-  { id: 6, src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80", alt: "Speaker addressing packed hall", span: "normal", },
-  { id: 7, src: "https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=600&q=80", alt: "Award ceremony on stage", span: "tall", },
-  { id: 8, src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&q=80", alt: "Conference registration and entry", span: "normal", },
-  { id: 9, src: "https://images.unsplash.com/photo-1464863979621-258859e62245?w=900&q=80", alt: "Keynote speaker full hall", span: "wide", },
-  { id: 10, src: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&q=80", alt: "Workshop session delegates", span: "normal", },
+  { id: 1, src: usagallery, alt: "Conference main stage with large audience", span: "wide", },
+  { id: 2,  src: usagallery0,  alt: "Speaker presenting on stage", span: "tall",},
+  { id: 3, src: usagallery1, alt: "Panel discussion on stage", span: "normal",},
+  { id: 4, src: usagallery2, alt: "Networking event crowd", span: "normal", },
+  { id: 5, src: usagallery3, alt: "Round table business meeting", span: "wide", },
+  { id: 6, src: usagallery4, alt: "Speaker addressing packed hall", span: "normal", },
+  { id: 7, src: usagallery5, alt: "Award ceremony on stage", span: "tall", },
+  { id: 8, src: usagallery6, alt: "Conference registration and entry", span: "normal", },
+  { id: 9, src: usagallery7, alt: "Keynote speaker full hall", span: "wide", },
+  { id: 10, src: usagallery8, alt: "Workshop session delegates", span: "normal", },
+  { id: 11, src: usagallery9, alt: "Panel discussion with audience", span: "normal", },
+  // { id: 12, src: usagallery10, alt: "Networking event with drinks", span: "tall", },
 ];
 
 function RegularGallery() {
@@ -688,196 +323,16 @@ function RegularGallery() {
   );
 }
 
-/*====================== videp section =======================================*/
-function VideoSection() {
-  const sectionRef = useRef(null);
-  const iframeRef = useRef(null);
-  const [hasPlayed, setHasPlayed] = useState(false);
-  const [showReplay, setShowReplay] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef(null);
-  const observerRef = useRef(null);
-
-  const VIDEO_ID = "UF8uR6Z6KLc";
-
-  useEffect(() => {
-    if (!window.YT) {
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(tag);
-    }
-
-    const initPlayer = () => {
-      playerRef.current = new window.YT.Player("yt-player", {
-        videoId: VIDEO_ID,
-        playerVars: {
-          autoplay: 0,
-          controls: 1,
-          rel: 0,
-          modestbranding: 1,
-          playsinline: 1,
-        },
-        events: {
-          onStateChange: (event) => {
-            if (event.data === 0) {
-              setIsPlaying(false);
-              setShowReplay(true);
-            }
-            if (event.data === 1) {
-              setIsPlaying(true);
-              setShowReplay(false);
-            }
-            if (event.data === 2) {
-              setIsPlaying(false);
-            }
-          },
-        },
-      });
-    };
-
-    if (window.YT && window.YT.Player) {
-      initPlayer();
-    } else {
-      window.onYouTubeIframeAPIReady = initPlayer;
-    }
-
-    return () => {
-      if (playerRef.current && playerRef.current.destroy) {
-        playerRef.current.destroy();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasPlayed) {
-            setTimeout(() => {
-              if (playerRef.current && playerRef.current.playVideo) {
-                playerRef.current.playVideo();
-                setHasPlayed(true);
-                setIsPlaying(true);
-              }
-            }, 600);
-            observerRef.current.disconnect();
-          }
-        });
-      },
-      { threshold: 0.5 },
-    );
-
-    if (sectionRef.current) {
-      observerRef.current.observe(sectionRef.current);
-    }
-
-    return () => observerRef.current && observerRef.current.disconnect();
-  }, [hasPlayed]);
-
-  const handleReplay = () => {
-    if (playerRef.current) {
-      playerRef.current.seekTo(0);
-      playerRef.current.playVideo();
-      setShowReplay(false);
-      setIsPlaying(true);
-    }
-  };
-
-  return (
-    <section className="usa-vs-section" ref={sectionRef}>
-      {/* Header */}
-      <div className="usa-vs-header">
-        <span className="usa-vs-eyebrow">In Focus</span>
-        <h2 className="usa-vs-title">  Voices That <em>Shape the Future</em> </h2>
-        <p className="usa-vs-subtitle">
-          Relive the energy, insight, and impact from our most powerful
-          conference sessions.
-        </p>
-      </div>
-
-      <div className="usa-vs-stage">
-        <span className="usa-vs-ghost usa-vs-ghost--tl">inspiring</span>
-        <span className="usa-vs-ghost usa-vs-ghost--br">leaders</span>
-
-        <div className="usa-vs-pill usa-vs-pill--left">
-          <span>S</span>
-          <span>G</span>
-          <span>C</span>
-        </div>
-
-        <div className="usa-vs-pill usa-vs-pill--right">
-          <span>2</span>
-          <span>0</span>
-          <span>2</span>
-          <span>5</span>
-        </div>
-
-        <div className="usa-vs-blob usa-vs-blob--tl" />
-        <div className="usa-vs-blob usa-vs-blob--br" />
-
-        <div className={`usa-vs-card ${isPlaying ? "usa-vs-card--playing" : ""}`}>
-          <div className="usa-vs-card__inner">
-            <div id="yt-player" ref={iframeRef} />
-
-            {showReplay && (
-              <div className="usa-vs-replay-overlay">
-                <button className="usa-vs-replay-btn" onClick={handleReplay}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M1 4v6h6M23 20v-6h-6"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  Watch Again
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Platform strip */}
-      <div className="usa-vs-platforms">
-        <span className="usa-vs-platforms__label">Also streaming on:</span>
-        <div className="usa-vs-platforms__list">
-          {[ "YouTube", "LinkedIn Live", "Facebook Live", "Zoom Webinar", "Google Meet",
-          ].map((p) => (
-            <div className="usa-vs-platform-badge" key={p}>
-              {p}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ─── ROOT ──────────────────────────────────────────────────────────── */
 export default function Gallery() {
- 
+
   return (
     <>
       <div className="usa-page">
         <Navbar />
-        {/* <GalleryHero />
-        <BentoGrid />
+        <GalleryHero />
         <HeroSection />
         <RegularGallery />
-        <VideoSection />
-        <GalleryCarousel /> */}
-
-        <TempGallery />     {/* ← temp until real data arrives */}
-        
         <Footer theme="usa"/>
       </div>
     </>
