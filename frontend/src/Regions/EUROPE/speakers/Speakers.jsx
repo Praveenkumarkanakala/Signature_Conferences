@@ -3,24 +3,19 @@ import { Navbar } from "../Landingpage/eurohome.jsx";
 import "./Speakers.css";
 import "../Landingpage/eurohome.css";
 import Footer from "../../../Components/Footer/footer";
-import { TempSpeakersHero, TempSpeakersFilter, TempSpeakersComingSoon } from "./tempspeakers";
 
 
+import spimg from "../../USA/Landingpage/images/galleryimgus.jpeg";
+import spimg1 from "../../USA/Landingpage/images/galleryimgus1.jpeg";
+import spimg2 from "../../USA/Landingpage/images/galleryimgus2.jpeg";
+import spimg3 from "../../USA/Landingpage/images/galleryimgus3.jpeg";
+import spimg4 from "../../USA/Landingpage/images/galleryimgus4.jpeg";
+import spimg5 from "../../USA/Landingpage/images/galleryimgus5.jpeg";
+import spimg6 from "../../USA/Landingpage/images/usagallery5.jpeg";
+import spimg7 from "../../USA/Landingpage/images/usagallery7.jpeg";
+import spimg8 from "../../USA/Landingpage/images/usagallery9.jpeg";
+import spimg9 from "../../USA/Landingpage/images/usagallery13.jpeg";
 
-import spimg from "./images/euroimg.jpeg";
-import spimg1 from "./images/euroimg1.jpeg";
-import spimg2 from "./images/euroimg2.jpeg";
-import spimg3 from "./images/euroimg3.jpeg";
-import spimg4 from "./images/euroimg4.jpeg";
-import spimg5 from "./images/euroimg5.jpeg";
-import spimg6 from "./images/euroimg6.jpeg";
-import spimg7 from "./images/euroimg7.jpeg";
-import spimg8 from "./images/euroimg8.jpeg";
-import spimg9 from "./images/euroimg9.jpeg";
-import spimg10 from "./images/euroimg10.jpeg";
-import spimg11 from "./images/euroimg11.jpeg";
-import spimg12 from "./images/euroimg12.jpeg";
-import spimg13 from "./images/euroimg13.jpeg";
 
 /* ─── HARDCODED SPEAKER IMAGES ───────────────── */
 const speakers = [
@@ -34,10 +29,7 @@ const speakers = [
   { id: 8,  image: spimg7,  alt: "Speaker 8" },
   { id: 9,  image: spimg8,  alt: "Speaker 9" },
   { id: 10, image:spimg9, alt: "Speaker 10" },
-  { id: 11, image:spimg10, alt: "Speaker 11" },
-  { id: 12, image:spimg11, alt: "Speaker 12" },
-  { id: 13, image:spimg12, alt: "Speaker 13" },
-  { id: 14, image: spimg13, alt: "Speaker 14" },
+
 ];
 
 /* ─── HERO ───────────────────────────────────── */
@@ -89,13 +81,8 @@ export default function Speakers() {
   return (
     <div className="europe-page">
       <Navbar />
-
-       <TempSpeakersHero />
-      <TempSpeakersFilter active={activeFilter} onChange={setActiveFilter} />
-      <TempSpeakersComingSoon />
-
-      {/* <SpeakersHero /> 
-       <SpeakersGrid /> */}
+      <SpeakersHero /> 
+       <SpeakersGrid />
       <Footer theme="europe" />
     </div>
   );

@@ -1,67 +1,15 @@
-// export const eventMeta = {
-//   title: "Summit\nSpeakers",
-//   department: "Creative & Innovation Track",
-//   date: "November 2025",
-//   url: "www.reallygreat.site",
-// };
+/* ─── LOCAL SPEAKER IMAGE IMPORTS ────────────── */
+import aishaImg from "../../USA/Landingpage/images/galleryimgus5.jpeg";
+import priyaImg from "../../USA/Landingpage/images/galleryimgus1.jpeg";
+import yukiImg from "../../USA/Landingpage/images/galleryimgus2.jpeg";
+import fatimaImg from "../../USA/Landingpage/images/galleryimgus3.jpeg";
+import graceImg from "../../USA/Landingpage/images/galleryimgus4.jpeg";
+import sofiaImg from "../../USA/Landingpage/images/galleryimgus.jpeg";
+import meilingImg from "../../USA/Landingpage/images/usagallery5.jpeg";
+import divyaImg from "../../USA/Landingpage/images/usagallery7.jpeg";
+import miriamImg from "../../USA/Landingpage/images/usagallery9.jpeg";
+import leilaImg from "../../USA/Landingpage/images/usagallery13.jpeg";
 
-// export const speakers = [
-//   {
-//     id: 1,
-//     role: "Keynote Speaker",
-//     name: "Arjun Mehta",
-//     topic: "The Future of Human-AI Collaboration",
-//     age: "34 YO",
-//     bg: "teal",
-//     // Using a DiceBear avatar URL (SVG-based, no copyright issues)
-//     image: "https://api.dicebear.com/7.x/personas/svg?seed=Arjun&backgroundColor=transparent&size=200",
-//   },
-//   {
-//     id: 2,
-//     role: "Workshop Lead",
-//     name: "Sofia Reyes",
-//     topic: "Designing for Emerging Markets",
-//     age: "29 YO",
-//     bg: "amber",
-//     image: "https://api.dicebear.com/7.x/personas/svg?seed=Sofia&backgroundColor=transparent&size=200",
-//   },
-//   {
-//     id: 3,
-//     role: "Panel Moderator",
-//     name: "James Okoye",
-//     topic: "Ethics in Product Development",
-//     age: "41 YO",
-//     bg: "slate",
-//     image: "https://api.dicebear.com/7.x/personas/svg?seed=James&backgroundColor=transparent&size=200",
-//   },
-//   {
-//     id: 4,
-//     role: "Tech Director",
-//     name: "Priya Nair",
-//     topic: "Scaling Startups in 2025",
-//     age: "36 YO",
-//     bg: "dark",
-//     image: "https://api.dicebear.com/7.x/personas/svg?seed=Priya&backgroundColor=transparent&size=200",
-//   },
-//   {
-//     id: 5,
-//     role: "Creative Lead",
-//     name: "Marco Deluca",
-//     topic: "Brand Identity at Scale",
-//     age: "44 YO",
-//     bg: "ivory",
-//     image: "https://api.dicebear.com/7.x/personas/svg?seed=Marco&backgroundColor=transparent&size=200",
-//   },
-//   {
-//     id: 6,
-//     role: "UX Strategist",
-//     name: "Lena Vogel",
-//     topic: "Invisible Interfaces",
-//     age: "31 YO",
-//     bg: "rose",
-//     image: "https://api.dicebear.com/7.x/personas/svg?seed=Lena&backgroundColor=transparent&size=200",
-//   },
-// ];
 /* ─── SPEAKER CATEGORIES ─────────────────────── */
 export const speakerCategories = [
   { id: "all", label: "All Speakers" },
@@ -83,8 +31,7 @@ export const speakers = [
     country: "Nigeria",
     conference: "WE Summit Mumbai",
     bg: "teal",
-    image:
-      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=500&fit=crop&crop=face",
+    image: aishaImg,
   },
   {
     id: 2,
@@ -95,8 +42,7 @@ export const speakers = [
     country: "India",
     conference: "WE Summit Mumbai",
     bg: "rose",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop&crop=face",
+    image: priyaImg,
   },
   {
     id: 3,
@@ -107,8 +53,7 @@ export const speakers = [
     country: "Japan",
     conference: "WE Summit Tokyo",
     bg: "amber",
-    image:
-      "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=400&h=500&fit=crop&crop=face",
+    image: yukiImg,
   },
   {
     id: 4,
@@ -119,8 +64,7 @@ export const speakers = [
     country: "UAE",
     conference: "WE Summit Dubai",
     bg: "slate",
-    image:
-      "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=400&h=500&fit=crop&crop=face",
+    image: fatimaImg,
   },
   {
     id: 5,
@@ -131,8 +75,7 @@ export const speakers = [
     country: "Ghana",
     conference: "WE Summit Mumbai",
     bg: "dark",
-    image:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=500&fit=crop&crop=face",
+    image: graceImg,
   },
   {
     id: 6,
@@ -143,8 +86,7 @@ export const speakers = [
     country: "Colombia",
     conference: "WE Summit Singapore",
     bg: "ivory",
-    image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=500&fit=crop&crop=face",
+    image: sofiaImg,
   },
   {
     id: 7,
@@ -155,10 +97,8 @@ export const speakers = [
     country: "Taiwan",
     conference: "WE Summit Singapore",
     bg: "teal",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=500&fit=crop&crop=face",
+    image: meilingImg,
   },
-
   {
     id: 9,
     name: "Divya Menon",
@@ -168,8 +108,7 @@ export const speakers = [
     country: "India",
     conference: "WE Summit Mumbai",
     bg: "amber",
-    image:
-      "https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=400&h=500&fit=crop&crop=face",
+    image: divyaImg,
   },
   {
     id: 10,
@@ -180,8 +119,7 @@ export const speakers = [
     country: "Nigeria",
     conference: "WE Summit Dubai",
     bg: "teal",
-    image:
-      "https://images.unsplash.com/photo-1589156280159-27698a70f29e?w=400&h=500&fit=crop&crop=face",
+    image: miriamImg,
   },
   {
     id: 11,
@@ -192,8 +130,7 @@ export const speakers = [
     country: "Iran",
     conference: "WE Summit Dubai",
     bg: "dark",
-    image:
-      "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=400&h=500&fit=crop&crop=face",
+    image: leilaImg,
   },
 
   /* ── AI & STEM ─────────────────────────────── */

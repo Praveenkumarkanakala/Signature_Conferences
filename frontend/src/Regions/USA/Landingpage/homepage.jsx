@@ -6,18 +6,24 @@ import Footer from "../../../Components/Footer/footer";
 import statue from "./statue.png";
 import whyJoinUs from "./whyjoinus4.png";
 import sgcLogo from "../../globaldata/sgc_logo.jpeg";
-import { TempHomeGallery, TempHomeSpeakers } from "./TempHGS";
 import { supabase } from "../../../lib/supabase.jsx";
 import SEO from "../../../Components/SEO.jsx";
 
 
+import usahomegallery from "../../USA/Images/galleryusa.jpeg";
+import usahomegallery1 from "../../USA/Images/galleryusa5.jpeg";
+import usahomegallery2 from "../../USA/Images/galleryusa1.jpeg";
+import usahomegallery3 from "../../USA/Images/usagallery.jpeg";
+import usahomegallery4 from "../../USA/Images/galleryusa3.jpeg";
+import usahomegallery5 from "../../USA/Images/usagallery1.jpeg";
 
-import Speakerimg from "./images/galleryimg.jpeg";
-import Speakerimg1 from "./images/galleryimg1.jpeg";
-import Speakerimg2 from "./images/galleryimg2.jpeg";
-import Speakerimg3 from "./images/galleryimg3.jpeg";
-import Speakerimg4 from "./images/galleryimg4.jpeg";
-import Speakerimg5 from "./images/galleryimg5.jpeg";
+
+import Speakerimg from "./images/galleryimgus.jpeg";
+import Speakerimg1 from "./images/galleryimgus1.jpeg";
+import Speakerimg2 from "./images/galleryimgus2.jpeg";
+import Speakerimg3 from "./images/galleryimgus3.jpeg";
+import Speakerimg4 from "./images/galleryimgus4.jpeg";
+import Speakerimg5 from "./images/galleryimgus5.jpeg";
 
 
 const NAV_LINKS = [
@@ -717,12 +723,12 @@ const EsteeemedSpeakers = () => {
 };
 
 const GALLERY_IMAGES = [
-  { id: 1, image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&auto=format&fit=crop&q=80", title: "Global Leaders Summit", date: "August 08, 2026", location: "Paris, France", description: "An electrifying gathering of world leaders sharing vision, strategy, and purpose on the global stage." },
-  { id: 2, image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&auto=format&fit=crop&q=80", title: "Women in Power", date: "August 09, 2026", location: "Paris, France", description: "Celebrating the voices of trailblazing women redefining leadership across industries worldwide." },
-  { id: 3, image: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&auto=format&fit=crop&q=80", title: "Innovation Panel", date: "September 15, 2026", location: "New York, USA", description: "Thought leaders debate the future of technology, disruption, and human-centered design." },
-  { id: 4, image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=900&auto=format&fit=crop&q=80", title: "Executive Forum", date: "October 10, 2026", location: "London, UK", description: "A curated forum where top executives align on strategy, growth, and global opportunity." },
-  { id: 5, image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=900&auto=format&fit=crop&q=80", title: "Keynote Moments", date: "October 11, 2026", location: "London, UK", description: "Thousands gathered to witness landmark keynotes that shaped conversations for years to come." },
-  { id: 6, image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=900&auto=format&fit=crop&q=80", title: "Resilience & Growth", date: "November 20, 2026", location: "Dubai, UAE", description: "Powerful stories of resilience and transformation delivered by an unforgettable lineup of speakers." },
+  { id: 1, src: usahomegallery, title: "Keynote Sessions", description: "Inspiring keynote sessions featuring visionary leaders sharing powerful ideas, insights, and perspectives." },
+  { id: 2, src: usahomegallery1, title: "Award Ceremony", description: "Celebrating outstanding achievements and recognizing individuals who have made a remarkable impact." },
+  { id: 3, src: usahomegallery2, title: "Expert Talks", description: "Engaging talks from industry experts exploring emerging trends, innovations, and transformative ideas." },
+  { id: 4, src: usahomegallery3, title: "Panel Discussions", description: "Thought-provoking discussions bringing together leading experts to exchange knowledge and diverse perspectives." },
+  { id: 5, src: usahomegallery4, title: "Networking Moments", description: "Meaningful connections and conversations bringing together professionals, researchers, and industry leaders." },
+  { id: 6, src: usahomegallery5, title: "Conference Highlights", description: "Memorable moments from an inspiring conference filled with learning, collaboration, recognition, and new opportunities." },
 ];
 
 const ANIMATIONS = ["usa-anim-rise", "usa-anim-swivel", "usa-anim-drop", "usa-anim-slide", "usa-anim-zoom", "usa-anim-flip"];
@@ -783,7 +789,7 @@ const GallerySection = () => {
           <div className="usa-gallery-stack usa-gallery-stack--br2" />
           {visible && (
             <div className={`usa-gallery-card ${animClass}`} key={active.id}>
-              <img src={active.image} alt={active.title} />
+              <img src={active.src} alt={active.title} />
               <div className="usa-gallery-card__overlay">
                 <span className="usa-gallery-card__overlay-title">{active.title}</span>
                 <span className="usa-gallery-card__overlay-location">{active.location}</span>
@@ -809,8 +815,6 @@ const GallerySection = () => {
 export { Navbar };
 
 export default function HomePage() {
-  // ✅ REMOVED: This effect was conflicting with Navbar's scroll-lock
-  // The page should use native document scrolling, not nested containers
   
   return (
     <div className="usa-page">
@@ -819,13 +823,8 @@ export default function HomePage() {
       <Hero />
       <FutureEvents />
       <WhyJoinUs />
-      {/* <EsteeemedSpeakers /> */}
-             <TempHomeSpeakers/>
-
-      {/* <GallerySection /> */}
-
-       <TempHomeGallery/>
-
+      <EsteeemedSpeakers />
+      <GallerySection />
       <Footer theme="usa" />
     </div>
   );

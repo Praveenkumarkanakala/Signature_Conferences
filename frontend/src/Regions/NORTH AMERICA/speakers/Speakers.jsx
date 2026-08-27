@@ -2,7 +2,20 @@ import { useState } from "react";
 import { NaNavbar } from "../NAHome/Nahome";
 import "./Speakers.css";
 import Footer from "../../../Components/Footer/footer";
-import speakerImg from "./image.png";
+
+// Speaker photos — replace these imports with your own images.
+// Drop files into the same folder as this component and update the paths below.
+import speaker1 from "../../USA/Landingpage/images/galleryimgus.jpeg";
+import speaker2 from "../../USA/Landingpage/images/galleryimgus1.jpeg";
+import speaker3 from "../../USA/Landingpage/images/galleryimgus2.jpeg";
+import speaker4 from "../../USA/Landingpage/images/galleryimgus3.jpeg";
+import speaker5 from "../../USA/Landingpage/images/galleryimgus4.jpeg";
+import speaker6 from "../../USA/Landingpage/images/galleryimgus5.jpeg";
+import speaker7 from "../../USA/Landingpage/images/usagallery7.jpeg";
+import speaker8 from "../../USA/Landingpage/images/usagallery13.jpeg";
+import speaker9 from "../../USA/Landingpage/images/usagallery5.jpeg";
+import speaker10 from "../../USA/Landingpage/images/usagallery9.jpeg";
+
 
 export const speakerCategories = [
   { id: "all", label: "All Speakers" },
@@ -12,81 +25,76 @@ export const speakerCategories = [
   { id: "wellness", label: "Wellness" },
 ];
 
+// Edit this array to add or update speakers.
+// "label" shows only on hover — set it to "" to skip a label for that speaker.
+// IMPORTANT: give each speaker their own unique image import above —
+// right now they all point at the same placeholder file.
+const speakers = [
+  { id: 1, img: speaker1, label: "Speaker" },
+  { id: 2, img: speaker2, label: "Speaker" },
+  { id: 3, img: speaker3, label: "Keynote Speaker" },
+  { id: 4, img: speaker4, label: "Speaker" },
+  { id: 5, img: speaker5, label: "Keynote Speaker" },
+  { id: 6, img: speaker6, label: "Speaker" },
+  { id: 7, img: speaker7, label: "Speaker" },
+  { id: 8, img: speaker8, label: "Keynote Speaker" },
+  { id: 9, img: speaker9, label: "Speaker" },
+  { id: 10, img: speaker10, label: "Speaker" },
+];
+
 function SpeakersHero() {
   return (
     <section className="na-speakers-hero">
       <div className="na-speakers-hero__content">
         <span className="na-speakers-hero__tag">
-          North America Signature Global Conferences – Speakers
+          Signature Global Conferences — Speakers
         </span>
         <h1 className="na-speakers-hero__title">
-          Our Speakers Are <em>Coming Soon</em>
+          VOICES THAT
+          <br />
+          MOVE <em>THE WORLD</em>
         </h1>
       </div>
     </section>
   );
 }
 
-function FilterBar({ active, onChange }) {
+function SpeakerCard({ speaker }) {
+  const [imgError, setImgError] = useState(false);
+
   return (
-    <div className="na-speakers-filters">
-      <div className="na-speakers-filters__inner">
-        {speakerCategories.map((f) => (
-          <button
-            key={f.id}
-            className={`na-speakers-filters__pill${
-              active === f.id ? " na-speakers-filters__pill--active" : ""
-            }`}
-            onClick={() => onChange(f.id)}
-          >
-            {f.label}
-          </button>
-        ))}
+    <article className="na-speaker-card">
+      <div className="na-speaker-card__frame">
+        {!imgError ? (
+          <img
+            src={speaker.img}
+            alt="Speaker"
+            className="na-speaker-card__img"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="na-speaker-card__img-fallback" />
+        )}
+
+        {speaker.label && (
+          <>
+            <div className="na-speaker-card__scrim" />
+            <span className="na-speaker-card__label">{speaker.label}</span>
+          </>
+        )}
       </div>
-    </div>
+    </article>
   );
 }
 
-function ComingSoonSection() {
+function SpeakersGrid() {
   return (
-    <section className="na-speakers-split">
-      <div className="na-speakers-split__img-wrap">
-        <img
-          src={speakerImg}
-          alt="Speaker presenting to audience"
-          className="na-speakers-split__img"
-        />
-        <div className="na-speakers-split__img-overlay" />
-
-        {/* Quote overlay on image for mobile */}
-        <div className="na-speakers-split__mobile-quote">
-          <span className="na-speakers-split__quote-mark">"</span>
-          <p className="na-speakers-split__journey-text">
-            Every great journey starts with a first step.
-          </p>
-          <p className="na-speakers-split__quote-text">
-            We are curating a powerful lineup of global speakers, industry
-            leaders, and changemakers. Stay tuned as we unveil inspiring voices
-            for our upcoming conferences.
-          </p>
-          <div className="na-speakers-split__quote-line" />
-        </div>
-      </div>
-
-      {/* Desktop quote panel */}
-      <div className="na-speakers-split__quote">
-        <div className="na-speakers-split__quote-inner">
-          <span className="na-speakers-split__quote-mark">"</span>
-          <h2 className="na-speakers-split__journey-heading">
-            Every great journey<br />starts with a<br />
-            <em>first step.</em>
-          </h2>
-          <p className="na-speakers-split__quote-text">
-            We are curating a powerful lineup of global speakers, industry
-            leaders, and changemakers. Stay tuned as we unveil inspiring voices
-            for our upcoming conferences.
-          </p>
-          <div className="na-speakers-split__quote-line" />
+    <section className="na-speakers-grid-section">
+      <div className="na-speakers-grid-section__inner">
+        <div className="na-speakers-grid">
+          {speakers.map((speaker) => (
+            <SpeakerCard key={speaker.id} speaker={speaker} />
+          ))}
         </div>
       </div>
     </section>
@@ -94,14 +102,11 @@ function ComingSoonSection() {
 }
 
 export default function Speakers() {
-  const [activeFilter, setActiveFilter] = useState("all");
-
   return (
     <div className="na-page">
       <NaNavbar />
       <SpeakersHero />
-      <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <ComingSoonSection />
+      <SpeakersGrid />
       <Footer theme="northamerica" />
     </div>
   );

@@ -6,55 +6,84 @@
   --as-sp-shadow-hover: 0 30px 72px rgba(0, 0, 0, 0.52);
 }
 
-.as-sp-filters {
-  position: sticky;
-  top: 88px;
-  z-index: 100;
-  padding: 18px 60px;
-  background: rgba(14, 0, 1, 0.88);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(213, 62, 15, 0.18);
-}
-
-.as-sp-filters__inner {
-  max-width: 1220px;
-  margin: 0 auto;
+/* ─── HERO ───────────────────────────────────── */
+.as-sp-hero {
+  position: relative;
+  min-height: 62vh;
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 160px 40px 100px;
+  background: linear-gradient(180deg, #0e0001 0%, #1a0002 55%, #0e0001 100%);
 }
 
-.as-sp-filters__pill {
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: 1px solid rgba(238, 217, 185, 0.16);
-  background: rgba(94, 0, 6, 0.12);
-  color: rgba(238, 217, 185, 0.64);
+.as-sp-hero__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 20%, rgba(213, 62, 15, 0.22), transparent 60%),
+    radial-gradient(ellipse 40% 40% at 85% 80%, rgba(240, 74, 16, 0.1), transparent 60%);
+  pointer-events: none;
+}
+
+.as-sp-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  text-align: center;
+}
+
+.as-sp-hero__kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 0 28px;
   font-family: var(--font-body, "Inter", sans-serif);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+  color: var(--flame-bright, #f04a10);
 }
 
-.as-sp-filters__pill:hover {
-  transform: translateY(-1px);
+.as-sp-hero__line {
+  width: 40px;
+  height: 1px;
+  background: rgba(240, 74, 16, 0.5);
+}
+
+.as-sp-hero__title {
+  margin: 0;
+  font-family: var(--font-display, "Anton", sans-serif);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  font-size: clamp(2.8rem, 6.5vw, 5.6rem);
   color: var(--cream-light, #f9f0e0);
-  border-color: rgba(213, 62, 15, 0.36);
-  background: rgba(213, 62, 15, 0.12);
 }
 
-.as-sp-filters__pill--active {
-  color: var(--cream-light, #f9f0e0);
-  border-color: transparent;
-  background: linear-gradient(135deg, var(--flame-bright, #f04a10), var(--red, #9b0f06));
-  box-shadow: 0 8px 24px rgba(213, 62, 15, 0.32);
+@media (max-width: 768px) {
+  .as-sp-hero {
+    min-height: 48vh;
+    padding: 130px 24px 70px;
+  }
+
+  .as-sp-hero__kicker {
+    gap: 10px;
+    font-size: 0.62rem;
+  }
+
+  .as-sp-hero__line {
+    width: 24px;
+  }
 }
 
+/* ─── GRID ───────────────────────────────────── */
 .as-sp-grid-section {
-  padding: 64px 60px 110px;
+  padding: 64px 30px 110px;
   background:
     radial-gradient(circle at 15% 0%, rgba(94, 0, 6, 0.16), transparent 30%),
     radial-gradient(circle at 85% 100%, rgba(213, 62, 15, 0.1), transparent 28%),
@@ -62,26 +91,14 @@
 }
 
 .as-sp-grid-section__inner {
-  max-width: 1220px;
+  max-width: 1400px;
   margin: 0 auto;
-}
-
-.as-sp-grid-section__count {
-  margin-bottom: 34px;
-  font-family: var(--font-body, "Inter", sans-serif);
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  color: rgba(238, 217, 185, 0.5);
-}
-
-.as-sp-grid-section__count strong {
-  color: var(--flame-bright, #f04a10);
 }
 
 .as-sp-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
+  gap: 28px;
 }
 
 .as-sp-card {
@@ -104,7 +121,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 18px;
-  height: 430px;
+  height: 380px;
   background: rgba(14, 0, 1, 0.7);
 }
 
@@ -128,20 +145,13 @@
   transform: scale(1.05);
 }
 
-@media (max-width: 1100px) {
-  .as-sp-filters,
-  .as-sp-grid-section {
-    padding-left: 30px;
-    padding-right: 30px;
-  }
-
+@media (max-width: 1300px) {
   .as-sp-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 768px) {
-  .as-sp-filters,
+@media (max-width: 900px) {
   .as-sp-grid-section {
     padding-left: 22px;
     padding-right: 22px;
@@ -153,7 +163,7 @@
   }
 
   .as-sp-card__imageWrap {
-    height: 320px;
+    height: 300px;
   }
 }
 

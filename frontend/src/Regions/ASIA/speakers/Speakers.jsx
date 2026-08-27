@@ -1,29 +1,28 @@
-import { useState } from "react";
-import { Navbar } from "../Home/asia.jsx";
 import {
-  speakerCategories,
-  getSpeakersByCategory,
+  speakers,
 } from "./speakerdata.jsx";
+import { Navbar } from "../Home/asia.jsx";
 import "./Speakers.css";
 import "../Home/asia.css";
 import Footer from "../../../Components/Footer/footer";
-import { TempSpeakersHero, TempSpeakersFilter, TempSpeakersComingSoon } from "./tempspeakers";
 
-function FilterBar({ active, onChange }) {
+function SpeakersHero() {
   return (
-    <div className="as-sp-filters">
-      <div className="as-sp-filters__inner">
-        {speakerCategories.map((category) => (
-          <button
-            key={category.id}
-            className={`as-sp-filters__pill${active === category.id ? " as-sp-filters__pill--active" : ""}`}
-            onClick={() => onChange(category.id)}
-          >
-            {category.label}
-          </button>
-        ))}
+    <section className="as-sp-hero">
+      <div className="as-sp-hero__glow" />
+      <div className="as-sp-hero__inner">
+        <p className="as-sp-hero__kicker">
+          <span className="as-sp-hero__line" />
+          Signature Global Conferences — Speakers
+          <span className="as-sp-hero__line" />
+        </p>
+        <h1 className="as-sp-hero__title">
+          Voices That
+          <br />
+          Move The World
+        </h1>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -37,17 +36,14 @@ function SpeakerCard({ speaker }) {
   );
 }
 
-function SpeakersGrid({ filter }) {
-  const filtered = getSpeakersByCategory(filter);
+function SpeakersGrid() {
+  const featured = speakers.slice(0, 10);
 
   return (
     <section className="as-sp-grid-section">
       <div className="as-sp-grid-section__inner">
-        <p className="as-sp-grid-section__count">
-          Showing <strong>{filtered.length}</strong> speaker{filtered.length !== 1 ? "s" : ""}
-        </p>
         <div className="as-sp-grid">
-          {filtered.map((speaker) => (
+          {featured.map((speaker) => (
             <SpeakerCard key={speaker.id} speaker={speaker} />
           ))}
         </div>
@@ -57,20 +53,11 @@ function SpeakersGrid({ filter }) {
 }
 
 export default function AsiaSpeakers() {
-  const [activeFilter, setActiveFilter] = useState("all");
-
   return (
-    // ✅ Root wrapper to prevent CSS leakage
     <div className="as-page">
       <Navbar />
-
-<TempSpeakersHero />
-      <TempSpeakersFilter active={activeFilter} onChange={setActiveFilter} />
-      <TempSpeakersComingSoon />
-
-
-      {/* <FilterBar active={activeFilter} onChange={setActiveFilter} />
-      <SpeakersGrid filter={activeFilter} /> */}
+      <SpeakersHero />
+      <SpeakersGrid />
       <Footer theme="asia" />
     </div>
   );

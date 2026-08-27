@@ -39,6 +39,23 @@
   display: block;
 }
 
+/* ─── IMAGE-FILL OVERRIDES ──────────────────────────────────────
+   .na-page img (above) sets height:auto globally, which beats any
+   single-class rule like .na-speaker-card__img on specificity alone
+   ((0,1,1) > (0,1,0)), even when the single-class rule is written
+   later in the file. Every card image that needs to fill/crop its
+   wrapper (object-fit: cover) is re-declared here with a chained
+   selector so it wins. Add new card image classes to this block
+   rather than relying on the class alone. ───────────────────────── */
+.na-page .na-fe__card-img-wrap .na-fe__card-img,
+.na-page .na-speaker-card__img-wrap .na-speaker-card__img,
+.na-page .na-gallery__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .na-page a,
 .na-page button {
   -webkit-tap-highlight-color: transparent;
@@ -2155,18 +2172,6 @@
   background: var(--na-green, #1e3a2f);
 }
 
-.na-gallery__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.42s ease;
-}
-
-.na-gallery__photo:hover img {
-  transform: scale(1.06);
-}
-
 .na-gallery__photo-overlay {
   position: absolute;
   inset: 0;
@@ -2176,6 +2181,13 @@
   pointer-events: none;
 }
 
+.na-gallery__photo:hover img {
+  transform: scale(1.06);
+}
+
+.na-gallery__photo img {
+  transition: transform 0.42s ease;
+}
 
 .na-gallery__photo:hover .na-gallery__photo-overlay {
   background: rgba(30, 58, 47, 0.22);

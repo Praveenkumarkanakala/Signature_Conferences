@@ -1,38 +1,38 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TempHomeSpeakers } from "./TempHomeSpeakers";
-import { TempHomeGallery } from "./TempHomeGallery";
+// import { TempHomeSpeakers } from "./TempHomeSpeakers";
+// import { TempHomeGallery } from "./TempHomeGallery";
 import { supabase } from "../../../lib/supabase.jsx";
 import SEO from "../../../Components/SEO.jsx";
-
-
-
 import "./eurohome.css";
 import BgImage from "./imgs/texture_bg_2.jpg";
 import sgcLogo from "../../globaldata/sgc_logo.jpeg";
 import Footer from "../../../Components/Footer/footer";
 
-import img1 from "../speakers/images/euroimg1.jpeg";
-import img2 from "../speakers/images/euroimg2.jpeg";
-import img3 from "../speakers/images/euroimg3.jpeg";
-import img4 from "../speakers/images/euroimg4.jpeg";
-import img5 from "../speakers/images/euroimg5.jpeg";
-import img6 from "../speakers/images/euroimg6.jpeg";
-import img7 from "../speakers/images/euroimg7.jpeg";
-import img8 from "../speakers/images/euroimg8.jpeg";
-import img9 from "../speakers/images/euroimg9.jpeg";
-import img10 from "../speakers/images/euroimg10.jpeg";
-import img11 from "../speakers/images/euroimg11.jpeg";
+import img1 from "../../USA/Landingpage/images/galleryimgus.jpeg";
+import img2 from "../../USA/Landingpage/images/galleryimgus1.jpeg";
+import img3 from "../../USA/Landingpage/images/galleryimgus2.jpeg";
+import img4 from "../../USA/Landingpage/images/galleryimgus3.jpeg";
+import img5 from "../../USA/Landingpage/images/galleryimgus4.jpeg";
+import img6 from "../../USA/Landingpage/images/galleryimgus5.jpeg";
+import img7 from "../../USA/Landingpage/images/usagallery5.jpeg";
+import img8 from "../../USA/Landingpage/images/usagallery7.jpeg";
+import img9 from "../../USA/Landingpage/images/usagallery9.jpeg";
+import img10 from "../../USA/Landingpage/images/usagallery13.jpeg";
 
-
-
+import eurogalleryimg from "../../USA/Images/usagallery7.jpeg";
+import eurogalleryimg1 from "../../USA/Images/usagallery1.jpeg";
+import eurogalleryimg2 from "../../USA/Images/usagallery2.jpeg";
+import eurogalleryimg3 from "../../USA/Images/usagallery4.jpeg";
+import eurogalleryimg4 from "../../USA/Images/usagallery3.jpeg";
+import eurogalleryimg5 from "../../USA/Images/usagallery5.jpeg";
+import eurogalleryimg6 from "../../USA/Images/usagallery11.jpeg";
+import eurogalleryimg7 from "../../USA/Images/usagallery8.jpeg";
 
 import EuroHimg from "./imgs/EuroHimg.webp";
 import EuroHimg1 from "./imgs/EuroHimg1.webp";
 import EuroHimg2 from "./imgs/EuroHimg2.webp";
 import EuroHimg3 from "./imgs/EuroHimg3.webp";
-
-
 
 
 /*=================== DATA EXPORTS ============================== */
@@ -85,26 +85,6 @@ export const speakers = [
   { id: 4, image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80", name: "Amara Nwosu", country: "Nigeria", role: "Policy & Innovation Leader" },
 ];
 
-export const highlights = [
-  { id: 1, image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80", size: "large" },
-  { id: 2, image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=80", size: "small" },
-  { id: 3, image: "https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=500&q=80", size: "medium" },
-  { id: 4, image: "https://images.unsplash.com/photo-1560523159-6b681a1e1852?w=500&q=80", size: "small" },
-  { id: 5, image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&q=80", size: "large" },
-  { id: 6, image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=500&q=80", size: "medium" },
-  { id: 7, image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=500&q=80", size: "small" },
-  { id: 8, image: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=500&q=80", size: "medium" },
-];
-
-export const pastConferences = [
-  { id: 1, image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=500&q=80", title: "Global Visionaries Summit", date: "March 2024", location: "Paris, France" },
-  { id: 2, image: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=500&q=80", title: "Leaders of Tomorrow Forum", date: "July 2024", location: "Mumbai, India" },
-  { id: 3, image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80", title: "Signature CEO Roundtable", date: "October 2023", location: "New York, USA" },
-  { id: 4, image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80", title: "International Impact Conference", date: "January 2023", location: "Dubai, UAE" },
-  { id: 5, image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=500&q=80", title: "Women Who Lead Summit", date: "May 2023", location: "London, UK" },
-  { id: 6, image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=80", title: "Innovation Nexus Conference", date: "September 2022", location: "Singapore" },
-  { id: 7, image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=500&q=80", title: "Entrepreneurship World Forum", date: "November 2022", location: "Toronto, Canada" },
-];
 
 /* ==================================================
    CONSTANTS
@@ -134,18 +114,17 @@ const SPEAKERS = [
   { id: 8, image: img8 },
   { id: 9, image: img9 },
   { id: 10, image: img10 },
-  { id: 11, image: img11 },
 ];
 
 const photos = [
-  { id: 1, src: "https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=900&auto=format&fit=crop", alt: "Conference keynote hall", label: "Keynote Session", tag: "Main Stage", span: "tall" },
-  { id: 2, src: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=900&auto=format&fit=crop", alt: "Speaker presenting on stage", label: "Opening Address", tag: "Speaker", span: "wide" },
-  { id: 3, src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900&auto=format&fit=crop", alt: "People networking", label: "Networking Lounge", tag: "Networking", span: "square" },
-  { id: 4, src: "https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=900&auto=format&fit=crop", alt: "Panel discussion", label: "Panel Discussion", tag: "Panel", span: "square" },
-  { id: 5, src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&auto=format&fit=crop", alt: "Conference auditorium", label: "Grand Auditorium", tag: "Venue", span: "wide" },
-  { id: 6, src: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=900&auto=format&fit=crop", alt: "Workshop session", label: "Breakout Workshop", tag: "Workshop", span: "square" },
-  { id: 8, src: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=900&auto=format&fit=crop", alt: "Expo and booths", label: "Exhibition Floor", tag: "Expo", span: "wide" },
-  { id: 9, src: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&auto=format&fit=crop", alt: "Audience interaction", label: "Live Q&A", tag: "Audience", span: "square" },
+  { id: 1, src: eurogalleryimg, alt: "Conference keynote hall", span: "tall" },
+  { id: 2, src: eurogalleryimg1, alt: "Speaker presenting on stage", span: "wide" },
+  { id: 3, src: eurogalleryimg2, alt: "People networking", span: "square" },
+  { id: 4, src: eurogalleryimg3, alt: "Panel discussion", span: "square" },
+  { id: 5, src: eurogalleryimg4, alt: "Conference auditorium", span: "wide" },
+  { id: 6, src: eurogalleryimg5, alt: "Workshop session", span: "square" },
+  { id: 8, src: eurogalleryimg6, alt: "Expo and booths", span: "wide" },
+  { id: 9, src: eurogalleryimg7, alt: "Audience interaction", span: "square" },
 ];
 
 /* ==================================================
@@ -630,11 +609,11 @@ export default function HomePage() {
         <HeroSection />
         <FutureEvents />
         <WhyJoinUs />
-        {/* <SpeakersCarousel /> */}
-        <TempHomeSpeakers />
+        <SpeakersCarousel />
+        {/* <TempHomeSpeakers /> */}
       
-        {/* <GalleryGrid /> */}
-         <TempHomeGallery />  
+        <GalleryGrid />
+         {/* <TempHomeGallery />   */}
         <Footer theme="europe" />
       </div>
     </div>

@@ -3,18 +3,18 @@ import { Navbar } from "../Landingpage/homepage.jsx";
 import "./Speakers.css";
 import Footer from "../../../Components/Footer/footer";
 import "../Landingpage/homepage.css";
-import USASpeakersSection from "./tempspeakers.jsx";
+// import USASpeakersSection from "./tempspeakers.jsx";
 
-import speaker1 from "../Landingpage/images/galleryimg.jpeg";
-import speaker2 from "../Landingpage/images/galleryimg1.jpeg";
-import speaker3 from "../Landingpage/images/galleryimg2.jpeg";
-import speaker4 from "../Landingpage/images/galleryimg3.jpeg";
-import speaker5 from "../Landingpage/images/galleryimg4.jpeg";
-import speaker6 from "../Landingpage/images/galleryimg5.jpeg";
-import speaker7 from "../Landingpage/images/galleryimg6.jpeg";
-import speaker8 from "../Landingpage/images/galleryimg7.jpeg";
-import speaker9 from "../Landingpage/images/galleryimg8.jpeg";
-import speaker10 from "../Landingpage/images/galleryimg9.jpeg";
+import speaker1 from "../Landingpage/images/galleryimgus.jpeg";
+import speaker2 from "../Landingpage/images/galleryimgus1.jpeg";
+import speaker3 from "../Landingpage/images/galleryimgus2.jpeg";
+import speaker4 from "../Landingpage/images/galleryimgus3.jpeg";
+import speaker5 from "../Landingpage/images/galleryimgus4.jpeg";
+import speaker6 from "../Landingpage/images/galleryimgus5.jpeg";
+import speaker7 from "../Landingpage/images/usagallery5.jpeg";
+import speaker8 from "../Landingpage/images/usagallery7.jpeg";
+import speaker9 from "../Landingpage/images/usagallery9.jpeg";
+import speaker10 from "../Landingpage/images/usagallery13.jpeg";
 
 function unlockScroll() {
   const scrollY = Math.abs(parseInt(document.body.style.top || "0", 10));
@@ -111,9 +111,9 @@ export default function Speakers() {
   return (
     <div className="usa-page">
       <Navbar />
-      {/* <SpeakersHero /> */}
-      {/* <SpeakersGrid /> */}
-      <USASpeakersSection/>
+      <SpeakersHero />
+      <SpeakersGrid />
+      {/* <USASpeakersSection/> */}
       <Footer theme="usa" />
     </div>
   );

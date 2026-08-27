@@ -4,10 +4,24 @@ import "./asia.css";
 import HERO_IMAGE from "./ASIA_IMG.jpg";
 import { getConferencesByRegion } from "../../globaldata/eventsglobaldata";
 import Footer from "../../../Components/Footer/footer";
-import { TempHomeGallery, TempHomeSpeakers } from "./TempHGS";
 import { supabase } from "../../../lib/supabase.jsx";
 import sgcLogo from "../../globaldata/sgc_logo.jpeg";
 import SEO from "../../../Components/SEO.jsx";
+
+import asiagalleyhome from "../../USA/Images/usagallery1.jpeg";
+import asiagalleyhome1 from "../../USA/Images/usagallery4.jpeg";
+import asiagalleyhome2 from "../../USA/Images/galleryusa5.jpeg";
+import asiagalleyhome3 from "../../USA/Images/galleryusa4.jpeg";
+import asiagalleyhome4 from "../../USA/Images/usagallery6.jpeg";
+import asiagalleyhome5 from "../../USA/Images/galleryusa1.jpeg";
+import asiagalleyhome6 from "../../USA/Images/galleryusa3.jpeg";
+import asiagalleyhome7 from "../../USA/Images/galleryusa.jpeg";
+
+
+import speakerimg from "../../USA/Landingpage/images/galleryimgus3.jpeg";
+import speakerimg1 from "../../USA/Landingpage/images/galleryimgus2.jpeg";
+import speakerimg2 from "../../USA/Landingpage/images/galleryimgus5.jpeg";
+import speakerimg3 from "../../USA/Landingpage/images/galleryimgus.jpeg";
 
 
 /* ─── DATA ──────────────────────────────────── */
@@ -26,21 +40,21 @@ const whyJoinFeatures = [
 ];
 
 const speakers = [
-  { id: 1, image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&q=80", name: "Dr. Arjun Mehta", country: "India", role: "Global Strategy Advisor" },
-  { id: 2, image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&q=80", name: "Sarah Al-Rashidi", country: "UAE", role: "CEO, FuturePath Inc." },
-  { id: 3, image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80", name: "James O'Brien", country: "United Kingdom", role: "Keynote Speaker & Author" },
-  { id: 4, image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80", name: "Amara Nwosu", country: "Nigeria", role: "Policy & Innovation Leader" },
+  { id: 1, src: speakerimg, name: "Yuko Kondo",  role: "Global Strategy Advisor" },
+  { id: 2, src: speakerimg1, name: "Gloria Sloan", role: "Author | Life Coach ...." },
+  { id: 3, src: speakerimg2, name: "Janice Lum",  role: "Artist as Facilitator" },
+  { id: 4, src: speakerimg3, name: "Dr. Stoyana Natseva",  role: "Keynote Speaker | Coach" },
 ];
 
 const highlights = [
-  { id: 1, image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80", size: "large" },
-  { id: 2, image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=80", size: "small" },
-  { id: 3, image: "https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=500&q=80", size: "medium" },
-  { id: 4, image: "https://images.unsplash.com/photo-1560523159-6b681a1e1852?w=500&q=80", size: "small" },
-  { id: 5, image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&q=80", size: "large" },
-  { id: 6, image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=500&q=80", size: "medium" },
-  { id: 7, image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=500&q=80", size: "small" },
-  { id: 8, image: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=500&q=80", size: "medium" },
+  { id: 1, src: asiagalleyhome, size: "large" },
+  { id: 2, src: asiagalleyhome1, size: "small" },
+  { id: 3, src: asiagalleyhome2, size: "medium" },
+  { id: 4, src: asiagalleyhome3, size: "small" },
+  { id: 5, src: asiagalleyhome4, size: "large" },
+  { id: 6, src: asiagalleyhome5, size: "medium" },
+  { id: 7, src: asiagalleyhome6, size: "small" },
+  { id: 8, src: asiagalleyhome7, size: "medium" },
 ];
 
 const pastConferences = [
@@ -435,7 +449,7 @@ function Speakers() {
           {speakers.map((sp, i) => (
             <FadeUp key={sp.id} delay={i * 80}>
               <div className="as-hp-speaker-card">
-                <div className="as-hp-speaker-card__img-wrap"><img src={sp.image} alt={sp.name} /></div>
+                <div className="as-hp-speaker-card__img-wrap"><img src={sp.src} alt={sp.name} /></div>
                 <h3 className="as-hp-speaker-card__name">{sp.name}</h3>
                 <p className="as-hp-speaker-card__country">{sp.country}</p>
                 <span className="as-hp-speaker-card__role">{sp.role}</span>
@@ -470,7 +484,7 @@ function Highlights() {
           <div className="as-hp-highlights__grid">
             {highlights.map((h) => (
               <div key={h.id} className={`as-hp-highlight-item as-hp-highlight-item--${h.size}`}>
-                <img src={h.image} alt="Conference highlight" />
+                <img src={h.src} alt="Conference highlight" />
                 <div className="as-hp-highlight-item__overlay" />
               </div>
             ))}
@@ -536,7 +550,6 @@ function CTABanner() {
 /* ─── ROOT ──────────────────────────────────── */
 export default function Homepage() {
   return (
-    // ✅ KEY CHANGE: Scoped root class
     <div className="as-page">
       <SEO title="Asia Conferences" />
       <Navbar />
@@ -549,11 +562,9 @@ export default function Homepage() {
       <div className="as-hp-divider" />
       <WhyJoin />
       <div className="as-hp-divider" />
-      {/* <Speakers /> */}
-      < TempHomeSpeakers/>
+      <Speakers />
       <div className="as-hp-divider" />
-      <TempHomeGallery/>
-      {/* <Highlights /> */}
+      <Highlights />
       {/* <PastConferences /> */}
       <CTABanner />
       <Footer theme="asia" />

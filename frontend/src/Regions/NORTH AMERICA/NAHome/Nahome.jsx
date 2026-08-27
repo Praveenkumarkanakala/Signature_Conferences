@@ -4,12 +4,26 @@ import "./Nahome.css";
 import sgcLogo from "./SGC Logo.png";
 import heroBg from "./north_america_bg.webp";
 import Footer from "../../../Components/Footer/footer";
-import { TempHomeGallery, TempHomeSpeakers } from "./TempHGS";
 import { supabase } from "../../../lib/supabase.jsx";
 import SEO from "../../../Components/SEO.jsx";
 
+import nahomeimg from "../../USA/Images/galleryusa2.jpeg";
+import nahomeimg1 from "../../USA/Images/usagallery3.jpeg";
+import nahomeimg2 from "../../USA/Images/galleryusa1.jpeg";
+import nahomeimg3 from "../../USA/Images/galleryusa5.jpeg";
+import nahomeimg4 from "../../USA/Images/galleryusa.jpeg";
 
 
+import speaker1 from "../../USA/Landingpage/images/galleryimgus.jpeg";
+import speaker2 from "../../USA/Landingpage/images/galleryimgus1.jpeg";
+import speaker3 from "../../USA/Landingpage/images/galleryimgus2.jpeg";
+import speaker4 from "../../USA/Landingpage/images/galleryimgus3.jpeg";
+import speaker5 from "../../USA/Landingpage/images/galleryimgus4.jpeg";
+import speaker6 from "../../USA/Landingpage/images/galleryimgus5.jpeg";
+import speaker7 from "../../USA/Landingpage/images/usagallery5.jpeg";
+import speaker8 from "../../USA/Landingpage/images/usagallery7.jpeg";
+import speaker9 from "../../USA/Landingpage/images/usagallery9.jpeg";
+import speaker10 from "../../USA/Landingpage/images/usagallery13.jpeg";
 
 
 const NA_NAV_LINKS = [
@@ -427,32 +441,29 @@ function NaWhyJoinUs() {
 }
 
 const speakers = [
-  { id: 1, name: "Dr. Amara Osei", role: "Keynote Speaker", topic: "Future of AI Ethics", img: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=500&fit=crop&crop=face" },
-  { id: 2, name: "Marcus Lin", role: "Tech Visionary", topic: "Quantum Computing", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop&crop=face" },
-  { id: 3, name: "Priya Sharma", role: "Policy Director", topic: "Digital Sovereignty", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop&crop=face" },
-  { id: 4, name: "James Okafor", role: "Innovation Lead", topic: "Green Tech", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=500&fit=crop&crop=face" },
-  { id: 5, name: "Elena Vasquez", role: "Entrepreneur", topic: "Startup Ecosystems", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=500&fit=crop&crop=face" },
-  { id: 6, name: "Ravi Menon", role: "Research Scientist", topic: "Neural Interfaces", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop&crop=face" },
-  { id: 7, name: "Zoe Andersen", role: "Creative Director", topic: "Design & Culture", img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=500&fit=crop&crop=face" },
-  { id: 8, name: "Tomás Reyes", role: "Economist", topic: "Web3 Finance", img: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=500&fit=crop&crop=face" },
+  { id: 1, src: speaker1, alt: "Speaker 1" },
+  { id: 2, src: speaker2, alt: "Speaker 2" },
+  { id: 3, src: speaker3, alt: "Speaker 3" },
+  { id: 4, src: speaker4, alt: "Speaker 4" },
+  { id: 5, src: speaker5, alt: "Speaker 5" },
+  { id: 6, src: speaker6, alt: "Speaker 6" },
+  { id: 7, src: speaker7, alt: "Speaker 7" },
+  { id: 8, src: speaker8, alt: "Speaker 8" },
+  { id: 9, src: speaker9, alt: "Speaker 9" },
+  { id: 10, src: speaker10, alt: "Speaker 10" },
+
 ];
+
 
 const row1 = [...speakers, ...speakers];
 const row2 = [...[...speakers].reverse(), ...[...speakers].reverse()];
 
-function NASpeakerCard({ sp, index, isActive, onEnter, onLeave }) {
-  const num = String(((index % speakers.length) + 1)).padStart(2, "0");
+function NASpeakerCard({ sp,  isActive, onEnter, onLeave }) {
   return (
     <div className={`na-speaker-card${isActive ? " na-speaker-card--active" : ""}`} onMouseEnter={onEnter} onMouseLeave={onLeave}>
-      <span className="na-speaker-card__index" aria-hidden="true">{num}</span>
       <div className="na-speaker-card__img-wrap">
-        <img src={sp.img} alt={sp.name} className="na-speaker-card__img" draggable="false" />
+        <img src={sp.src} alt={sp.alt} className="na-speaker-card__img" draggable="false" />
         <div className="na-speaker-card__overlay" aria-hidden="true" />
-        <div className="na-speaker-card__info">
-          <span className="na-speaker-card__topic">{sp.topic}</span>
-          <strong className="na-speaker-card__name">{sp.name}</strong>
-          <span className="na-speaker-card__role">{sp.role}</span>
-        </div>
       </div>
       <div className="na-speaker-card__bar" aria-hidden="true" />
     </div>
@@ -506,11 +517,11 @@ const features = [
 ];
 
 const photos = [
-  { id: 1, src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&h=540&fit=crop", alt: "Conference keynote stage", cls: "na-gallery__photo--wide" },
-  { id: 2, src: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=500&h=700&fit=crop", alt: "Professionals networking", cls: "na-gallery__photo--portrait" },
-  { id: 3, src: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=400&fit=crop", alt: "Speaker at podium", cls: "" },
-  { id: 4, src: "https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=600&h=400&fit=crop", alt: "Two people networking", cls: "" },
-  { id: 5, src: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&fit=crop", alt: "Audience applauding", cls: "" },
+  { id: 1, src: nahomeimg, alt: "Conference keynote stage", cls: "na-gallery__photo--wide" },
+  { id: 2, src: nahomeimg1, alt: "Professionals networking", cls: "na-gallery__photo--portrait" },
+  { id: 3, src: nahomeimg2, alt: "Speaker at podium", cls: "" },
+  { id: 4, src: nahomeimg3, alt: "Two people networking", cls: "" },
+  { id: 5, src: nahomeimg4, alt: "Audience applauding", cls: "" },
 ];
 
 const GlobeIcon = () => (
@@ -554,14 +565,12 @@ function NAGallery() {
               </li>
             ))}
           </ul>
-          <button className="na-gallery__btn" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="na-gallery__btn-icon" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            View More Photos
-          </button>
+          <Link to="/na-gallery" className="na-gallery__btn">
+             <svg viewBox="0 0 24 24"  fill="none" stroke="currentColor" strokeWidth="2" className="na-gallery__btn-icon"  aria-hidden="true"   >
+             <rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" />  <polyline points="21 15 16 10 5 21" />
+             </svg>
+             View More Photos
+          </Link>
         </div>
         <div className="na-gallery__right">
           <div className="na-gallery__grid">
@@ -602,10 +611,8 @@ export default function NaHome() {
       <NaHero />
       <NaFutureEvents />
       <NaWhyJoinUs />
-      {/* <NASpeakers /> */}
-      < TempHomeSpeakers/>
-      {/* <NAGallery /> */}
-      <TempHomeGallery/>
+      <NASpeakers />
+      <NAGallery />
 
       <Footer theme="northamerica" />
     </div>
