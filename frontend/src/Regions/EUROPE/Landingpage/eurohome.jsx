@@ -19,6 +19,10 @@ import img7 from "../../USA/Landingpage/images/usagallery5.jpeg";
 import img8 from "../../USA/Landingpage/images/usagallery7.jpeg";
 import img9 from "../../USA/Landingpage/images/usagallery9.jpeg";
 import img10 from "../../USA/Landingpage/images/usagallery13.jpeg";
+import img11 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
+import img12 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
+
+
 
 import eurogalleryimg from "../../USA/Images/usagallery7.jpeg";
 import eurogalleryimg1 from "../../USA/Images/usagallery1.jpeg";
@@ -114,6 +118,8 @@ const SPEAKERS = [
   { id: 8, image: img8 },
   { id: 9, image: img9 },
   { id: 10, image: img10 },
+  { id: 11, image: img11 },
+  { id: 12, image: img12 },
 ];
 
 const photos = [

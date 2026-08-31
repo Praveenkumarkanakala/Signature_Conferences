@@ -24,6 +24,8 @@ import speaker7 from "../../USA/Landingpage/images/usagallery5.jpeg";
 import speaker8 from "../../USA/Landingpage/images/usagallery7.jpeg";
 import speaker9 from "../../USA/Landingpage/images/usagallery9.jpeg";
 import speaker10 from "../../USA/Landingpage/images/usagallery13.jpeg";
+import speaker11 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
+import speaker12 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
 
 
 const NA_NAV_LINKS = [
@@ -451,6 +453,8 @@ const speakers = [
   { id: 8, src: speaker8, alt: "Speaker 8" },
   { id: 9, src: speaker9, alt: "Speaker 9" },
   { id: 10, src: speaker10, alt: "Speaker 10" },
+  { id: 11, src: speaker11, alt: "Speaker 11" },
+  { id: 12, src: speaker12, alt: "Speaker 12" },
 
 ];
 

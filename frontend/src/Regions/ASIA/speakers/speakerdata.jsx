@@ -9,6 +9,9 @@ import meilingImg from "../../USA/Landingpage/images/usagallery5.jpeg";
 import divyaImg from "../../USA/Landingpage/images/usagallery7.jpeg";
 import miriamImg from "../../USA/Landingpage/images/usagallery9.jpeg";
 import leilaImg from "../../USA/Landingpage/images/usagallery13.jpeg";
+import leilaImg1 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
+import leilaImg2 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
+
 
 /* ─── SPEAKER CATEGORIES ─────────────────────── */
 export const speakerCategories = [
@@ -143,8 +146,7 @@ export const speakers = [
     country: "India",
     conference: "WE Summit Mumbai",
     bg: "dark",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop&crop=face",
+    image: leilaImg1,
   },
   {
     id: 13,
@@ -155,8 +157,7 @@ export const speakers = [
     country: "Germany",
     conference: "WE Summit Singapore",
     bg: "slate",
-    image:
-      "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&h=500&fit=crop&crop=face",
+    image: leilaImg2,
   },
   {
     id: 14,

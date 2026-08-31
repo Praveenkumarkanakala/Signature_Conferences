@@ -24,6 +24,8 @@ import Speakerimg2 from "./images/galleryimgus2.jpeg";
 import Speakerimg3 from "./images/galleryimgus3.jpeg";
 import Speakerimg4 from "./images/galleryimgus4.jpeg";
 import Speakerimg5 from "./images/galleryimgus5.jpeg";
+import Speakerimg6 from "./images/Marcia Hamilton.jpeg";
+import Speakerimg7 from "./images/Cara Tyrrell.jpeg";
 
 
 const NAV_LINKS = [
@@ -686,6 +688,8 @@ const SPEAKERS = [
   { id: 4, image: Speakerimg3 },
   { id: 5, image: Speakerimg4 },
   { id: 6, image: Speakerimg5 },
+  { id: 7, image: Speakerimg6 },
+  { id: 8, image: Speakerimg7 },
 ];
 
 const EsteeemedSpeakers = () => {

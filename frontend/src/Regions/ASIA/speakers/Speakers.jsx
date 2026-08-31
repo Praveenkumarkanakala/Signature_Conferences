@@ -1,6 +1,4 @@
-import {
-  speakers,
-} from "./speakerdata.jsx";
+import { speakers,} from "./speakerdata.jsx";
 import { Navbar } from "../Home/asia.jsx";
 import "./Speakers.css";
 import "../Home/asia.css";
@@ -37,7 +35,7 @@ function SpeakerCard({ speaker }) {
 }
 
 function SpeakersGrid() {
-  const featured = speakers.slice(0, 10);
+  const featured = speakers.slice(0, 12);
 
   return (
     <section className="as-sp-grid-section">
