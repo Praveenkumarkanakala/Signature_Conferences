@@ -11,6 +11,8 @@ import miriamImg from "../../USA/Landingpage/images/usagallery9.jpeg";
 import leilaImg from "../../USA/Landingpage/images/usagallery13.jpeg";
 import leilaImg1 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
 import leilaImg2 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
+import leilaImg3 from "../../USA/Landingpage/images/JanetHamilton.jpeg";
+
 
 
 /* ─── SPEAKER CATEGORIES ─────────────────────── */
@@ -168,8 +170,7 @@ export const speakers = [
     country: "Nigeria",
     conference: "WE Summit Dubai",
     bg: "teal",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=500&fit=crop&crop=face",
+    image: leilaImg3,
   },
   {
     id: 15,

@@ -17,6 +17,8 @@ import spimg8 from "../../USA/Landingpage/images/usagallery9.jpeg";
 import spimg9 from "../../USA/Landingpage/images/usagallery13.jpeg";
 import spimg10 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
 import spimg11 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
+import spimg12 from "../../USA/Landingpage/images/JanetHamilton.jpeg";
+
 
 
 
@@ -34,6 +36,8 @@ const speakers = [
   { id: 10, image:spimg9, alt: "Speaker 10" },
   { id: 11, image:spimg10, alt: "Speaker 11" },
   { id: 12, image:spimg11, alt: "Speaker 12" },
+  { id: 13, image:spimg12, alt: "Speaker 13" },
+
 
 ];
 

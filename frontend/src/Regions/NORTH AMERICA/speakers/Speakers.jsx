@@ -17,6 +17,8 @@ import speaker9 from "../../USA/Landingpage/images/usagallery5.jpeg";
 import speaker10 from "../../USA/Landingpage/images/usagallery9.jpeg";
 import speaker11 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
 import speaker12 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
+import speaker13 from "../../USA/Landingpage/images/JanetHamilton.jpeg";
+
 
 
 
@@ -45,6 +47,7 @@ const speakers = [
   { id: 10, img: speaker10, label: "Speaker" },
   { id: 11, img: speaker11, label: "Keynote Speaker" },
   { id: 12, img: speaker12, label: "Speaker" }, 
+  { id: 13, img: speaker13, label: "Keynote Speaker" },
 ];
 
 function SpeakersHero() {

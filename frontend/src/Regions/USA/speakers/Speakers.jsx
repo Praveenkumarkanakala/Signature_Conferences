@@ -17,6 +17,8 @@ import speaker9 from "../Landingpage/images/usagallery9.jpeg";
 import speaker10 from "../Landingpage/images/usagallery13.jpeg";
 import speaker11 from "../Landingpage/images/Marcia Hamilton.jpeg";
 import speaker12 from "../Landingpage/images/Cara Tyrrell.jpeg";
+import speaker13 from "../Landingpage/images/JanetHamilton.jpeg";
+
 
 function unlockScroll() {
   const scrollY = Math.abs(parseInt(document.body.style.top || "0", 10));
@@ -49,7 +51,7 @@ const speakers = [
   { id: 10, name: "Speaker ", image: speaker10 },
   { id: 11, name: "Keynote Speaker ", image: speaker11 },
   { id: 12, name: "Keynote Speaker ", image: speaker12 },
-
+  { id: 13, name: "Keynote Speaker ", image: speaker13 },
 ];
 
 /* ─── HERO ──────────────────────────────────── */

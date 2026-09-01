@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import * as THREE from "three";
 import "./homepage.css";
 
+import asiaImg from "./aisahome.jpeg"; 
 import teamPhoto from "./image.png";
 import image1 from "./newimg.jpg";
 import image2 from "./newimg1.jpg";
@@ -457,7 +458,7 @@ const WorldMapScene = ({ activeStep, isMobile, regionData }) => {
 
 /* ─── REGION CARDS DATA ─────────────────────────── */
 const regions = [
-  { title: "Asia",          sub: "Signature Global Conferences", desc: "Where ancient wisdom meets tomorrow's innovation across the world's most dynamic continent.",      stat: "42+ Events", cls: "main-card-asia",     route: "/asia"         },
+  { title: "Asia",          img: asiaImg, sub: "Signature Global Conferences", desc: "Where ancient wisdom meets tomorrow's innovation across the world's most dynamic continent.",      stat: "42+ Events", cls: "main-card-asia",     route: "/asia"         },
   { title: "Europe",        sub: "Signature Global Conferences", desc: "Bridging heritage and progress at the crossroads of culture, policy, and emerging technology.",      stat: "38+ Events", cls: "main-card-europe",   route: "/europe"       },
   { title: "North America", sub: "Signature Global Conferences", desc: "Driving bold conversations that define the future of business, innovation, and leadership.",         stat: "61+ Events", cls: "main-card-namerica", route: "/northamerica" },
   { title: "USA",           sub: "Signature Global Conferences", desc: "At the epicenter of global influence — where every summit shapes industries and reshapes agendas.",  stat: "55+ Events", cls: "main-card-usa",      route: "/usa"          },
@@ -763,7 +764,7 @@ export default function HomePage() {
           </div>
           <div className="main-cards-grid">
             {regions.map((r, i) => (
-              <article className={`main-card ${r.cls} main-observe`} key={r.title} style={{ "--i": i }}>
+              <article className={`main-card ${r.cls} main-observe`}  key={r.title}  style={{ "--i": i, ...(r.img ? { backgroundImage: `url(${r.img})` } : {}) }} >
                 <span className="main-card-dot" />
                 <div className="main-card-body"><h3>{r.title}</h3></div>
                 <div className="main-card-footer">
