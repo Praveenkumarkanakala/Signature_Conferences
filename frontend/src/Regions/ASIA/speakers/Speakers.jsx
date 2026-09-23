@@ -29,13 +29,16 @@ function SpeakerCard({ speaker }) {
     <article className="as-sp-card">
       <div className="as-sp-card__imageWrap">
         <img src={speaker.image} alt={speaker.name} className="as-sp-card__img" />
+        <div className="as-sp-card__overlay">
+          <p className="as-sp-card__name">{speaker.name}</p>
+        </div>
       </div>
     </article>
   );
 }
 
 function SpeakersGrid() {
-  const featured = speakers.slice(0, 13);
+  const featured = speakers.slice(0, 14);
 
   return (
     <section className="as-sp-grid-section">

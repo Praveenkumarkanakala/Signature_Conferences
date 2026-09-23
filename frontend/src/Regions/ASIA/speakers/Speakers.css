@@ -121,7 +121,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 18px;
-  height: 380px;
+  height: 300px;
   background: rgba(14, 0, 1, 0.7);
 }
 
@@ -143,6 +143,35 @@
 
 .as-sp-card:hover .as-sp-card__img {
   transform: scale(1.05);
+}
+
+/* ─── NAME OVERLAY (on hover) ─────────────────── */
+.as-sp-card__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  padding: 18px;
+  background: linear-gradient(180deg, transparent 40%, rgba(14, 0, 1, 0.88) 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.as-sp-card:hover .as-sp-card__overlay {
+  opacity: 1;
+}
+
+.as-sp-card__name {
+  margin: 0;
+  font-family: var(--font-display, "Anton", sans-serif);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  color: var(--cream-light, #f9f0e0);
+  text-transform: uppercase;
+  line-height: 1.15;
 }
 
 @media (max-width: 1050px) {
