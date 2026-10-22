@@ -18,6 +18,9 @@ import speaker10 from "../Landingpage/images/usagallery13.jpeg";
 import speaker11 from "../Landingpage/images/Marcia Hamilton.jpeg";
 import speaker12 from "../Landingpage/images/Cara Tyrrell.jpeg";
 import speaker13 from "../Landingpage/images/JanetHamilton.jpeg";
+import speaker14 from "../Landingpage/images/NataliyaPetrushina.png";
+
+
 
 
 function unlockScroll() {
@@ -52,6 +55,7 @@ const speakers = [
   { id: 11, name: "Keynote Speaker ", image: speaker11 },
   { id: 12, name: "Keynote Speaker ", image: speaker12 },
   { id: 13, name: "Keynote Speaker ", image: speaker13 },
+  { id: 14, name: "Keynote Speaker ", image: speaker14 }, 
 ];
 
 /* ─── HERO ──────────────────────────────────── */
