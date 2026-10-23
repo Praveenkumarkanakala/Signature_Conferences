@@ -19,7 +19,10 @@ import speaker11 from "../Landingpage/images/Marcia Hamilton.jpeg";
 import speaker12 from "../Landingpage/images/Cara Tyrrell.jpeg";
 import speaker13 from "../Landingpage/images/JanetHamilton.jpeg";
 import speaker14 from "../Landingpage/images/NataliyaPetrushina.png";
-
+import speaker15 from "../Landingpage/images/OzanaGiusca.jpeg";
+import speaker16 from "../Landingpage/images/CathleenBeerkens.jpeg";
+import speaker17 from "../Landingpage/images/AminaHedayatKhalil.jpeg";
+import speaker18 from "../Landingpage/images/KarenTomlinson.jpeg";
 
 
 
@@ -56,6 +59,10 @@ const speakers = [
   { id: 12, name: "Keynote Speaker ", image: speaker12 },
   { id: 13, name: "Keynote Speaker ", image: speaker13 },
   { id: 14, name: "Keynote Speaker ", image: speaker14 }, 
+  { id: 15, name: "Keynote Speaker ", image: speaker15 }, 
+  { id: 16, name: "Keynote Speaker ", image: speaker16 },
+  { id: 17, name: "Keynote Speaker ", image: speaker17 },
+  { id: 18, name: "Keynote Speaker ", image: speaker18 }, 
 ];
 
 /* ─── HERO ──────────────────────────────────── */

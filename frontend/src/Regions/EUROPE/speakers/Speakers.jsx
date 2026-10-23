@@ -18,6 +18,11 @@ import spimg9 from "../../USA/Landingpage/images/usagallery13.jpeg";
 import spimg10 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
 import spimg11 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
 import spimg12 from "../../USA/Landingpage/images/JanetHamilton.jpeg";
+import spimg13 from "../../USA/Landingpage/images/OzanaGiusca.jpeg";
+import spimg14 from "../../USA/Landingpage/images/CathleenBeerkens.jpeg";
+import spimg15 from "../../USA/Landingpage/images/AminaHedayatKhalil.jpeg";
+import spimg16 from "../../USA/Landingpage/images/KarenTomlinson.jpeg";
+
 
 
 
@@ -37,6 +42,10 @@ const speakers = [
   { id: 11, image:spimg10, alt: "Speaker 11" },
   { id: 12, image:spimg11, alt: "Speaker 12" },
   { id: 13, image:spimg12, alt: "Speaker 13" },
+  { id: 14, image:spimg13, alt: "Speaker 14" },
+  { id: 15, image:spimg14, alt: "Speaker 15" },
+  { id: 16, image:spimg15, alt: "Speaker 16" },
+  { id: 17, image:spimg16, alt: "Speaker 17" },
 
 
 ];

@@ -3,8 +3,7 @@ import { NaNavbar } from "../NAHome/Nahome";
 import "./Speakers.css";
 import Footer from "../../../Components/Footer/footer";
 
-// Speaker photos — replace these imports with your own images.
-// Drop files into the same folder as this component and update the paths below.
+
 import speaker1 from "../../USA/Landingpage/images/galleryimgus.jpeg";
 import speaker2 from "../../USA/Landingpage/images/galleryimgus1.jpeg";
 import speaker3 from "../../USA/Landingpage/images/galleryimgus2.jpeg";
@@ -18,6 +17,10 @@ import speaker10 from "../../USA/Landingpage/images/usagallery9.jpeg";
 import speaker11 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
 import speaker12 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
 import speaker13 from "../../USA/Landingpage/images/JanetHamilton.jpeg";
+import speaker14 from "../../USA/Landingpage/images/OzanaGiusca.jpeg";
+import speaker15 from "../../USA/Landingpage/images/CathleenBeerkens.jpeg";
+import speaker16 from "../../USA/Landingpage/images/AminaHedayatKhalil.jpeg";
+import speaker17 from "../../USA/Landingpage/images/KarenTomlinson.jpeg";
 
 
 
@@ -48,6 +51,10 @@ const speakers = [
   { id: 11, img: speaker11, label: "Keynote Speaker" },
   { id: 12, img: speaker12, label: "Speaker" }, 
   { id: 13, img: speaker13, label: "Keynote Speaker" },
+  { id: 14, img: speaker14, label: "Speaker" },
+  { id: 15, img: speaker15, label: "Keynote Speaker" },
+  { id: 16, img: speaker16, label: "Speaker" },
+  { id: 17, img: speaker17, label: "Keynote Speaker" },
 ];
 
 function SpeakersHero() {

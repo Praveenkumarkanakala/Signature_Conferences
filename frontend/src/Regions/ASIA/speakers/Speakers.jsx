@@ -38,7 +38,7 @@ function SpeakerCard({ speaker }) {
 }
 
 function SpeakersGrid() {
-  const featured = speakers.slice(0, 14);
+  const featured = speakers.slice(0, 18);
 
   return (
     <section className="as-sp-grid-section">
