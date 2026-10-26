@@ -14,7 +14,7 @@ import leilaImg from "../../USA/Landingpage/images/usagallery13.jpeg";
 import leilaImg1 from "../../USA/Landingpage/images/Marcia Hamilton.jpeg";
 import leilaImg2 from "../../USA/Landingpage/images/Cara Tyrrell.jpeg";
 import leilaImg3 from "../../USA/Landingpage/images/JanetHamilton.jpeg";
-import leilaImg4 from "../../USA/Landingpage/images/Mayumi Pachkoski.jpeg";
+// import leilaImg4 from "../../USA/Landingpage/images/Mayumi Pachkoski.jpeg";
 import leilaImg5 from "../../USA/Landingpage/images/OzanaGiusca.jpeg";
 import leilaImg6 from "../../USA/Landingpage/images/CathleenBeerkens.jpeg";
 import leilaImg7 from "../../USA/Landingpage/images/AminaHedayatKhalil.jpeg";
@@ -35,7 +35,7 @@ export const speakers = [
   { id: 11, name: "Marcia Hamilton", image: leilaImg1 },
   { id: 12, name: "Cara Tyrrell", image: leilaImg2 },
   { id: 13, name: "Janet Hamilton", image: leilaImg3 },
-  { id: 14, name: "Mayumi Pachkoski", image: leilaImg4 },
+  // { id: 14, name: "Mayumi Pachkoski", image: leilaImg4 },
   { id: 15, name: "Ozana Giusca", image: leilaImg5 },
   { id: 16, name: "Cathleen Beerkens", image: leilaImg6 },
   { id: 17, name: "Amina Hedayat Khalil", image: leilaImg7 },
